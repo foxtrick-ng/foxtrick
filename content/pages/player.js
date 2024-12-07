@@ -617,7 +617,7 @@ Foxtrick.Pages.Player.getSkillsWithText = function(doc) {
 			/** @type {HTMLTableElement} */
 			var skillTable;
 			if (this.isSenior(doc)) {
-				skillTable = doc.querySelector('.transferPlayerSkills, .mainBox table');
+				skillTable = doc.querySelector('.transferPlayerSkills, .mainBox:not(.ft-dummy) table');
 				return this.parseSeniorSkills(skillTable);
 			}
 
