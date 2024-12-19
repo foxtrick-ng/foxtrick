@@ -69,12 +69,30 @@ Foxtrick.util.matchView.fillMatches = function(container, xml, errorText) {
 		return null;
 	};
 	var getMatchInfo = function(match) {
-		var type = xml.text('MatchType', match);
+		var type = mapNtType(xml.text('MatchType', match));
 		var cupLvl = xml.num('CupLevel', match);
 		var cupIdx = xml.num('CupLevelIndex', match);
 		var cup = cupLvl * 3 + cupIdx;
 		return type2info(type, cup);
 	};
+
+	/**
+	 * Detects if the Team is a NT/U21 team.
+	 * @return {boolean} is NT/U21
+	 */
+	const isNt = function() {
+		return xml.text('ShortTeamName') == '';
+	}
+
+	/**
+	 * Map HTO match type to NT match types
+	 * @param {number} type match type 
+	 * @return {number} match type
+	 */
+	const mapNtType = function(type) {
+		let ntTypeMap = { 50: 10, 51: 11, 61: 12 };
+		return isNt() ? ntTypeMap[type] : type;
+	}
 
 	var doc = container.ownerDocument;
 	var IS_RTL = Foxtrick.util.layout.isRtl(doc);
@@ -122,8 +140,14 @@ Foxtrick.util.matchView.fillMatches = function(container, xml, errorText) {
 		var matchCell = doc.createElement('td');
 		var matchLink = doc.createElement('a');
 		matchLink.dataset.matchType = match.type;
-		matchLink.href = '/Club/Matches/Match.aspx?matchID=' + match.id + '&SourceSystem=' +
-			(isYouth ? 'Youth' : 'Hattrick');
+		
+		let sourceSystem = 'Hattrick';
+		if (isNt())
+			sourceSystem = 'HTOIntegrated';
+		else if (isYouth)
+			sourceSystem = 'Youth';
+		
+		matchLink.href = '/Club/Matches/Match.aspx?matchID=' + match.id + '&SourceSystem=' + sourceSystem;
 
 		// limit team name length to fit in one line
 		var cutLength = 12;
@@ -171,7 +195,7 @@ Foxtrick.util.matchView.fillMatches = function(container, xml, errorText) {
 			// add HT-Live
 			var liveLink = doc.createElement('a');
 			liveLink.href = '/Club/Matches/Live.aspx?actionType=addMatch&matchID=' + match.id +
-				'&SourceSystem=' + (isYouth ? 'Youth' : 'Hattrick');
+				'&SourceSystem=' + sourceSystem;
 
 			var liveImg = doc.createElement('img');
 			liveImg.className = 'matchHTLive';
@@ -191,7 +215,7 @@ Foxtrick.util.matchView.fillMatches = function(container, xml, errorText) {
 		if (!matchXML)
 			continue;
 
-		var type = xml.text('MatchType', matchXML);
+		var type = mapNtType(xml.text('MatchType', matchXML));
 		var typeInfo = getMatchInfo(matchXML);
 
 		var matchId = xml.num('MatchID', matchXML);

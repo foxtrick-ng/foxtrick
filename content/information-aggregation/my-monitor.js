@@ -130,9 +130,8 @@ Foxtrick.modules.MyMonitor = {
 			var matchesBySource = [
 				{ source: 'Hattrick', type: 'senior' },
 				{ source: 'Youth', type: 'youth' },
-
-				// README: HTO matches currently disabled in my monitor
-				// { source: 'HTOIntegrated', type: 'hto' },
+				// README: NT matches are now source: HTOIntegrated
+				{ source: 'HTOIntegrated', type: 'nt' },
 			];
 
 			Foxtrick.forEach(function(t) {
@@ -146,8 +145,10 @@ Foxtrick.modules.MyMonitor = {
 			 * @type {MyMonitorFilterType[]}
 			 */
 			var matchesByType = [
-				'Official',
-				'NT',
+			//	README: disabled as this does the same thing as source: Senior in current implementation
+			//	'Official',
+			//	README: diabled as NT matches are now source: HTOIntegrated
+			//	'NT',
 			];
 
 			Foxtrick.forEach(function(t) {
@@ -189,7 +190,7 @@ Foxtrick.modules.MyMonitor = {
 				var url;
 
 				if (source) {
-					var re = new RegExp(Foxtrick.strToRe(source), 'i');
+					var re = new RegExp(Foxtrick.strToRe(source));
 					var sourceMatches = Foxtrick.filter(function(link) {
 						return re.test(link.href);
 					}, liveLinks);
