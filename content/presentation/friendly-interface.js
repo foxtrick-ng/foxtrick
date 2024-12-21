@@ -2,6 +2,7 @@
 /**
  * friendly-interface
  * More friendly interface tweaks
+ * 
  * @author ryanli, convincedd
  */
 
@@ -15,7 +16,7 @@ Foxtrick.modules['FriendlyInterface'] = {
 		'HideSpeechlessSecretary',
 	],
 
-	// eslint-disable-next-line complexity
+
 	run: function(doc) {
 		var module = this;
 		if (Foxtrick.isPage(doc, 'playerDetails') &&
@@ -29,6 +30,9 @@ Foxtrick.modules['FriendlyInterface'] = {
 			// a player has highlight <=> he is a national player
 			var highlight = playerInfo.querySelector('.highlight');
 			if (highlight) {
+				if (Foxtrick.Pages.Player.isNewDesign(doc))
+					return; // new design for Player page already adds NT link
+				
 				var text = highlight.textContent;
 				var leagueId = Foxtrick.Pages.Player.getNationalityId(doc);
 				let league = Foxtrick.XMLData.League[leagueId];

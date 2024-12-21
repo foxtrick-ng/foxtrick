@@ -1,16 +1,15 @@
 /**
-* entry.js
-* Entry point of Foxtrick modules
-* @author ryanli, convincedd, LA-MJ
-*/
+ * entry.js
+ * Entry point of Foxtrick modules
+ * 
+ * @author ryanli, convincedd, LA-MJ
+ */
 
 'use strict';
 
-/* eslint-disable */
 if (!this.Foxtrick)
 	// @ts-ignore
 	var Foxtrick = {};
-/* eslint-enable */
 
 Foxtrick.entry = {};
 
@@ -53,7 +52,6 @@ Foxtrick.entry.docLoad = function(doc) {
 
 	let diff = new Date().getTime() - begin;
 
-	// eslint-disable-next-line no-restricted-properties
 	Foxtrick.log('page run time:', diff, 'ms |', doc.location.pathname, doc.location.search);
 
 	Foxtrick.log.flush(doc);
@@ -90,7 +88,6 @@ Foxtrick.entry.contentScriptInit = function(data) {
 		}
 	}
 	else {
-		/* eslint-disable camelcase */
 		Foxtrick.Prefs.initContent(data.prefsChromeDefault, data.prefsChromeUser);
 
 		Foxtrick.L10n.propertiesDefault = data.propertiesDefault;
@@ -99,7 +96,6 @@ Foxtrick.entry.contentScriptInit = function(data) {
 		Foxtrick.L10n.screenshots = data.screenshots;
 		Foxtrick.L10n.plFormDefault = data.plFormDefault;
 		Foxtrick.L10n.plForm = data.plForm;
-		/* eslint-enable camelcase */
 	}
 
 	for (let lang in data.htLangJSON)
@@ -108,6 +104,7 @@ Foxtrick.entry.contentScriptInit = function(data) {
 	Foxtrick.XMLData.htCurrencyJSON = JSON.parse(data.currencyJSON);
 	Foxtrick.XMLData.aboutJSON = JSON.parse(data.aboutJSON);
 	Foxtrick.XMLData.worldDetailsJSON = JSON.parse(data.worldDetailsJSON);
+	Foxtrick.XMLData.nationalTeamsJSON = JSON.parse(data.nationalTeamsJSON);
 	Foxtrick.XMLData.League = data.league;
 	Foxtrick.XMLData.countryToLeague = data.countryToLeague;
 };
@@ -156,7 +153,7 @@ Foxtrick.entry.run = function(doc) {
 	/**
 	 * @param  {document} doc
 	 * @param  {FTModule} m
-	 * @return {function}
+	 * @return {Function}
 	 */
 	let getModuleRunner = (doc, m) => () => {
 		let begin = new Date();
@@ -250,6 +247,7 @@ Foxtrick.entry.change = function(doc, changes) {
 			try {
 				ret = ex.test(doc.location.pathname);
 			}
+			/* eslint-disable-next-line */
 			catch (e) { }
 
 			return ret;
@@ -304,7 +302,7 @@ Foxtrick.entry.change = function(doc, changes) {
  *
  * @template {FTModule} M
  * @param {M[]}                  modules {Array.<object>}
- * @param {function(M):function} makeFn  {function(object)->?function}
+ * @param {function(any):Function} makeFn  {function(object)->?function}
  */
 Foxtrick.entry.niceRun = function(modules, makeFn) {
 	let mdls = Foxtrick.unique(modules);
