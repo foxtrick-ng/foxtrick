@@ -1,16 +1,15 @@
 /**
  * xml-load.js
  * xml loading
+ * 
  * @author convinced, LA-MJ
  */
 
 'use strict';
 
-/* eslint-disable */
 if (!this.Foxtrick)
 	// @ts-ignore
 	var Foxtrick = {};
-/* eslint-enable */
 
 Foxtrick.XMLData = {
 	MODULE_NAME: 'XMLData',
@@ -30,10 +29,14 @@ Foxtrick.XMLData = {
 
 	/** @type {Partial<WorldDetailsSchema>} */
 	worldDetailsJSON: {},
+	
+	/** @type {Partial<NationalTeamsSchema>} */
+	nationalTeamsJSON: {},
 
 	/**
 	 * @param {boolean} _ reInit
 	 */
+	/* eslint-disable-next-line no-unused-vars */
 	init: function(_) {
 		var module = this;
 
@@ -43,6 +46,8 @@ Foxtrick.XMLData = {
 		module.aboutJSON = JSON.parse(about);
 		var world = Foxtrick.util.load.sync(Foxtrick.InternalPath + 'data/worlddetails.json');
 		module.worldDetailsJSON = JSON.parse(world);
+		var nationalTeams = Foxtrick.util.load.sync(Foxtrick.InternalPath + 'data/nationalteams.json');
+		module.nationalTeamsJSON = JSON.parse(nationalTeams);
 
 		if (!module.worldDetailsJSON) {
 			Foxtrick.log(new Error('loading world failed'));
@@ -90,29 +95,20 @@ Foxtrick.XMLData = {
 	/**
 	 * Get the name of National Team for a certain league
 	 *
-	 * NOTE: the returned string is trimmed
-	 *
 	 * @param  {number} id
 	 * @return {string}
 	 */
 	getNTNameByLeagueId: function(id) {
-		/* eslint-disable quote-props */
-		var NT_BY_COUNTRY = {
-			// 'Al Maghrib': 'Al Maghrib ', // oh yes, there's a space here!
-			'Côte d’Ivoire': 'Côte d\'Ivoire',
-			'Kampuchea': 'Prateh Kampuchea',
-			'O’zbekiston': 'O\'zbekiston',
-			'Panamá': 'Panama',
-			'Shqipëria': 'Shqiperia',
-			'Sénégal': 'Senegal',
-			'RD Congo': 'DR Congo', // FIXME
-			'Ītyōṗṗyā': 'Ethiopia', // FIXME
-			'Madagasikara': 'Madagasikara', // FIXME
-		};
-		/* eslint-enable quote-props */
+		let teams = Foxtrick.XMLData.nationalTeamsJSON.HattrickData.NationalTeams;
+		let team = Foxtrick.nth((team) => {
+			return team.LeagueId === id.toString();
+		}, teams);
 
-		let country = Foxtrick.L10n.getCountryNameNative(id);
-		return country in NT_BY_COUNTRY ? NT_BY_COUNTRY[country] : country;
+		if (team)
+			return team.NationalTeamName;
+
+		// team not in local nationalTeamsJSON, fallback to league name
+		return Foxtrick.L10n.getCountryNameNative(id);
 	},
 };
 
@@ -125,6 +121,9 @@ Foxtrick.XMLData = {
  * @prop {string} CupName
  * @prop {string} MatchRound
  * @prop {string} MatchRoundsLeft
+ */
+
+/** 
  * @typedef Countrydefinition
  * @prop {string} Available
  * @prop {string} CountryCode
@@ -134,6 +133,9 @@ Foxtrick.XMLData = {
  * @prop {string} CurrencyRate
  * @prop {string} DateFormat
  * @prop {string} TimeFormat
+ */
+
+/**
  * @typedef LeagueDefinition
  * @prop {string} ActiveTeams
  * @prop {string} ActiveUsers
@@ -187,4 +189,14 @@ Foxtrick.XMLData = {
  * @prop {AboutJSONPerson[]} designers
  * @prop {AboutJSONPerson[]} donators
  * @prop {AboutJSONTranslation[]} translations
+ */
+
+/**
+ * @typedef NationalTeamDefinition
+ * @prop {string} Dress
+ * @prop {string} LeagueId
+ * @prop {string} NationalTeamID
+ * @prop {string} NationalTeamName
+ * @prop {string} RatingScores
+ * @typedef { { HattrickData: { NationalTeams: NationalTeamDefinition[] } } } NationalTeamsSchema
  */

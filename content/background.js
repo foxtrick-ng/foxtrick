@@ -9,10 +9,8 @@
 
 'use strict';
 
-/* eslint-disable */
 if (!this.Foxtrick)
 	var Foxtrick = {};
-/* eslint-enable */
 
 if (!Foxtrick.loader)
 	Foxtrick.loader = {};
@@ -61,7 +59,7 @@ Foxtrick.loader.background.browserLoad = function() {
 
 		Foxtrick.log('Foxtrick.loader.background.browserLoad');
 
-		var [currencyJSON, aboutJSON, worldDetailsJSON, cssTextCollection] =
+		var [currencyJSON, aboutJSON, worldDetailsJSON, nationalTeamsJSON, cssTextCollection] =
 			/** @type {string[]} */ ([]);
 
 		/** @type {Record<string, string>} */
@@ -75,6 +73,7 @@ Foxtrick.loader.background.browserLoad = function() {
 			currencyJSON = JSON.stringify(Foxtrick.XMLData.htCurrencyJSON);
 			aboutJSON = JSON.stringify(Foxtrick.XMLData.aboutJSON);
 			worldDetailsJSON = JSON.stringify(Foxtrick.XMLData.worldDetailsJSON);
+			nationalTeamsJSON = JSON.stringify(Foxtrick.XMLData.nationalTeamsJSON);
 
 			htLanguagesJSONText = {};
 			for (let [lang, obj] of Object.entries(Foxtrick.L10n.htLanguagesJSON))
@@ -144,6 +143,7 @@ Foxtrick.loader.background.browserLoad = function() {
 				currencyJSON,
 				aboutJSON,
 				worldDetailsJSON,
+				nationalTeamsJSON,
 
 				league: Foxtrick.XMLData.League,
 				countryToLeague: Foxtrick.XMLData.countryToLeague,
@@ -431,21 +431,18 @@ if (Foxtrick.arch == 'Sandboxed')
  * @typedef FT.ResourceDict
  * @prop {Record<string, *>} prefsChromeUser
  * @prop {Record<string, *>} prefsChromeDefault
-
  * @prop {Record<string, string>} propertiesDefault
  * @prop {Record<string, string>} properties
  * @prop {string} screenshotsDefault
  * @prop {string} screenshots
-
  * @prop {number} plForm
  * @prop {number} plFormDefault
- *
  * @prop {string} [cssText]
-
  * @prop {Record<string, string>} htLangJSON
  * @prop {string} currencyJSON
  * @prop {string} aboutJSON
  * @prop {string} worldDetailsJSON
+ * @prop {string} nationalTeamsJSON
  * @prop {Record<number, LeagueDefinition>} league
  * @prop {Record<number, number>} countryToLeague
  */
