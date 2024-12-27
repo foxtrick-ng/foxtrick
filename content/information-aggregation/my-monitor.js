@@ -36,8 +36,8 @@ Foxtrick.modules.MyMonitor = {
 			var teams = [];
 			try {
 				teams = JSON.parse(savedTeams);
-			}
-			catch (e) {
+			} 
+			catch {
 				Foxtrick.log('Cannot parse saved teams:', savedTeams);
 			}
 
@@ -130,9 +130,8 @@ Foxtrick.modules.MyMonitor = {
 			var matchesBySource = [
 				{ source: 'Hattrick', type: 'senior' },
 				{ source: 'Youth', type: 'youth' },
-
-				// README: HTO matches currently disabled in my monitor
-				// { source: 'HTOIntegrated', type: 'hto' },
+				// README: NT matches are now source: HTOIntegrated
+				{ source: 'HTOIntegrated', type: 'nt' },
 			];
 
 			Foxtrick.forEach(function(t) {
@@ -147,7 +146,8 @@ Foxtrick.modules.MyMonitor = {
 			 */
 			var matchesByType = [
 				'Official',
-				'NT',
+			//	README: disabled as NT matches are now source: HTOIntegrated
+			//	'NT',
 			];
 
 			Foxtrick.forEach(function(t) {
@@ -166,8 +166,7 @@ Foxtrick.modules.MyMonitor = {
 			var infoCell = row.appendChild(doc.createElement('td'));
 			infoCell.id = 'ft-monitor-live-info';
 
-			Foxtrick.onClick(button, function(ev) {
-				// eslint-disable-next-line no-invalid-this
+			Foxtrick.onClick(button, function() { 
 				var doc = this.ownerDocument;
 
 				/** @type {NodeListOf<HTMLAnchorElement>} */
@@ -189,7 +188,7 @@ Foxtrick.modules.MyMonitor = {
 				var url;
 
 				if (source) {
-					var re = new RegExp(Foxtrick.strToRe(source), 'i');
+					var re = new RegExp(Foxtrick.strToRe(source));
 					var sourceMatches = Foxtrick.filter(function(link) {
 						return re.test(link.href);
 					}, liveLinks);
@@ -242,6 +241,7 @@ Foxtrick.modules.MyMonitor = {
 
 		/**
 		 * display my monitor on MyHT, a.k.a news, and dashboard page
+		 * 
 		 * @param {document} doc
 		 */
 		var display = function(doc) {
@@ -281,7 +281,6 @@ Foxtrick.modules.MyMonitor = {
 			var sortAndReload = function(order) {
 				return function() {
 					Foxtrick.Prefs.setModuleValue('MyMonitor', order);
-					// eslint-disable-next-line no-invalid-this
 					this.ownerDocument.location.reload();
 				};
 			};
@@ -462,10 +461,9 @@ Foxtrick.modules.MyMonitor = {
 				 * @return {Listener<HTMLInputElement, MouseEvent>}
 				 */
 				var move = function(direction) {
-					return function(ev) {
+					return function() {
 						var teams = getSavedTeams();
 						var frames = [...doc.getElementsByClassName('ft-monitor-frame')];
-						// eslint-disable-next-line no-invalid-this, consistent-this
 						var thisFrame = this;
 						thisFrame = thisFrame.closest('.ft-monitor-frame');
 						if (!thisFrame) {
@@ -586,9 +584,9 @@ Foxtrick.modules.MyMonitor = {
 
 		/**
 		 * show my monitor shortcuts in sidebar
+		 * 
 		 * @param {document} doc
 		 */
-		// eslint-disable-next-line complexity
 		var showSidebar = function(doc) {
 			/** @type {MyMonitorTeamType} */
 			var type;
