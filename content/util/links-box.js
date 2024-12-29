@@ -366,9 +366,9 @@ Foxtrick.util.links.showEdit = function(doc, ownBoxBody, linkSet) {
  */
 Foxtrick.util.links.delStdLink = function() {
 	try {
-		let link = this.previousElementSibling;
-		let key = link.getAttribute('key');
-		let moduleName = link.getAttribute('module');
+		let link = /**@type {HTMLAnchorElement} */(this.previousElementSibling);
+		let key = link.dataset.key;
+		let moduleName = link.dataset.module;
 		Foxtrick.Prefs.setModuleEnableState(moduleName + '.' + key, false);
 		let linkSpan = this.parentElement;
 		linkSpan.remove();
