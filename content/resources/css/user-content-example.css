@@ -242,18 +242,6 @@ a[data-author^="HT-"] {
 	background-color: #d1d1ff;
 }
 
-/* New HT mail */
-.ft-new-mail {
-	color: yellow;
-	font-weight: bold;
-}
-
-/* New Forum repply to me */
-.ft-new-forum-msg {
-	color: blue;
-	font-weight: bold;
-}
-
 /* friendly pool colors */
 .ft-home {background-color:#FC0;} /* played home */
 .ft-away {background-color:#F74;} /* played away */
