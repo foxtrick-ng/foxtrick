@@ -774,13 +774,13 @@ Foxtrick.getChanges = function(node, callback, obsOpts) {
 // eslint-disable-next-line complexity
 Foxtrick.addBoxToSidebar = function(doc, title, content, prec, forceLeft) { // FIXME support angular
 	// class of the box to add
-	var boxClass = 'sidebarBox';
+	var boxClass = 'box sidebarBox';
 	var sidebar = doc.getElementById('sidebar');
 	if (!sidebar || forceLeft) {
 		if ((sidebar = doc.querySelector('.subMenu')))
-			boxClass = 'subMenuBox';
+			boxClass = 'box subMenuBox';
 		else if ((sidebar = doc.querySelector('.subMenuConf')))
-			boxClass = 'subMenuBox';
+			boxClass = 'box subMenuBox';
 	}
 
 	if (!sidebar)
