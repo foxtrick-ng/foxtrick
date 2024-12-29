@@ -9,6 +9,7 @@ Foxtrick.modules['LinksArena'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.LINKS,
 	PAGES: ['arena'],
 	LINK_TYPES: 'arenalink',
+	SEATING_TYPES: ['terraces', 'basic', 'roof', 'vip'],
 	/**
 	 * return HTML for FT prefs
 	 * @param  {document}         doc
@@ -24,22 +25,41 @@ Foxtrick.modules['LinksArena'] = {
 	},
 
 	links: function(doc) {
-		var arenaInfo = doc.querySelector('div.arenaInfo');
-		if (!arenaInfo)
+		let arenaInfo = doc.querySelector('div.arenaInfo');
+		let arenaExpansion = doc.querySelector('ng-app[app="arena-expansion"]');
+		if (!arenaInfo && !arenaExpansion)
 			return;
+		let SEATING_TYPES = Foxtrick.modules.LinksArena.SEATING_TYPES;
+		let arenaId = Foxtrick.Pages.All.getId(doc);
+		let teamId = Foxtrick.Pages.All.getTeamId(doc);
+		let info = { teamId: teamId, arenaId: arenaId, };
+		for (let seating of SEATING_TYPES) info[seating] = null;
+		let retVal = {info: info};
 
-		var arenaId = Foxtrick.Pages.All.getId(doc);
-		var teamId = Foxtrick.Pages.All.getTeamId(doc);
+		if (arenaInfo) {
+			// We are on the stadium page.
+			let arenaTable = arenaInfo.getElementsByTagName('table')[0];
+			if (arenaTable) {
+				let rowIdx = 3;
+				for (let seating of SEATING_TYPES) {
+					info[seating] = Foxtrick.trimnum(arenaTable.rows[rowIdx].cells[1].textContent);
+					rowIdx++;
+				}
+				return retVal;
+			}
+		}
 
-		var arenaTable = arenaInfo.getElementsByTagName('table')[0];
-		var info = {
-			terraces: Foxtrick.trimnum(arenaTable.rows[3].cells[1].textContent),
-			basic: Foxtrick.trimnum(arenaTable.rows[4].cells[1].textContent),
-			roof: Foxtrick.trimnum(arenaTable.rows[5].cells[1].textContent),
-			vip: Foxtrick.trimnum(arenaTable.rows[6].cells[1].textContent),
-			teamId: teamId,
-			arenaId: arenaId,
-		};
-		return { info: info };
+		if (arenaExpansion) {
+			// We are on the stadium expansion page.
+			let arenaTable = arenaExpansion.getElementsByTagName('table')[0];
+			if (arenaTable) {
+				let rowIdx = 2;
+				for (let seating of SEATING_TYPES) {
+					info[seating] = Foxtrick.trimnum(arenaTable.rows[rowIdx].cells[1].textContent);
+					rowIdx++;
+				}
+				return retVal;
+			}
+		}
 	}
 };
