@@ -76,7 +76,7 @@ html[dir="rtl"] .teamIcon {
 .ft-monitor-frame > h3 > a.flag + img {
 	margin-top:-2px;
 }
-#eventList {
+
+div.calendarWrapperOuter {
 	min-height: 0px;
 }
-
