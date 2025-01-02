@@ -175,51 +175,46 @@ html[dir="rtl"] .date { padding-right: initial; }
 div.rightHandBoxBody > div {
 	margin: 10px 0;
 }
-/*
- * expanders
- * TODO - use attribute expanded to denote whether expanded
- */
 
-h2.ft-expander-unexpanded, h2.ft-expander-expanded,
-div.ft-expander-unexpanded h2, div.ft-expander-expanded h2,
-h4.ft-expander-unexpanded, h4.ft-expander-expanded,
-div.ft-expander-unexpanded h4, div.ft-expander-expanded h4 {
+/* expanders */
+div.ft-expander-unexpanded, div.ft-expander-expanded,
+h2.ft-expander-unexpanded, h2.ft-expander-expanded {
 	cursor: pointer;
+}
+
+div.ft-expander-unexpanded h4, div.ft-expander-expanded h4,
+h2.ft-expander-unexpanded, h2.ft-expander-expanded {
 	background-repeat: no-repeat;
 }
+
+div.ft-expander-unexpanded h4 {
+	background-image: url("chrome://foxtrick/content/resources/img/link-down.png");
+}
+div.ft-expander-expanded h4 {
+	background-image: url("chrome://foxtrick/content/resources/img/link-up.png");
+}
+
+h2.ft-expander-unexpanded {
+	background-image: url("chrome://foxtrick/content/resources/img/down.gif");
+}
+h2.ft-expander-expanded {
+	background-image: url("chrome://foxtrick/content/resources/img/up.gif");
+}
+
 html[dir="ltr"] h2.ft-expander-unexpanded, html[dir="ltr"] h2.ft-expander-expanded,
-html[dir="ltr"] div.ft-expander-unexpanded h2, html[dir="ltr"] div.ft-expander-expanded h2,
-html[dir="ltr"] h4.ft-expander-unexpanded, html[dir="ltr"] h4.ft-expander-expanded,
 html[dir="ltr"] div.ft-expander-unexpanded h4, html[dir="ltr"] div.ft-expander-expanded h4 {
 	background-position: right;
 }
 html[dir="rtl"] h2.ft-expander-unexpanded, html[dir="rtl"] h2.ft-expander-expanded,
-html[dir="rtl"] div.ft-expander-unexpanded h2, html[dir="rtl"] div.ft-expander-expanded h2,
-html[dir="rtl"] h4.ft-expander-unexpanded, html[dir="rtl"] h4.ft-expander-expanded,
 html[dir="rtl"] div.ft-expander-unexpanded h4, html[dir="rtl"] div.ft-expander-expanded h4 {
 	background-position: left;
 }
 
-/* div expanders */
-div.ft-expander-unexpanded h2, div.ft-expander-unexpanded h4 {
-	background-image: url("chrome://foxtrick/content/resources/img/link-down.png");
+div.ft-expander-unexpanded i.icon-caret-up {
+	display: none;
 }
-div.ft-expander-expanded h2, div.ft-expander-expanded h4 {
-	background-image: url("chrome://foxtrick/content/resources/img/link-up.png");
-}
-
-/* h2/h3 expanders */
-h2.ft-expander-unexpanded, h3.ft-expander-unexpanded {
-	background-image: url("chrome://foxtrick/content/resources/img/down.gif");
-}
-h2.ft-expander-expanded, h3.ft-expander-expanded {
-	background-image: url("chrome://foxtrick/content/resources/img/up.gif");
-}
-html[dir="ltr"] h3.ft-expander-unexpanded, html[dir="ltr"] h3.ft-expander-expanded {
-	padding-right: 20px;
-}
-html[dir="rtl"] h3.ft-expander-unexpanded, html[dir="rtl"] h3.ft-expander-expanded {
-	padding-right: 20px;
+div.ft-expander-expanded i.icon-caret-down{
+	display: none;
 }
 
 /*Forum HighlighthreadOpener PostID*/

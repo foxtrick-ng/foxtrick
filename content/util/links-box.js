@@ -31,7 +31,7 @@ Foxtrick.util.links.add = function(ownBoxBody, customLinkSet, info, hasNewSideba
 		// save info for reuse
 		ownBoxBody.dataset.linkInfo = JSON.stringify(info);
 
-		var expanded = false;
+		var expanded = true;
 
 		/** @type {Listener<HTMLElement, MouseEvent>} */
 		var headerClick = function() {
@@ -39,8 +39,6 @@ Foxtrick.util.links.add = function(ownBoxBody, customLinkSet, info, hasNewSideba
 			let doc = this.ownerDocument;
 
 			try {
-				expanded = !expanded;
-
 				// remove old
 				let editbox = doc.getElementById('ft-edit-links');
 				if (editbox)
@@ -59,6 +57,8 @@ Foxtrick.util.links.add = function(ownBoxBody, customLinkSet, info, hasNewSideba
 					Foxtrick.util.links.showEdit(doc, ownBoxBody, customLinkSet);
 				else
 					Foxtrick.util.links.showLinks(doc, ownBoxBody, customLinkSet);
+				
+				expanded = !expanded;
 			}
 			catch (e) {
 				Foxtrick.log(e);
@@ -78,16 +78,9 @@ Foxtrick.util.links.add = function(ownBoxBody, customLinkSet, info, hasNewSideba
 			let header = sidebar.querySelector(headerTag);
 			if (header.textContent != l10nBoxHeader)
 				return false;
-
-			let hh = Foxtrick.cloneElement(header, true);
-			let div = doc.createElement('div');
-			div.appendChild(hh);
-			div.setAttribute('aria-label', div.title = l10nCustomLinkTitle);
-
-			Foxtrick.onClick(div, headerClick);
-
-			let pn = header.parentNode;
-			pn.replaceChild(div, header);
+			let parentNode = /**@type {HTMLElement}*/(header.parentNode);
+			parentNode.setAttribute('aria-label', parentNode.title = l10nCustomLinkTitle);
+			Foxtrick.onClick(parentNode, headerClick);
 			return true;
 		}, allDivs);
 
@@ -136,10 +129,6 @@ Foxtrick.util.links.showLinks = function(doc, ownBoxBody, linkSet) {
 		let box = doc.getElementById(ownBoxId);
 		if (!box)
 			return;
-
-		let div = box.firstElementChild;
-		Foxtrick.removeClass(div, 'ft-expander-unexpanded');
-		Foxtrick.addClass(div, 'ft-expander-expanded');
 
 		let delLinks = ownBoxBody.querySelectorAll('.foxtrickRemove');
 		for (let delLink of delLinks)
@@ -194,11 +183,10 @@ Foxtrick.util.links.showEdit = function(doc, ownBoxBody, linkSet) {
 	// TODO convert into a class
 	try {
 		{
-			// box
 			let ownBoxId = 'ft-links-box';
-			let expander = doc.getElementById(ownBoxId).firstElementChild;
-			Foxtrick.removeClass(expander, 'ft-expander-expanded');
-			Foxtrick.addClass(expander, 'ft-expander-unexpanded');
+			let box = doc.getElementById(ownBoxId);
+			if (!box)
+				return;
 
 			let delLinks = ownBoxBody.querySelectorAll('.foxtrickRemove');
 			for (let delLink of delLinks)
@@ -757,12 +745,14 @@ Foxtrick.util.links.run = function(doc, module) {
 
 	}).catch(Foxtrick.catch('links.run.custom'));
 
-	let adder = o.hasNewSidebar ? Foxtrick.Pages.Match : Foxtrick;
+	let sidebarBox;
+	if (o.hasNewSidebar) 
+		sidebarBox = Foxtrick.Pages.Match.addBoxToSidebar(doc, HEADER, box, -20, true);
+	else
+		sidebarBox = Foxtrick.addBoxToSidebar(doc, HEADER, box, -20, false, true);
 
-	// eslint-disable-next-line no-magic-numbers
-	let wrapper = adder.addBoxToSidebar(doc, HEADER, box, -20);
-	if (wrapper)
-		wrapper.id = 'ft-links-box';
+	if (sidebarBox)
+		sidebarBox.id = 'ft-links-box';
 };
 
 /**

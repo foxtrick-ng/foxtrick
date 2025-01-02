@@ -34,18 +34,9 @@ Foxtrick.modules['TeamSelectBox'] = {
 		});
 		listBox = linkBoxes[0];
 
-		// add headerClick
 		var header = listBox.getElementsByTagName('h2')[0];
-		var pn = header.parentNode;
-		var div = null;
-		if (pn.className != 'boxLeft') {
-			var hh = pn.removeChild(header);
-			div = Foxtrick.createFeaturedElement(doc, this, 'div');
-			div.appendChild(hh);
-			pn.insertBefore(div, pn.firstChild);
-		}
-		else
-			div = pn.parentNode;
+		var boxHead = header.parentNode;
+		Foxtrick.addBoxToSidebar(doc, header.textContent, null, 0, false, true)
 
 		var toList = function() {
 			var option = listBox.getElementsByTagName('option')[0];
@@ -78,7 +69,10 @@ Foxtrick.modules['TeamSelectBox'] = {
 			var players = listBox.getElementsByTagName('a');
 			for (var i = 0; i < players.length; ++i) {
 				var player = players[i];
-				var option = doc.createElement('option');
+				if (player.href.trim().length == 0)
+					continue;
+
+				option = doc.createElement('option');
 				option.value = player.href;
 				option.textContent = player.textContent;
 				selectBox.appendChild(option);
@@ -101,20 +95,13 @@ Foxtrick.modules['TeamSelectBox'] = {
 		var toggle = function() {
 			try {
 				showAsList = !showAsList;
-				if (showAsList) {
-					toList();
-					div.className = 'boxHead ft-expander-expanded';
-				}
-				else {
-					toSelectBox();
-					div.className = 'boxHead ft-expander-unexpanded';
-				}
+				(showAsList) ? toList() : toSelectBox();
 			}
 			catch (e) {
 				Foxtrick.log(e);
 			}
 		};
-		Foxtrick.onClick(div, toggle);
+		Foxtrick.onClick(boxHead, toggle);
 		toggle();
 	}
 };

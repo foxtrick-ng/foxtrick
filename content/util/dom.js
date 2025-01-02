@@ -762,17 +762,20 @@ Foxtrick.getChanges = function(node, callback, obsOpts) {
 
 /**
  * Add a box to the sidebar, either on the right or on the left.
+ * If box with title already exists, method adds content and expander. 
  * Returns the added box.
+ * 
  * @author Ryan Li, LA-MJ
  * @param  {document} doc
- * @param  {string}   title       the title of the box, will create one if inexists
- * @param  {Element}  content     HTML node of the content
- * @param  {number}   prec        precedence of the box, the smaller, the higher
- * @param  {boolean}  [forceLeft] force the box to be displayed on the left
- * @return {Element}              box to be added to
+ * @param  {string}   title        the title of the box, will create one if inexists
+ * @param  {Element}  content      HTML node of the content
+ * @param  {number}   prec         precedence of the box, the smaller, the higher
+ * @param  {boolean}  [forceLeft]  force the box to be displayed on the left
+ * @param  {boolean}  [isExpander] add expander icon and event to box header
+ * @return {Element}               box to be added to
  */
 // eslint-disable-next-line complexity
-Foxtrick.addBoxToSidebar = function(doc, title, content, prec, forceLeft) { // FIXME support angular
+Foxtrick.addBoxToSidebar = function(doc, title, content, prec, forceLeft, isExpander) { // FIXME support angular
 	// class of the box to add
 	var boxClass = 'sidebarBox';
 	var sidebar = doc.getElementById('sidebar');
@@ -811,33 +814,20 @@ Foxtrick.addBoxToSidebar = function(doc, title, content, prec, forceLeft) { // F
 		boxHead.className = 'boxHead';
 		dest.appendChild(boxHead);
 
-		// boxHead - boxLeft
-		let headBoxLeft = doc.createElement('div');
-		headBoxLeft.className = 'boxLeft';
-		boxHead.appendChild(headBoxLeft);
-
-		// boxHead - boxLeft - h2
+		// boxHead - h2
 		let h2 = doc.createElement('h2');
 		h2.textContent = title;
-		headBoxLeft.appendChild(h2);
+		boxHead.appendChild(h2);
 
 		// boxBody
 		let boxBody = doc.createElement('div');
 		boxBody.className = 'boxBody';
 		dest.appendChild(boxBody);
 
-		// append content to boxBody
-		boxBody.appendChild(content);
-
 		// boxFooter
 		let boxFooter = doc.createElement('div');
 		boxFooter.className = 'boxFooter';
 		dest.appendChild(boxFooter);
-
-		// boxFooter - boxLeft
-		let footBoxLeft = doc.createElement('div');
-		footBoxLeft.className = 'boxLeft';
-		boxFooter.appendChild(footBoxLeft);
 
 		// now we insert the newly created box
 		var inserted = false;
@@ -864,8 +854,34 @@ Foxtrick.addBoxToSidebar = function(doc, title, content, prec, forceLeft) { // F
 			sidebar.appendChild(dest);
 	}
 
+	if (isExpander) {
+		let boxHead = dest.querySelector('.boxHead');
+		if (boxHead && !dest.querySelector('[class^="ft-expander"]')) {
+			Foxtrick.addClass(boxHead, 'ft-expander-unexpanded');
+
+			let iconDown = doc.createElement('i');
+			iconDown.classList.add('icon-caret-down');
+			let iconUp = doc.createElement('i');
+			iconUp.classList.add('icon-caret-up');
+
+			let anchor = doc.createElement('a');
+			anchor.append(iconDown, iconUp);
+
+			let span = doc.createElement('span');
+			span.classList.add('header-right');
+			span.append(anchor);
+
+			Foxtrick.onClick(boxHead, () => {
+				Foxtrick.toggleClass(boxHead, 'ft-expander-expanded');
+				Foxtrick.toggleClass(boxHead, 'ft-expander-unexpanded');
+			});
+			boxHead.append(span);
+		}
+	}
+
 	// finally we add the content
-	dest.querySelector('.boxBody').appendChild(content);
+	if (content)
+		dest.querySelector('.boxBody').appendChild(content);
 
 	return dest;
 };

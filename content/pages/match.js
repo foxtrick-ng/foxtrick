@@ -678,13 +678,15 @@ Foxtrick.Pages.Match.addLiveOverviewListener = function(doc, callback) {
  * Add a box to the sidebar on the right.
  * Returns the added box.
  * Modeled on Foxtrick.addBoxToSidebar.
+ * 
  * @param  {document} doc
- * @param  {string}   title   the title of the box, will create one if inexists
- * @param  {Element}  content HTML node of the content
- * @param  {number}   prec    precedence of the box, the smaller, the higher
- * @return {Element}          box to be added to
+ * @param  {string}   title      the title of the box, will create one if inexists
+ * @param  {Element}  content    HTML node of the content
+ * @param  {number}   prec       precedence of the box, the smaller, the higher
+ * @param  {boolean}  isExpander add expander icon and event to box header
+ * @return {Element}             box to be added to
  */
-Foxtrick.Pages.Match.addBoxToSidebar = function(doc, title, content, prec) {
+Foxtrick.Pages.Match.addBoxToSidebar = function(doc, title, content, prec, isExpander) {
 	if (this.isPrematch(doc)) {
 		// redirect to old style in prematch
 		return Foxtrick.addBoxToSidebar(doc, title, content, prec);
@@ -717,6 +719,14 @@ Foxtrick.Pages.Match.addBoxToSidebar = function(doc, title, content, prec) {
 		// boxHead
 		var boxHead = doc.createElement('div');
 		dest.appendChild(boxHead);
+
+		if (isExpander) {
+			Foxtrick.addClass(boxHead, 'ft-expander-unexpanded');
+			Foxtrick.onClick(boxHead, () => {
+				Foxtrick.toggleClass(boxHead, 'ft-expander-expanded');
+				Foxtrick.toggleClass(boxHead, 'ft-expander-unexpanded');
+			});
+		}
 
 		// header
 		var header = doc.createElement('h4');
