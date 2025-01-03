@@ -13,3 +13,9 @@ html[data-theme="simple"] #ft_rapidid_container { font-size: 100%; }
 html[data-theme="simple"] #ft_rapidid_form { z-index: 999; position: relative; bottom: 10px; background-color: white;}
 html[data-theme="standard"] #ft_rapidid_form { position: relative; bottom: 6px; }
 
+/* style the live ticker to prevent it wrapping in locales with a long
+translation of l10n key RapidId.ViewById */
+.ongoingEvents {
+	position: absolute;
+	margin-left: 320px;
+}
