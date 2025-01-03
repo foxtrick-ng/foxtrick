@@ -97,7 +97,16 @@ Foxtrick.modules.ShowFriendlyBooked = {
 
 			if (Foxtrick.util.layout.isSupporter(doc)) {
 				let updPnlLiveLeagueTable = Foxtrick.Pages.Series.getLiveTable(doc);
-				Foxtrick.insertBefore(link, updPnlLiveLeagueTable.querySelector('br'));
+				let headerBr = updPnlLiveLeagueTable.querySelector('br');
+				try {
+					if (headerBr)
+						Foxtrick.insertBefore(link, headerBr);
+					else
+						// no <br> in header, probably HGL during season break
+						Foxtrick.prependChild(link, updPnlLiveLeagueTable.firstElementChild.firstElementChild);
+				} catch {
+					Foxtrick.log(this.MODULE_NAME+': Error inserting link into series table')
+				}
 			}
 			else {
 				let table = Foxtrick.Pages.Series.getTable(doc);
