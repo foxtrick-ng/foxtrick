@@ -42,6 +42,11 @@ Foxtrick.modules['Fans'] = {
 		}
 
 		if (Foxtrick.Prefs.isModuleOptionEnabled('Fans', 'ShowSumFans')) {
+			/** @type {HTMLTableElement} */
+			var table = doc.querySelector('#members .thin, .fanUpdates');
+			if (!table)
+				return; // table won't be present for new teams that haven't had a fan update
+
 			var main = doc.getElementById('mainBody');
 			var fansText = main.getElementsByTagName('td')[1].textContent;
 			var fansNow = Foxtrick.trimnum(fansText);
@@ -60,8 +65,6 @@ Foxtrick.modules['Fans'] = {
 				total += n;
 			}, nums);
 
-			/** @type {HTMLTableElement} */
-			var table = doc.querySelector('#members .thin, .fanUpdates');
 			var row = Foxtrick.insertFeaturedRow(table, module, -1);
 			Foxtrick.addClass(row, 'ft-bordertop');
 			var td1 = doc.createElement('td');
