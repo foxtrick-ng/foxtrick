@@ -33,6 +33,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 		Players: {
 			ownLink: '/Club/Players/',
 			linkByTeam: '/Club/Players/?teamId=[teamid]',
+			linkByNationalTeam: '/Club/NationalTeam/NTPlayers.aspx?teamId=[teamid]',
 			linkByUser: '/Club/Manager/?userId=[userid]&redir_to_players=true',
 		},
 		Series: {
@@ -288,7 +289,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 					list.className = 'ft-popup-list';
 
 					var addItem = function(key, isOwnTeam, teamId, userId, userName, ownLink,
-					                       linkByTeam, linkByUser, linkByUserName) {
+					                       linkByTeam, linkByNationalTeam, linkByUser, linkByUserName) {
 
 						var item = doc.createElement('li');
 						var link = doc.createElement('a');
@@ -297,9 +298,13 @@ Foxtrick.modules['TeamPopupLinks'] = {
 						var user = userName;
 						if (user && userId && userId == user.match(/\d+/))
 							user = '';
+						
+						var isNationalTeam = Foxtrick.util.id.isNTId(teamId);
 
 						if (isOwnTeam && ownLink)
 							link.href = ownLink;
+						else if (teamId && isNationalTeam && linkByNationalTeam)
+							link.href = linkByNationalTeam.replace(TEAM_ID_TAG, teamId);
 						else if (teamId && linkByTeam)
 							link.href = linkByTeam.replace(TEAM_ID_TAG, teamId);
 						else if (user && linkByUserName)
@@ -337,7 +342,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 								continue;
 
 							let ownLink = def.ownLink;
-							addItem(link, true, null, null, null, ownLink, null, null, null);
+							addItem(link, true, null, null, null, ownLink, null, null, null, null);
 						}
 					}
 					else {
@@ -346,7 +351,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 								let def = links[link];
 								let own = teamId == ownTeamId;
 								addItem(link, own, teamId, userId, userName, def.ownLink,
-								        def.linkByTeam, def.linkByUser, def.linkByUserName);
+								        def.linkByTeam, def.linkByNationalTeam, def.linkByUser, def.linkByUserName);
 							}
 							else if (isEnabledWithinContext(link, !showMore)) {
 								showLessMore = true;
