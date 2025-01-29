@@ -100,7 +100,6 @@ Foxtrick.modules.ShowLineupSet = {
 			var teamNode1 = doc.createElement('span');
 			teamNode1.textContent = teams[1];
 
-			Foxtrick.addClass(matchLink, 'nowrap');
 			matchLink.textContent = '';
 			matchLink.appendChild(teamNode0);
 			matchLink.appendChild(doc.createTextNode('\u00a0-\u00a0'));
