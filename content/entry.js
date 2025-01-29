@@ -180,7 +180,7 @@ Foxtrick.entry.run = function(doc) {
 		if (shouldDelay) {
 			promise = new Promise((resolve) => {
 				Foxtrick.onChange(ngApp, (doc, app) => {
-					if (!doc.getElementById('mainBody'))
+					if (!doc.getElementById('mainBody') && !app.getElementsByTagName('ht-mainbox').length)
 						return false;
 
 					if (app.getElementsByTagName('ht-loading').length)
