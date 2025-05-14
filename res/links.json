@@ -489,12 +489,15 @@
 			"url": "https://hattid.com/team/teamOverview?teamId=[teamid]"
 		},
 		"leaguelink": {
-			"url": "https://hattid.com/league?leagueId=[leagueid]]"
+			"url": "https://hattid.com/league?leagueId=[leagueid]"
 		},
 		"worldlink": {
 			"url": "https://hattid.com/worldOverview"
 		},
-		"title": "Hattid (AlltidLike)",
+		"playerlink": {
+			"url": "https://hattid.com/player/[playerid]"
+		},
+		"title": "Hattid",
 		"img": "https://www.foxtrick.org/res/linkicons/hattid.png"
 	},
 	"ratemyacademy": {
