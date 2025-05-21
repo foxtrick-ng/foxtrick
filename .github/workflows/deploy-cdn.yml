@@ -5,6 +5,8 @@ on:
   workflow_dispatch:
   
   push:
+    branches:
+      - 'cdn'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
