@@ -522,7 +522,7 @@ if (Foxtrick.platform !== 'Android') {
 	// branch cannot be accessed so early so we need a lazy getter
 	(function() {
 		var localDataPath = Foxtrick.DataPath;
-		var remoteDataPath = 'https://cdn.rawgit.com/minj/foxtrick/res/%d/res/';
+		var remoteDataPath = 'https://foxtrick-ng.github.io/foxtrick/';
 		Foxtrick.lazyProp(Foxtrick, 'DataPath', function() {
 			if (Foxtrick.branch !== 'dev')
 				return remoteDataPath;
