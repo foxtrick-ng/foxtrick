@@ -279,6 +279,14 @@ Foxtrick.modules.Links = {
 			},
 
 			/**
+			 * @param  {string}  prop
+			 * @return {boolean}
+			 */
+			NOTEXISTS: function(prop) {
+				return !this.EXISTS(prop);
+			},
+
+			/**
 			 * @param  {string}  first
 			 * @param  {string}  second
 			 * @return {boolean}
@@ -440,7 +448,7 @@ Foxtrick.modules.Links = {
 /**
  * @typedef {'GREATER'|'SMALLER'|'EQUAL'} LinkAllowCompareFilterType
  * @typedef {[LinkAllowCompareFilterType, string, string]} LinkAllowCompareFilter
- * @typedef {'EXISTS'} LinkAllowPredicateFilterType
+ * @typedef {'EXISTS'|'NOTEXISTS'} LinkAllowPredicateFilterType
  * @typedef {[LinkAllowPredicateFilterType, string]} LinkAllowPredicateFilter
  * @typedef {LinkAllowCompareFilter|LinkAllowPredicateFilter} LinkAllowFilter
  * typedef {LinkAllowCompareFilter|LinkAllowPredicateFilter|LinkAllowLogicFilter} LinkAllowFilter
