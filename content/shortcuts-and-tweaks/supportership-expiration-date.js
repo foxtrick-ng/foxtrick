@@ -18,7 +18,7 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 
 		// get the content, translate days to date
 		let packageType =
-			doc.getElementById('ctl00_ctl00_CPContent_CPSidebar_pnlSubscriptionPackageType');
+			doc.getElementById('ctl00_ctl00_CPContent_CPSidebar_ucMyAccount_pnlSubscriptionPackageType');
 
 		if (!packageType)
 			return;
@@ -26,7 +26,9 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 		let box = packageType.closest('.sidebarBox');
 
 		/** @type {HTMLElement} */
-		let container = box.querySelector('.myAccountCounter .flex-grow');
+		let container = box.querySelector('#ctl00_ctl00_CPContent_CPSidebar_ucMyAccount_pnlSupporter');
+		if (!container)
+			return;
 
 		// feature highlight
 		Foxtrick.makeFeaturedElement(container, this);
