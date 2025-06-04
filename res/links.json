@@ -488,12 +488,19 @@
 		"teamlink": {
 			"url": "https://hattid.com/team/teamOverview?teamId=[teamid]"
 		},
+		"playerslink": {
+			"url": "https://hattid.com/team/[teamid]?pageName=playerRatings&pageSize=64"
+		},
 		"leaguelink": {
 			"url": "https://hattid.com/league?leagueId=[leagueid]]"
 		},
 		"worldlink": {
 			"url": "https://hattid.com/worldOverview"
 		},
+		"allow": [
+			"NOTEXISTS",
+			"ntteamid"
+		],
 		"title": "Hattid (AlltidLike)",
 		"img": "https://www.foxtrick.org/res/linkicons/hattid.png"
 	},

@@ -40,6 +40,10 @@ Foxtrick.modules['LinksPlayers'] = {
 			playerIds: playerIds,
 		};
 
+		if (Foxtrick.util.id.isNTId(teamId)) {
+			 info.ntTeamId = teamId;
+		}
+
 		return { info: info };
 	},
 };
