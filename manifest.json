@@ -170,6 +170,7 @@
 			"content/links/links-country.js",
 			"content/links/links-economy.js",
 			"content/links/links-fans.js",
+			"content/links/links-flags.js",
 			"content/links/links-league.js",
 			"content/links/links-manager.js",
 			"content/links/links-match.js",

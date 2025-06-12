@@ -112,8 +112,24 @@
 		"teamlink": {
 			"url": "http://www.ht-flagtools.org/profile.php?teamId=[teamid]"
 		},
+		"flagslink": {
+			"url": "http://www.ht-flagtools.org/profile.php?teamId=[teamid]"
+		},
 		"title": "HT Flagtools",
 		"img": "https://www.foxtrick.org/res/linkicons/flagtools.ico"
+	},
+	"funwithflags": {
+		"challengeslink": {
+			"url": "https://hattrick-fun-with-flags.app/"
+		},
+		"teamlink": {
+			"url": "https://hattrick-fun-with-flags.app/"
+		},
+		"flagslink": {
+			"url": "https://hattrick-fun-with-flags.app/"
+		},
+		"title": "Fun with flags",
+		"img": "https://foxtrick-ng.github.io/foxtrick/linkicons/fwf.ico"
 	},
 	"fcc_logo_coolness": {
 		"teamlink": {
