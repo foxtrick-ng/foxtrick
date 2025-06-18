@@ -1,4 +1,5 @@
 access/aria-landmarks.js
+alert/chrome-version.js
 alert/live-alert.js
 alert/new-mail.js
 alert/ticker-alert.js

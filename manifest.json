@@ -102,6 +102,7 @@
 
 			// <!-- categorized modules -->
 			"content/access/aria-landmarks.js",
+			"content/alert/chrome-version.js",
 			"content/alert/live-alert.js",
 			"content/alert/new-mail.js",
 			"content/alert/ticker-alert.js",

@@ -116,6 +116,7 @@ a good reason to. They are for version bumps in Makefile.
 
 				<!-- categorized modules -->
 				<string>content/access/aria-landmarks.js</string>
+				<string>content/alert/chrome-version.js</string>
 				<string>content/alert/live-alert.js</string>
 				<string>content/alert/new-mail.js</string>
 				<string>content/alert/ticker-alert.js</string>
