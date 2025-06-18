@@ -8,6 +8,7 @@
 
 /**
  * @typedef FT.Links
+ * @prop {Number} CACHE_MSECS how long to cache links.json (milliseconds)
  * @prop {()=>Promise<LinkCollection>} getCollection
  * @prop {(doc: document, options: LinkPageQuery)=>Promise<HTMLAnchorElement[]>} getLinks
  * @prop {(doc: document, c: LinkCollection, o: LinkPageQuery)=>HTMLAnchorElement[]} makeAnchors
@@ -21,6 +22,8 @@ Foxtrick.modules.Links = {
 	CORE_MODULE: true,
 	PAGES: ['all'],
 	OPTIONS: ['ReuseTab'],
+
+	CACHE_MSECS: Foxtrick.util.time.MSECS_IN_DAY,
 
 	/**
 	 * @param  {document} doc
@@ -137,7 +140,8 @@ Foxtrick.modules.Links = {
 			// Foxtrick.log('loading feed:', feed);
 
 			try {
-				let text = /** @type {string} */ (await Foxtrick.load(feed));
+				let text = /** @type {string} */ 
+				(await Foxtrick.load(feed, undefined, Foxtrick.modules.Core.HT_TIME + this.CACHE_MSECS));
 
 				if (text) {
 					Foxtrick.storage.set('LinksFeed.' + feed, text)
@@ -167,7 +171,7 @@ Foxtrick.modules.Links = {
 
 				return Foxtrick.storage.get('LinksFeed.' + feed);
 			}
-		}).map(p => p.catch(Foxtrick.catch('StoreLinksCollection')));
+		}.bind(this)).map(p => p.catch(Foxtrick.catch('StoreLinksCollection')));
 
 		const feedTexts = (await Promise.all(promises)).filter(Boolean).map(String);
 		return parseFeeds(feedTexts);
