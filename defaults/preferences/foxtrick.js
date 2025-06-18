@@ -192,7 +192,7 @@ pref("extensions.foxtrick.prefs.module.LastLogin.enabled", true);
 pref("extensions.foxtrick.prefs.module.LeagueNewsFilter.enabled", true);
 pref("extensions.foxtrick.prefs.module.LeagueNewsFilter.value", 0);
 pref("extensions.foxtrick.prefs.module.LineupShortcut.enabled", true);
-pref("extensions.foxtrick.prefs.module.Links.feedsList", "https://cdn.rawgit.com/minj/foxtrick/res/%d/res/links.json");
+pref("extensions.foxtrick.prefs.module.Links.feedsList", "https://foxtrick-ng.github.io/foxtrick/links.json");
 pref("extensions.foxtrick.prefs.module.Links.ReuseTab.enabled", false);
 pref("extensions.foxtrick.prefs.module.LinksAchievements.enabled", true);
 pref("extensions.foxtrick.prefs.module.LinksAlliances.enabled", true);
