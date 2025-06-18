@@ -279,6 +279,14 @@ Foxtrick.modules.Links = {
 			},
 
 			/**
+			 * @param  {string}  prop
+			 * @return {boolean}
+			 */
+			NOTEXISTS: function(prop) {
+				return !this.EXISTS(prop);
+			},
+
+			/**
 			 * @param  {string}  first
 			 * @param  {string}  second
 			 * @return {boolean}
@@ -399,8 +407,14 @@ Foxtrick.modules.Links = {
 				let test = props.allow;
 				let [type, ...rest] = test;
 
-				// @ts-ignore
-				allowed = COMPARE[type](...rest);
+				 // catching errors here allows us to add new COMPARE functions
+				 // without throwing errors for users on older versions
+				try {
+					// @ts-ignore
+					allowed = COMPARE[type](...rest);
+				} catch (e) {
+					Foxtrick.log(`WARNING: COMPARE[${type}] failed -\n ${e.message}\n ${e.stack}`);
+				}
 			}
 
 			if (!allowed)
@@ -440,7 +454,7 @@ Foxtrick.modules.Links = {
 /**
  * @typedef {'GREATER'|'SMALLER'|'EQUAL'} LinkAllowCompareFilterType
  * @typedef {[LinkAllowCompareFilterType, string, string]} LinkAllowCompareFilter
- * @typedef {'EXISTS'} LinkAllowPredicateFilterType
+ * @typedef {'EXISTS'|'NOTEXISTS'} LinkAllowPredicateFilterType
  * @typedef {[LinkAllowPredicateFilterType, string]} LinkAllowPredicateFilter
  * @typedef {LinkAllowCompareFilter|LinkAllowPredicateFilter} LinkAllowFilter
  * typedef {LinkAllowCompareFilter|LinkAllowPredicateFilter|LinkAllowLogicFilter} LinkAllowFilter
