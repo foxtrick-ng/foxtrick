@@ -414,15 +414,34 @@
 	"hattrickportal": {
 		"title": "Hattrick Portal NT/U20 tracker",
 		"img": "https://www.foxtrick.org/res/linkicons/hattrickportal.ico",
+		"playerslink": {
+			"url": "https://hattrickportal.online/Tracker"
+		},
 		"trackerleaguelink": {
-			"url": "https://hattrickportal.pro/Tracker"
+			"url": "https://hattrickportal.online/Tracker"
 		},
 		"trackernationalteamlink": {
-			"url": "https://hattrickportal.pro/Tracker"
+			"url": "https://hattrickportal.online/Tracker"
 		},
 		"trackerplayerlink": {
-			"url": "https://hattrickportal.pro/Tracker"
-		}
+			"url": "https://hattrickportal.online/Tracker/Player.aspx?playerID=[playerid]"
+		},
+		"allow": [
+			"OR",
+			[
+				"EQUAL",
+				"ownteamid",
+				"teamid"
+			],
+			[
+				"EXISTS",
+				"leagueid"
+			],
+			[
+				"EXISTS",
+				"playerid"
+			]
+		]
 	},
 	"hattrick-youthclub": {
 		"youthlink": {
