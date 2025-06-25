@@ -140,7 +140,7 @@ Foxtrick.htPages = {
 	                              '&actionType=playerevents',
 	'trainingEvents'            : '/Club/Players/PlayerHistory.aspx?playerId=\\d+' +
 	                              '&actionType=trainingevents',
-	'training'                  : '/Club/Training/(Default.aspx|?|$)',
+	'training'                  : '/Club/Training/(Training.aspx|?|$)',
 	'trainingStats'             : '/World/Stats/StatsTraining.aspx',
 	'youthTraining'             : '/Club/Training/YouthTraining.aspx',
 	'teamEstimation'            : '/Club/Training/TeamEstimation.aspx',

@@ -24,6 +24,7 @@ Foxtrick.modules['LinksTraining'] = {
 	},
 
 	links: function(doc) {
+		/** FIXME: code below is for old HT, make it work again
 		var main = doc.getElementById('mainBody');
 		var coachLink = main.querySelector('a[href^="/Help/Rules/AppDenominations"]');
 		var coach = Foxtrick.util.id.getSkillLevelFromLink(coachLink);
@@ -38,5 +39,7 @@ Foxtrick.modules['LinksTraining'] = {
 			trainingType: trainingType,
 		};
 		return { info: info };
+		**/
+		return {info: {}}
 	}
 };

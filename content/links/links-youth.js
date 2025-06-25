@@ -187,7 +187,24 @@ Foxtrick.modules['LinksYouthPlayerList'] = {
 			youthTeamId,
 			playerIds,
 		};
-		return { info };
+
+		// uses new HT players table so doesn't work on classic pages
+		let playersTable = doc.querySelector('#playersTable');
+		if (playersTable) {
+			let leaguelink = playersTable.querySelector('a.flag');
+			if (leaguelink)
+				info['leagueId'] = leaguelink.href.match(/LeagueID=(\d+)/)[1];
+		}
+
+		var types = ['youthplayerlistlink'];
+		if (Foxtrick.Prefs.isModuleEnabled('LinksTracker')) {
+			var tracker = {
+				type: 'trackeryouthplayerlistlink',
+				module: 'LinksTracker',
+			};
+			types.push(tracker);
+		}
+		return { types: types, info: info };
 	},
 
 };
