@@ -51,6 +51,8 @@ Foxtrick.modules.Core = {
 	run: function(doc) {
 		const CORE = this;
 
+		CORE.logPageViewType(doc);
+
 		CORE.addBugReportLink(doc);
 
 		CORE.monitorWeekChanges(doc);
@@ -563,5 +565,14 @@ Foxtrick.modules.Core = {
 	getPlayerList: function() {
 		return this.PLAYER_LIST;
 	},
+
+	/**
+	 * Log whether page view is classic and/or legacy
+	 * @param {Document} doc
+	 */
+	logPageViewType: function(doc) {
+		Foxtrick.Pages.All.isClassic(doc) && Foxtrick.log('Classic view detected');
+		Foxtrick.Pages.All.isLegacy(doc) && Foxtrick.log('Legacy page detected');
+	}
 
 };

@@ -46,6 +46,46 @@ Foxtrick.Pages.All.isYouth = function(doc) {
 };
 
 /**
+ * Test whether the page is in HT classic mode
+ * @param {Document} doc
+ * @return {boolean}
+ */
+Foxtrick.Pages.All.isClassic = function (doc) {
+	return Foxtrick.hasClass(doc.querySelector('body'), 'classic');
+}
+
+/**
+ * Test whether the page is a legacy page
+ *
+ * Legacy pages are those from the old HT design,
+ * and do not imply classic mode.
+ * @param {Document} doc
+ * @returns {boolean}
+ */
+Foxtrick.Pages.All.isLegacy = function (doc) {
+	/** @type {PAGE[]} */
+	var LEGACY_PAGES = [
+		'matchOrder',
+		'matchStatus',
+		'matchesHistory',
+		'matchesLatest',
+		'matchReferees'
+	];
+	if (Foxtrick.isPage(doc, LEGACY_PAGES))
+		return true;
+
+	/** @type {PAGE[]} */
+	var NG_PAGES = [
+		'match',
+		'matchesLive'
+	];
+	if (Foxtrick.isPage(doc, NG_PAGES) && !doc.querySelector('ng-app'))
+		return true;
+
+	return false;
+}
+
+/**
  * Get the page ID.
  * E. g. match, arena, series, team, player ID.
  * Defaults to own team ID where no ID is avalable.
