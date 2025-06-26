@@ -279,6 +279,14 @@ Foxtrick.modules.Links = {
 			},
 
 			/**
+			 * @param  {string}  prop
+			 * @return {boolean}
+			 */
+			NOTEXISTS: function(prop) {
+				return !this.EXISTS(prop);
+			},
+
+			/**
 			 * @param  {string}  first
 			 * @param  {string}  second
 			 * @return {boolean}
@@ -321,6 +329,15 @@ Foxtrick.modules.Links = {
 			},
 
 			/**
+			 * @param  {string}  first
+			 * @param  {string}  second
+			 * @return {boolean}
+			 */
+			NOTEQUAL: function(first, second) {
+				return !this.EQUAL(first, second);
+			},
+
+			/**
 			 * @param  {(LinkAllowLogicFilter|LinkAllowFilter)[]} conds
 			 * @return {boolean}
 			 */
@@ -341,6 +358,14 @@ Foxtrick.modules.Links = {
 			 * @param  {(LinkAllowLogicFilter|LinkAllowFilter)[]} conds
 			 * @return {boolean}
 			 */
+			NOR: function(...conds) {
+				return !this.OR(...conds);
+			},
+
+			/**
+			 * @param  {(LinkAllowLogicFilter|LinkAllowFilter)[]} conds
+			 * @return {boolean}
+			 */
 			AND: function(...conds) {
 				let result = true;
 				for (let c of conds) {
@@ -352,6 +377,14 @@ Foxtrick.modules.Links = {
 				}
 
 				return result;
+			},
+
+			/**
+			 * @param  {(LinkAllowLogicFilter|LinkAllowFilter)[]} conds
+			 * @return {boolean}
+			 */
+			NAND: function(...conds) {
+				return !this.AND(...conds);
 			},
 		};
 
@@ -399,8 +432,14 @@ Foxtrick.modules.Links = {
 				let test = props.allow;
 				let [type, ...rest] = test;
 
-				// @ts-ignore
-				allowed = COMPARE[type](...rest);
+				 // catching errors here allows us to add new COMPARE functions
+				 // without throwing errors for users on older versions
+				try {
+					// @ts-ignore
+					allowed = COMPARE[type](...rest);
+				} catch (e) {
+					Foxtrick.log(`WARNING: COMPARE[${type}] failed -\n ${e.message}\n ${e.stack}`);
+				}
 			}
 
 			if (!allowed)
@@ -438,13 +477,13 @@ Foxtrick.modules.Links = {
 };
 
 /**
- * @typedef {'GREATER'|'SMALLER'|'EQUAL'} LinkAllowCompareFilterType
+ * @typedef {'GREATER'|'SMALLER'|'EQUAL'|'NOTEQUAL'} LinkAllowCompareFilterType
  * @typedef {[LinkAllowCompareFilterType, string, string]} LinkAllowCompareFilter
- * @typedef {'EXISTS'} LinkAllowPredicateFilterType
+ * @typedef {'EXISTS'|'NOTEXISTS'} LinkAllowPredicateFilterType
  * @typedef {[LinkAllowPredicateFilterType, string]} LinkAllowPredicateFilter
  * @typedef {LinkAllowCompareFilter|LinkAllowPredicateFilter} LinkAllowFilter
  * typedef {LinkAllowCompareFilter|LinkAllowPredicateFilter|LinkAllowLogicFilter} LinkAllowFilter
- * @typedef {'OR'|'AND'} LinkAllowLogicFilterType
+ * @typedef {'OR'|'AND'|'NOR'|'NAND'} LinkAllowLogicFilterType
  * @typedef {[LinkAllowLogicFilterType, ...LinkAllowFilter[]]} LinkAllowLogicFilter recursive!
  * @typedef {LinkAllowFilter|LinkAllowLogicFilter} LinkDefinitionAllowFilter
  */
