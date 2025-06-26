@@ -55,6 +55,12 @@ Foxtrick.log = function(...args) {
 
 	concated += '\n';
 
+	// prepend utc date string
+	const now = new Date();
+	const pad = n => n.toString().padStart(2, '0');
+	const utcDateStr = `${now.getUTCFullYear()}-${pad(now.getUTCMonth() + 1)}-${pad(now.getUTCDate())} ${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}:${pad(now.getUTCSeconds())}`;
+	concated = `${utcDateStr}:${concated}`;
+
 	// add the compiled string to HTML log container
 	Foxtrick.log.cache += concated;
 	Foxtrick.log.flush();

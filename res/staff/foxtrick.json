@@ -20,6 +20,11 @@
 	"internal": "true",
 	"list": [
 		{
+			"duty": "developer",
+			"id": "13992846",
+			"name": "UnnecessaryDave"
+		},
+		{
 			"duty": "translator",
 			"id": "10038631",
 			"name": "Mohammad-SE"
@@ -2006,5 +2011,5 @@
 		}
 	],
 	"type": "foxtrick",
-	"url": "https://www.foxtrick.org/download"
+	"url": "https://foxtrick-ng.github.io"
 }
