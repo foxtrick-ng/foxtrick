@@ -1,5 +1,5 @@
 {
-	"type": "coach",
+	"type": "nt",
 	"list": [
 		{ "LeagueId": 1, "TeamId": 3000, "TeamName": "Sverige", "id": 12993496, "name": "grampus_bk" },
 		{ "LeagueId": 2, "TeamId": 3001, "TeamName": "England", "id": 5631303, "name": "irREDucible" },

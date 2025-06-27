@@ -20,7 +20,8 @@ Foxtrick.modules.StaffMarker = {
 		'chpp-contributors',
 		'chpp-holder',
 		'supporters',
-		'coach',
+		'nt',
+		'u20',
 
 		'manager',
 		'own',
@@ -28,6 +29,7 @@ Foxtrick.modules.StaffMarker = {
 	],
 	OPTION_EDITS: true,
 	OPTION_EDITS_DISABLED_LIST: [
+		true,
 		true,
 		true,
 		true,
@@ -59,7 +61,7 @@ Foxtrick.modules.StaffMarker = {
 		['chpp-contributors', 'htls', 'hy', 'ho'],
 		'chpp-holder',
 		['supporters', 'supporter', 'supported'],
-		'coach',
+		'nt', 'u20'
 	],
 
 	/**
@@ -85,7 +87,7 @@ Foxtrick.modules.StaffMarker = {
 		'chpp-holder',
 
 		// supporters use custom scheme
-		['coach', 'nt', 'u20'], // NOTE: remains != U21
+		'nt', 'u20', // NOTE: remains != U21
 	],
 
 	/**
@@ -100,9 +102,15 @@ Foxtrick.modules.StaffMarker = {
 		'chpp-holder': function(data) {
 			data['chpp-holder']['apps'] = {};
 		},
-		coach: function(data) {
-			if (typeof data['coach']['nts'] === 'undefined')
-				data['coach']['nts'] = {};
+		_coach: function(data, type) {
+			if (typeof data[type]['nts'] === 'undefined')
+				data[type]['nts'] = {};
+		},
+		nt: function(data) {
+			this._coach(data, 'nt');
+		},
+		u20: function(data) {
+			this._coach(data, 'u20');
 		},
 	},
 
@@ -119,13 +127,19 @@ Foxtrick.modules.StaffMarker = {
 		'chpp-holder': function(data, user) {
 			data['chpp-holder']['apps'][user.id] = user.appNames;
 		},
-		coach: function(data, user) {
-			data['coach']['nts'][user.id] = {
+		_coach: function(data, user, type) {
+			data[type]['nts'][user.id] = {
 				leagueId: user.LeagueId,
 				name: user.TeamName,
 				teamId: user.TeamId,
 			};
 		},
+		nt: function (data, user) {
+			this._coach(data, user, 'nt')
+		},
+		u20: function (data, user) {
+			this._coach(data, user, 'u20')
+		}
 	},
 
 	/**
@@ -153,9 +167,9 @@ Foxtrick.modules.StaffMarker = {
 			icon.title += appNames;
 			icon.alt += appNames;
 		},
-		coach: function(elements, data, userId) {
+		_coach: function(elements, data, userId, type) {
 			var doc = elements.target.ownerDocument;
-			var nt = data['coach']['nts'][userId];
+			var nt = data[type]['nts'][userId];
 
 			var url = '/Club/NationalTeam/NationalTeam.aspx?teamId=' + nt.teamId;
 			var title = elements.icon.title.replace(/%s/, nt.name);
@@ -165,6 +179,12 @@ Foxtrick.modules.StaffMarker = {
 			flagLink.target = '_blank';
 
 			return flagLink;
+		},
+		nt: function(elements, data, userId) {
+			return this._coach(elements, data, userId, 'nt');
+		},
+		u20: function(elements, data, userId) {
+			return this._coach(elements, data, userId, 'u20');
 		},
 		supporter: function(elements) {
 			var doc = elements.target.ownerDocument;
@@ -257,7 +277,7 @@ Foxtrick.modules.StaffMarker = {
 
 			var callback = module.TYPE_CALLBACK_MAP[key];
 			if (typeof callback === 'function')
-				callback(gData);
+				callback.call(module.TYPE_CALLBACK_MAP, gData);
 
 			var userCb = module.USER_CALLBACK_MAP[key];
 
@@ -269,7 +289,7 @@ Foxtrick.modules.StaffMarker = {
 				}
 
 				if (typeof userCb === 'function')
-					userCb(gData, user);
+					userCb.call(module.USER_CALLBACK_MAP, gData, user);
 
 			}, list);
 
@@ -557,7 +577,7 @@ Foxtrick.modules.StaffMarker = {
 				if (typeof callback === 'function') {
 					var elements = { target: target, icon: icon, link: link };
 
-					var ret = callback(elements, data, id);
+					var ret = callback.call(module.TARGET_CALLBACK_MAP, elements, data, id);
 					if (ret) {
 						if (ret === true)
 							skip = true;
@@ -566,8 +586,15 @@ Foxtrick.modules.StaffMarker = {
 					}
 				}
 
-				if (!skip)
-					target.insertBefore(marker, target.firstChild);
+				if (!skip) {
+					var parent = target.parentElement;
+					if (parent && Foxtrick.hasClass(parent, 'ft-popup-span')) {
+						// we want staff markers outside of popup spans
+						parent.before(marker);
+					} else {
+						target.before(marker);
+					}
+				}
 			}
 		};
 

@@ -1,5 +1,5 @@
 {
-	"type": "coach",
+	"type": "u20",
 	"list": [
 		{ "LeagueId": 1, "TeamId": 3041, "TeamName": "U21 Sverige", "id": 11717916, "name": "FWagner" },
 		{ "LeagueId": 2, "TeamId": 3042, "TeamName": "U21 England", "id": 11758956, "name": "-Teseo-" },

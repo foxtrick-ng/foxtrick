@@ -58,10 +58,10 @@ def getCoaches(id):
     return teams_with_coaches
 
 
-def saveCoaches(coaches, filename):
+def saveCoaches(coaches, filename, type_str):
     with codecs.open(filename, mode='w', encoding='utf-8') as file:
         file.write('{\n')
-        file.write('\t"type": "%s",\n' % "coach")
+        file.write('\t"type": "%s",\n' % type_str)
         file.write('\t"list": [\n')
         file.write('\t\t' + ',\n\t\t'.join('{ "LeagueId": %d, "TeamId": %d, "TeamName": "%s", "id": %d, "name": "%s" }' % (a["LeagueId"], a["TeamId"], a["TeamName"], a["CoachId"], a["CoachName"]) for a in coaches))
         file.write('\n\t]\n}')
@@ -76,8 +76,8 @@ def run(cwd='.'):
     u20 = sorted(u20, key=lambda x: x["LeagueId"])
     nt = sorted(nt, key=lambda x: x["LeagueId"])
 
-    saveCoaches(u20, os.path.expanduser(cwd + '/u20.json'))
-    saveCoaches(nt, os.path.expanduser(cwd + '/nt.json'))
+    saveCoaches(u20, os.path.expanduser(cwd + '/u20.json'), 'u20')
+    saveCoaches(nt, os.path.expanduser(cwd + '/nt.json'), 'nt')
 
 
 if __name__ == '__main__':
