@@ -241,7 +241,7 @@ Foxtrick.modules.CountryList = {
 
 		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'FlagSort')) {
 			for (let group of flagGroups) {
-				let insertBefore = group.slice().pop().nextSibling;
+				let insertBefore = group[0].previousSibling;
 
 				group.sort((a, b) => {
 					let imgA = a.querySelector('img');
@@ -249,10 +249,12 @@ Foxtrick.modules.CountryList = {
 					return imgA.alt.localeCompare(imgB.alt);
 				});
 
-				let wrapper = doc.createDocumentFragment();
-				Foxtrick.appendChildren(wrapper, group);
-
-				insertBefore.parentNode.insertBefore(wrapper, insertBefore);
+				let interleaved = [];
+				for (let i = 0; i < group.length; i++) {
+					interleaved.push(group[i]);
+					interleaved.push(group[i].nextSibling);
+				}
+				insertBefore.before(...interleaved);
 			}
 		}
 	},
