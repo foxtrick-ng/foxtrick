@@ -658,7 +658,8 @@ Foxtrick.L10n.getNumberFromSpecialty = function(specialty) {
  * @return {number}     {Integer}
  */
 Foxtrick.L10n.getCategoryId = function(cat) {
-	var categories = [null, 'GK', 'WB', 'CD', 'W', 'IM', 'FW', 'S', 'R', 'E1', 'E2'];
+	// TODO: extract to util
+	var categories = [null, 'GK', 'WB', 'CD', 'W', 'IM', 'FW', 'S', 'R', 'E1', 'E2', 'T1', 'T2', 'C'];
 
 	var idx = Foxtrick.indexOf(categories, cat);
 	if (idx < 1)
@@ -674,7 +675,8 @@ Foxtrick.L10n.getCategoryId = function(cat) {
  * @return {string}
  */
 Foxtrick.L10n.getCategoryById = function(id) {
-	var categories = [null, 'GK', 'WB', 'CD', 'W', 'IM', 'FW', 'S', 'R', 'E1', 'E2'];
+	// TODO: extract to util
+	var categories = [null, 'GK', 'WB', 'CD', 'W', 'IM', 'FW', 'S', 'R', 'E1', 'E2', 'T1', 'T2', 'C'];
 	return categories[id] || null;
 };
 
@@ -930,7 +932,7 @@ Foxtrick.L10n.getCountryNameLocal = function(leagueId, lang) {
 			},
 
 			__parse: function(props) {
-				const L10N_RE = /^(.+?)=(.+)$/mg;
+				const L10N_RE = /^(.+?)=(.*)$/mg;
 				var ret = {};
 
 				let prop;

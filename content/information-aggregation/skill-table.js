@@ -409,8 +409,8 @@ Foxtrick.modules.SkillTable = {
 				 * @param {number} cat
 				 */
 				category: function(cell, cat) {
-					// TODO extract to util
-					const CATEGORIES = ['GK', 'WB', 'CD', 'W', 'IM', 'FW', 'S', 'R', 'E1', 'E2'];
+					// TODO: extract to util
+					const CATEGORIES = ['GK', 'WB', 'CD', 'W', 'IM', 'FW', 'S', 'R', 'E1', 'E2', 'T1', 'T2', 'C'];
 					let category = CATEGORIES[cat - 1];
 					cell.textContent = Foxtrick.L10n.getString('categories.' + category);
 					cell.setAttribute('index', String(cat));
