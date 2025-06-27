@@ -43,6 +43,8 @@ Foxtrick.modules.StaffMarker = {
 
 	CSS: Foxtrick.InternalPath + 'resources/css/staff-marker.css',
 
+	CACHE_MSECS: Foxtrick.util.time.MSECS_IN_DAY,
+
 	/**
 	 * StaffMarker type specifications
 	 *
@@ -422,7 +424,10 @@ Foxtrick.modules.StaffMarker = {
 
 		var parsePromises = Foxtrick.map(function(url) {
 
-			return Foxtrick.load(url).then(function(text) {
+			// FIXME: mirror code in load.js for now; change this when HT_TIME nonsense is reviewed
+			let ts = Foxtrick.modules.Core?.HT_TIME ? Foxtrick.modules.Core.HT_TIME : Date.now() + Foxtrick.util.time.MSECS_IN_DAY;
+			return Foxtrick.load(url, undefined, ts + this.CACHE_MSECS)
+			.then(function(text) {
 
 				// set only if parsing step does not throw or fail
 				var parseOK = parseMarkers(text);
@@ -442,7 +447,7 @@ Foxtrick.modules.StaffMarker = {
 
 			}).catch(Foxtrick.catch(module));
 
-		}, urls);
+		}.bind(this), urls);
 
 		if (enabled['supporter'] && Foxtrick.Prefs.getBool('xmlLoad') &&
 		    Foxtrick.util.layout.isSupporter(doc)) {
