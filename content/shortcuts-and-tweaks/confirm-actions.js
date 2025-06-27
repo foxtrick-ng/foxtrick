@@ -235,9 +235,7 @@ Foxtrick.modules.ConfirmActions = {
 				let value = bidText[1] && bidText[1].value ||
 					bidText[0] && bidText[0].value;
 
-				let price = value.split('').reverse().join('');
-				price = price.replace(/(.{3})(?!$)/g, '$1' + NBSP);
-				price = price.split('').reverse().join('');
+				let price = value.replace(/\s/g,'').replace(/\B(?=(\d{3})+(?!\d))/g, NBSP);
 
 				let msg = msgTemplate.replace(/%s/, price);
 				let msgPara = doc.createElement('p');
