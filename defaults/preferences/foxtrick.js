@@ -203,6 +203,7 @@ pref("extensions.foxtrick.prefs.module.LinksCoach.enabled", true);
 pref("extensions.foxtrick.prefs.module.LinksCountry.enabled", true);
 pref("extensions.foxtrick.prefs.module.LinksEconomy.enabled", true);
 pref("extensions.foxtrick.prefs.module.LinksFans.enabled", true);
+pref("extensions.foxtrick.prefs.module.LinksFlags.enabled", true);
 pref("extensions.foxtrick.prefs.module.LinksLeague.enabled", true);
 pref("extensions.foxtrick.prefs.module.LinksManager.enabled", true);
 pref("extensions.foxtrick.prefs.module.LinksMatch.enabled", true);
