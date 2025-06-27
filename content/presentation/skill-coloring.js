@@ -276,6 +276,10 @@ Foxtrick.modules.SkillColoring = {
 			return;
 		}
 
+		// remove Hattrick's number if it exists
+		if (Foxtrick.hasClass(el.nextElementSibling, 'denominationNumber'))
+			el.nextElementSibling.remove();
+
 		var result = doc.createElement('span');
 		Foxtrick.addClass(result, 'ft-skill');
 		if (isProblemPage && skillTranslated &&
