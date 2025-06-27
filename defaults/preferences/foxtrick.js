@@ -305,6 +305,7 @@ pref("extensions.foxtrick.prefs.module.NewMail.NotifyForumSound_text", 'foxtrick
 pref("extensions.foxtrick.prefs.module.NewMail.NotifyMail.enabled", true);
 pref("extensions.foxtrick.prefs.module.NewMail.NotifyMailSound.enabled", false);
 pref("extensions.foxtrick.prefs.module.NewMail.NotifyMailSound_text", 'foxtrick://resources/sounds/DingLing.wav');
+pref("extensions.foxtrick.prefs.module.NotifyChromeVersion.enabled", true);
 pref("extensions.foxtrick.prefs.module.NtPeek.enabled", true);
 pref("extensions.foxtrick.prefs.module.OldStyleFace.enabled", false);
 pref("extensions.foxtrick.prefs.module.OriginalFace.ColouredYouth.enabled", false);
