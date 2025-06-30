@@ -52,9 +52,11 @@ Foxtrick.modules.MyMonitor = {
 						let ntName = Foxtrick.XMLData.getNTNameByLeagueId(leagueId);
 						let u21Name = 'U21 ' + ntName;
 
+						// ususal countryId/leagueId confusion here,
+						// but if corrected it will break flags for existing users
 						teams = [
-							{ id: ntId, name: ntName, type: 'nt' },
-							{ id: u21Id, name: u21Name, type: 'nt' },
+							{ id: ntId, name: ntName, type: 'nt', country: leagueId },
+							{ id: u21Id, name: u21Name, type: 'nt', country: leagueId },
 						];
 						teams = teams.filter(t => !!t.id);
 					}
@@ -424,15 +426,8 @@ Foxtrick.modules.MyMonitor = {
 							});
 						}
 						else if (team.country) {
-							var a = doc.createElement('a');
-							a.className = 'inner flag';
+							var a = Foxtrick.util.id.createFlagFromLeagueId(doc, team.country, getLink(team), team.name);
 							header.appendChild(a);
-
-							Foxtrick.addImage(doc, a, {
-								title: team.name,
-								class: 'flag' + team.country,
-								src: '/Img/Icons/transparent.gif',
-							});
 						}
 					}
 				});

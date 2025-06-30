@@ -14,7 +14,6 @@ Foxtrick.modules.Core = {
 	CSS: [
 		Foxtrick.InternalPath + 'resources/css/foxtrick.css',
 		Foxtrick.InternalPath + 'resources/css/headercopyicons.css',
-		Foxtrick.InternalPath + 'resources/css/flags.css',
 	],
 
 	/**

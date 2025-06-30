@@ -114,7 +114,9 @@ Foxtrick.modules['ExtraPlayerInfo'] = {
 				if (enableCoach && typeof player.trainerData !== 'undefined')
 					module.addCoachWrapper(pNode, player.trainerData);
 
-				if (enableNTFlag && typeof player.countryId !== 'undefined')
+				if (enableNTFlag && typeof player.countryId !== 'undefined' &&
+					// Only display in classic mode
+					(Foxtrick.hasClass(pNode, 'playerInfo') || Foxtrick.hasClass(pNode, 'playerInfoOld')))
 					module.addNTFlag(pNode, player.countryId);
 
 				if (enableLanguage)
