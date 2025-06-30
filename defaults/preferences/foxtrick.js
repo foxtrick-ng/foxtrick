@@ -637,9 +637,10 @@ pref("extensions.foxtrick.prefs.module.StaffMarker.chpp-contributors.enabled", t
 pref("extensions.foxtrick.prefs.module.StaffMarker.chpp-holder.enabled", true);
 pref("extensions.foxtrick.prefs.module.StaffMarker.supporters.enabled", true);
 pref("extensions.foxtrick.prefs.module.StaffMarker.manager.enabled", true);
-pref("extensions.foxtrick.prefs.module.StaffMarker.coach.enabled", true);
+pref("extensions.foxtrick.prefs.module.StaffMarker.nt.enabled", true);
+pref("extensions.foxtrick.prefs.module.StaffMarker.u20.enabled", true);
 pref("extensions.foxtrick.prefs.module.StaffMarker.own.enabled", false);
-pref("extensions.foxtrick.prefs.module.StaffMarker.own_text", "{\"1001\" : \"color: red;\", \"1002\" : \"background-color: yellow;\"}");
+pref("extensions.foxtrick.prefs.module.StaffMarker.own_text", '{"1001" : "color: red;", "1002" : "background-color: yellow;"}');
 pref("extensions.foxtrick.prefs.module.StaffMarker.forumInterface.enabled", true);
 pref("extensions.foxtrick.prefs.module.SupportershipExpirationDate.enabled", true);
 pref("extensions.foxtrick.prefs.module.SupportersList.enabled", true);

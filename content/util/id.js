@@ -455,7 +455,7 @@ Foxtrick.util.id.createFlagFromLeagueId = function(doc, leagueId, href, title) {
 	img.alt = img.title = title ? title : leagueName;
 	img.src = '/Img/Icons/transparent.gif';
 
-	flag.className = 'flag inner';
+	flag.className = 'flag inner ft-flag';
 	flag.appendChild(img);
 	return flag;
 };
