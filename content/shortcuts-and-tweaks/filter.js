@@ -128,6 +128,7 @@ Foxtrick.modules.Filter = {
 					{ key: 'stamina',	filtertype: 'minmax', min: null, max: null,	type: 'number'},
 					{ key: 'Form', 		filtertype: 'minmax', min: null, max: null,	type: 'number'},
 					{ key: 'XP', 		filtertype: 'minmax', min: null, max: null,	type: 'number'},
+					{ key: 'leadership',	filtertype: 'minmax', min: null, max: null,	type: 'number'},
 					{ key: 'specialty',	filtertype: 'category', category: null, 	type: 'text'},
 					{
 						key: 'stars',
@@ -190,8 +191,9 @@ Foxtrick.modules.Filter = {
 			return async function() {
 				// eslint-disable-next-line no-invalid-this
 				var doc = this.ownerDocument;
+				var filters = await getFilters(page);
 
-				for (let filter of await getFilters(page)) {
+				for (let filter of filters) {
 					if (!filter.filtertype)
 						continue;
 
@@ -237,6 +239,7 @@ Foxtrick.modules.Filter = {
 							Foxtrick.log(new Error('not implemented'));
 					}
 				}
+				saveFilters(page, filters);
 			};
 		};
 
@@ -374,7 +377,7 @@ Foxtrick.modules.Filter = {
 
 					/** @type {Record<string, boolean>} */
 					let categories = {};
-					for (let i = toBeFiltered.rowStartIdx; i < list.length; ++i) {
+					for (let i = toBeFiltered.rowStartIdx; i < list.length-1; ++i) {
 						let cell = list[i].querySelectorAll(toBeFiltered.cellType);
 						if (cell[idx].textContent)
 							categories[cell[idx].textContent] = true;
@@ -458,9 +461,13 @@ Foxtrick.modules.Filter = {
 				if (!rows)
 					return;
 
-				for (let i = toBeFiltered.rowStartIdx; i < rows.length; ++i) {
+				let shownRowIndex = 0;
+				for (let i = toBeFiltered.rowStartIdx; i < rows.length-1; ++i) {
 					let row = rows[i];
+					let hidden = false;
 					Foxtrick.removeClass(row, 'hidden');
+					Foxtrick.removeClass(row, 'odd');
+					Foxtrick.removeClass(row, 'even');
 
 					let cells = row.querySelectorAll(toBeFiltered.cellType);
 					let hide = false;
@@ -484,8 +491,12 @@ Foxtrick.modules.Filter = {
 						else if (filter.type == 'stars') {
 							val = 0;
 
-							let stars = cell.querySelector('.stars');
-							if (stars) {
+							/** @type {Element} */
+							let stars;
+							if (stars = cell.querySelector('hattrick-rating')) {
+								val = parseFloat(stars.getAttribute('rating'));
+							}
+							else if (stars = cell.querySelector('.stars')) {
 								val = parseFloat(stars.textContent.trim()) || 0;
 							}
 							else {
@@ -525,8 +536,14 @@ Foxtrick.modules.Filter = {
 
 						if (hide) {
 							Foxtrick.addClass(row, 'hidden');
+							hidden = true;
 							break;
 						}
+					}
+
+					if (!hidden) {
+						++shownRowIndex;
+						Foxtrick.addClass(row, (shownRowIndex%2 == 0) ? 'even' : 'odd');
 					}
 				}
 			}
