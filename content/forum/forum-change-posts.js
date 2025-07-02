@@ -573,12 +573,12 @@ Foxtrick.modules['ForumChangePosts'] = {
 				var node = header_right.firstChild;
 				while (node) {
 					if (node.textContent && node.textContent
-					    .search(/ \d{1,4}.*?\d{1,2}.*?\d{1,4}.*? \d+:\d+/gi) != -1) {
+					    .search(/ \d{1,4}.*?\d{1,2}.*?\d{1,4}.*? \d+[:\.]\d+/gi) != -1) {
 						var span = doc.createElement('span');
 						span.textContent = node.textContent
-							.replace(/ (\d{1,4}.*?\d{1,2}.*?\d{1,4}.*?)(\d+:\d+)/gi, '$1');
+							.replace(/ (\d{1,4}.*?\d{1,2}.*?\d{1,4}.*?)(\d+[:\.]\d+)/gi, '$1');
 						span.title = node.textContent
-							.replace(/ (\d{1,4}.*?\d{1,2}.*?\d{1,4}.*?)(\d+:\d+)/gi, '$2');
+							.replace(/ (\d{1,4}.*?\d{1,2}.*?\d{1,4}.*?)(\d+[:\.]\d+)/gi, '$2');
 						node.parentNode.replaceChild(span, node);
 						break;
 					}
