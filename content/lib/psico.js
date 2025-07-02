@@ -357,7 +357,7 @@ Foxtrick.psico = {
 		var comparing_wage = wage;
 		//DEBUG
 		var debug = '\n';
-		debug += 'WAGE (without 20%): ' + parseInt(wage, 10) + '\n';
+		debug += 'WAGE (without 20% and 10%): ' + parseInt(wage, 10) + '\n';
 
 		//removing base salary from wage
 		wage -= 250;
@@ -378,9 +378,9 @@ Foxtrick.psico = {
 			'5' : [ 0.0005010000, 6.4000000000, 0.50, 1.0000 ], // keeping    [PLACEHOLDER]
 			'7' : [ 0.0007145560, 6.4607813171, 0.50, 0.7921 ], // defending
 			'2' : [ 0.0009418058, 6.4407950328, 0.50, 0.7832 ], // playmaking
-			'6' : [ 0.0004406158, 6.5212036764, 0.50, 0.7858 ], // passing
+			'6' : [ 0.0004476257, 6.5136791026, 0.50, 0.7707 ], // passing
 			'3' : [ 0.0004437607, 6.4641257225, 0.50, 0.7789 ], // winger
-			'4' : [ 0.0009136982, 6.4090063683, 0.50, 0.7985 ]  // scoring
+			'4' : [ 0.0009136982, 6.4090063683, 0.50, 0.7984 ]  // scoring
 		};
 
 		var subtractFromSkill;

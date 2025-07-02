@@ -218,8 +218,8 @@ Foxtrick.modules['PsicoTSI'] = {
 		let currTSI = p.tsi;
 		let currWAGE = currRate ? Math.floor(p.salary / (p.isAbroad ? 1.2 : 1) * currRate) : 0;
 		if (p.specialtyNumber) {
-			// players with a speciality have a 10% higher salary
-			currWAGE = currWAGE * (10 / 11);
+			// players with a speciality have a 10% bonus to skill contribution
+			currWAGE = (currWAGE-250) / 1.1 + 250;
 		}
 		let frm = p.form;
 		let sta = p.stamina;
