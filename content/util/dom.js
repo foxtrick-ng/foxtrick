@@ -774,8 +774,10 @@ Foxtrick.getChanges = function(node, callback, obsOpts) {
  * @param  {boolean}  [isExpander] add expander icon and event to box header
  * @return {Element}               box to be added to
  */
-// eslint-disable-next-line complexity
-Foxtrick.addBoxToSidebar = function(doc, title, content, prec, forceLeft, isExpander) { // FIXME support angular
+// TODO: switch to options object for extended parameters
+// TODO: set box id
+// FIXME: precedence logic won't execute on existing boxes
+Foxtrick.addBoxToSidebar = function(doc, title, content, prec, forceLeft, isExpander) {
 	// class of the box to add
 	var boxClass = 'box sidebarBox';
 	var sidebar = doc.getElementById('sidebar');
@@ -872,8 +874,7 @@ Foxtrick.addBoxToSidebar = function(doc, title, content, prec, forceLeft, isExpa
 			span.append(anchor);
 
 			Foxtrick.onClick(boxHead, () => {
-				Foxtrick.toggleClass(boxHead, 'ft-expander-expanded');
-				Foxtrick.toggleClass(boxHead, 'ft-expander-unexpanded');
+				Foxtrick.toggleExpanderArrow(boxHead);
 			});
 			boxHead.append(span);
 		}
@@ -884,6 +885,15 @@ Foxtrick.addBoxToSidebar = function(doc, title, content, prec, forceLeft, isExpa
 		dest.querySelector('.boxBody').appendChild(content);
 
 	return dest;
+};
+
+/**
+ * Toggle expander arrow in a sidebar box header.
+ * @param {HTMLElement} element box header
+ */
+Foxtrick.toggleExpanderArrow = function(element) {
+	Foxtrick.toggleClass(element, 'ft-expander-expanded');
+	Foxtrick.toggleClass(element, 'ft-expander-unexpanded');
 };
 
 /**

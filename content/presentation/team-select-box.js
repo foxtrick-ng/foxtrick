@@ -5,9 +5,15 @@
  * @author convinced, ryanli
  */
 
+/**
+ * @typedef {'selectbox'|'list'|null} State
+ */
+
 Foxtrick.modules['TeamSelectBox'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.PRESENTATION,
 	PAGES: ['allPlayers', 'youthPlayers'],
+
+	OPTIONS: ['RememberState'],
 
 	run: function(doc) {
 		var listBox; // sidebarBox containing player list
@@ -33,29 +39,28 @@ Foxtrick.modules['TeamSelectBox'] = {
 			return bLinks.length - aLinks.length;
 		});
 		listBox = linkBoxes[0];
+		var listTable = listBox.getElementsByTagName('table')[0];
+
+		if (!listTable || listTable.rows.length <= 1)
+			return; // zero or one player in the list
 
 		var header = listBox.getElementsByTagName('h2')[0];
 		var boxHead = header.parentNode;
-		Foxtrick.addBoxToSidebar(doc, header.textContent, null, 0, false, true)
+		var sidebarBox = Foxtrick.addBoxToSidebar(doc, header.textContent, null, 0, false, true)
+		sidebarBox.id = 'ft-team-select-box';
 
 		var toList = function() {
-			var option = listBox.getElementsByTagName('option')[0];
-			var pn = option.parentNode;
-			pn.removeChild(option);
-			option = listBox.getElementsByTagName('option')[0];
-			while (option != null) {
-				var player = doc.createElement('a');
-				player.href = option.value;
-				player.textContent = option.textContent;
-				pn.parentNode.appendChild(player);
-				pn.removeChild(option);
-				option = listBox.getElementsByTagName('option')[0];
-			}
-			var selectbox = listBox.getElementsByTagName('select')[0];
-			pn.parentNode.removeChild(selectbox);
+			if (toggleSelectBox())
+				setState('list');
 		};
 
 		var toSelectBox = function() {
+			if (toggleSelectBox()) {
+				setState('selectbox');
+				return;
+			}
+
+			// create a select box with all players
 			var selectBox = doc.createElement('select');
 			var selected = function() {
 				doc.location.href = selectBox.value;
@@ -66,7 +71,7 @@ Foxtrick.modules['TeamSelectBox'] = {
 			option.textContent = Foxtrick.L10n.getString('TeamSelectBox.selectplayer');
 			selectBox.appendChild(option);
 
-			var players = listBox.getElementsByTagName('a');
+			var players = listTable.getElementsByTagName('a');
 			for (var i = 0; i < players.length; ++i) {
 				var player = players[i];
 				if (player.href.trim().length == 0)
@@ -78,30 +83,70 @@ Foxtrick.modules['TeamSelectBox'] = {
 				selectBox.appendChild(option);
 			}
 			var boxBody = listBox.getElementsByClassName('boxBody')[0];
-			if (boxBody) {  // normal skin
-				boxBody.textContent = ''; // clear it first
+			if (boxBody) {
+				Foxtrick.toggleClass(listTable, 'hidden');
 				boxBody.appendChild(selectBox);
 			}
-			else {  // simple skin. has no inner boxBody
-				var headerdiv = listBox.getElementsByTagName('div')[0];
-				headerdiv = listBox.removeChild(headerdiv);
-				listBox.textContent = ''; // clear it first
-				listBox.appendChild(headerdiv);
-				listBox.appendChild(selectBox);
-			}
+			setState('selectbox');
 		};
 
-		var showAsList = true; // is shown as list initially
+		/**
+		 * Toggle between list and select box
+		 * @returns {boolean} true if select box was toggled
+		 */
+		var toggleSelectBox = function() {
+			var selectBox = listBox.getElementsByTagName('select')[0];
+			if (selectBox && listTable) {
+				Foxtrick.toggleClass(selectBox, 'hidden');
+				Foxtrick.toggleClass(listTable, 'hidden');
+				return true;
+			}
+			return false
+		}
+
+		/**
+		 * Sets global state of the select box
+		 * @param {State} state
+		 */
+		var setState = function(state) {
+			if (!Foxtrick.Prefs.isModuleOptionEnabled('TeamSelectBox', 'RememberState'))
+				return;
+			Foxtrick.Prefs.setString('TeamSelectBox.state', state);
+		}
+
+		/**
+		 * Gets global state of the select box
+		 * @returns {State} state
+		 */
+		var getState = function() {
+			if (!Foxtrick.Prefs.isModuleOptionEnabled('TeamSelectBox', 'RememberState'))
+				return;
+			return /** @type {State} */ (Foxtrick.Prefs.getString('TeamSelectBox.state'));
+		}
+
+		/** @type {State} */
+		let state;
+		if (Foxtrick.Prefs.isModuleOptionEnabled('TeamSelectBox', 'RememberState'))
+			state = getState();
+
+		switch (state) {
+			case 'selectbox':
+				toSelectBox();
+				state = 'selectbox';
+				break;
+			case 'list':
+				state = 'list';
+				Foxtrick.toggleExpanderArrow(boxHead);
+				break;
+			default: // saved state is null, or RememberState is off, we start with select box
+				toSelectBox();
+				state = 'selectbox';
+				break;
+		}
+
 		var toggle = function() {
-			try {
-				showAsList = !showAsList;
-				(showAsList) ? toList() : toSelectBox();
-			}
-			catch (e) {
-				Foxtrick.log(e);
-			}
+			(state === 'selectbox') ? toList() : toSelectBox();
 		};
 		Foxtrick.onClick(boxHead, toggle);
-		toggle();
 	}
 };
