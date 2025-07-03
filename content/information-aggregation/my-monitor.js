@@ -365,14 +365,15 @@ Foxtrick.modules.MyMonitor = {
 				Foxtrick.onClick(removeButton, function() {
 					let index = removeSelect.selectedIndex;
 					let opt = removeSelect.options[index];
-					if (opt)
+					if (opt) {
 						removeSelect.removeChild(opt);
 
-					gTeams.splice(index, 1); // remove the selected from teams
-					setSavedTeams(gTeams);
+						gTeams.splice(index, 1); // remove the selected from teams
+						setSavedTeams(gTeams);
 
-					let frame = doc.getElementsByClassName('ft-monitor-frame')[index];
-					frame.parentNode.removeChild(frame);
+						let frame = doc.getElementsByClassName('ft-monitor-frame')[index];
+						frame && frame.parentNode.removeChild(frame);
+					}
 				});
 
 				// add note
