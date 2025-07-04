@@ -271,7 +271,7 @@ Foxtrick.modules.SkillColoring = {
 			skillNumber = false;
 		}
 
-		if (!(skillNumber || skillTranslated)) {
+		if (!(skillNumber || skillTranslated) || el.querySelector('.ft-skill')) {
 			// nothing else to do here
 			return;
 		}
@@ -286,6 +286,15 @@ Foxtrick.modules.SkillColoring = {
 		result.appendChild(doc.createTextNode(skillTranslated ? ` (${skill}` : ' ('));
 
 		if (skillNumber) {
+			// hide Hattrick's number if it exists
+			if (Foxtrick.hasClass(el.nextElementSibling, 'denominationNumber')) {
+				Foxtrick.addClass(el.nextElementSibling, 'hidden');
+			} else
+			if (el.parentElement.tagName === 'HT-SKILL-LINK') {
+				let next = el.parentElement.nextElementSibling;
+				Foxtrick.hasClass(next, 'denominationNumber') && Foxtrick.addClass(next, 'hidden');
+			}
+
 			let numSpan = doc.createElement('span');
 			Foxtrick.addClass(numSpan, 'ft-skill-number');
 			numSpan.textContent = skillTranslated ? ` ${level}` : String(level);
@@ -485,11 +494,17 @@ Foxtrick.modules.SkillColoring = {
 			Foxtrick.onChange(doc.getElementById('details'), playerDetailsChange);
 		}
 
-		if (skillNumber || skillTranslated) {
+		/**
+		 * Apply SkillNumber and SkillTranslated transformations
+		 *
+		 * @param {Document} doc
+		 * @param {Element} [el] element containing skills to be transformed
+		 */
+		let transformSkill = function(doc, el) {
 			// too little space on these pages
 			let isProblemPage = Foxtrick.isPage(doc, ['ownPlayers', 'transferSearchResult']);
 
-			let links = doc.querySelectorAll('a');
+			let links = el ? el.querySelectorAll('a') : doc.querySelectorAll('a');
 
 			let e = /\/Help\/Rules\/AppDenominations\.aspx\?.*&(?:ll|labellevel)=(\d+)#(\w+)/;
 			for (let link of links) {
@@ -508,7 +523,26 @@ Foxtrick.modules.SkillColoring = {
 
 				module.addSkill(doc, link, type, htIndex, flags);
 			}
+		};
+
+		if (skillNumber || skillTranslated) {
+			transformSkill(doc);
+
+			if (Foxtrick.isPage(doc, 'training')) {
+				let trainingReport = doc.querySelector('.tr-report');
+				trainingReport && Foxtrick.onChange(
+					trainingReport, transformSkill,
+					{ childList: true, subtree: true }
+				);
+			}
+
+			if (Foxtrick.isPage(doc, 'playerDetails')) {
+				let playerTabs = doc.querySelector(`#${Foxtrick.getMainIDPrefix()}updPlayerTabs`);
+				playerTabs && Foxtrick.onChange(
+					playerTabs, transformSkill,
+					{ childList: true, subtree: true }
+				);
+			}
 		}
 	},
-
 };
