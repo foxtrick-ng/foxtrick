@@ -11,7 +11,10 @@ Foxtrick.modules['SeniorTeamShortCuts'] = {
 	PAGES: ['teamPageAny', 'series', 'youthSeries', 'tournamentsGeneric'],
 	RADIO_OPTIONS: ['OnlyOtherPages', 'AllPages'],
 
-	/* eslint-disable complexity */
+	/**
+	 * module entry point
+	 * @param {Document} doc
+	 */
 	run: function(doc) {
 		var ownTeamId = Foxtrick.util.id.getOwnTeamId();
 
@@ -24,15 +27,18 @@ Foxtrick.modules['SeniorTeamShortCuts'] = {
 		    Foxtrick.Prefs.getInt('module.' + this.MODULE_NAME + '.value') === 0)
 			return;
 
-		var pos1 = -1;
-		var pos2 = -1;
-		var blHeaders = [...boxLeft.querySelectorAll('li')];
-		var blLinks = [...boxLeft.querySelectorAll('a')];
+		// queryselector excludes any ft boxes
+		var blHeaders = [...boxLeft.querySelectorAll('.subMenuBox:not([id^="ft-"]) li')];
+		var blLinks = [...boxLeft.querySelectorAll('.subMenuBox:not([id^="ft-"]) a')];
+
+		var pos1 = -1, pos2 = -1;
 		for (let [idx, blLink] of blLinks.entries()) {
 			if (pos1 == -1) {
+				//@ts-ignore-error
 				if (/\/Club\/(Players\/\?TeamID|NationalTeam\/NTPlayers)/i.test(blLink.href))
 					pos1 = idx;
 			}
+			//@ts-ignore-error
 			if (pos2 == -1 && /\/Club\/Matches\/\?TeamID/i.test(blLink.href))
 				pos2 = idx;
 		}
