@@ -38,8 +38,12 @@ Foxtrick.modules.YouthPromotes = {
 		if (promoDate > now) { // you have to wait to promote
 			let date = Foxtrick.util.time.buildDate(promoDate);
 			let daysToPromote = Math.ceil((promoDate.getTime() - now.getTime()) / MSECS_IN_DAY);
+			const weekAndSeasonToPromote = calculateWeekAndSeason(promoDate)
 			let message = Foxtrick.L10n.getString('YouthPromotes.future', daysToPromote);
-			message = message.replace(/%1/, daysToPromote.toString()).replace(/%2/, date);
+			message = message
+				.replace(/%1/, daysToPromote.toString())
+				.replace(/%2/, date)
+				.replace(/%3/,`${weekAndSeasonToPromote.week}/${weekAndSeasonToPromote.season}`);
 			promotionCounter.textContent = message;
 
 			let age = Foxtrick.Pages.Player.getAge(doc);
@@ -73,3 +77,31 @@ Foxtrick.modules.YouthPromotes = {
 
 	},
 };
+
+/**
+ * @param {Date} date
+ */
+function calculateWeekAndSeason(date) {
+  const REFERENCE = {
+    week: 1,
+    season: 1,
+    date: new Date("1997-09-27"),
+  };
+
+  const WEEKS_IN_SEASON = 16;
+  const MS_IN_WEEK = 1000 * 60 * 60 * 24 * 7;
+  
+  function getWeek(elapsedWeeks) {
+      const week = (REFERENCE.week + Math.floor(elapsedWeeks)) % WEEKS_IN_SEASON
+      return  (week <= 0 ? WEEKS_IN_SEASON : 0) + (week !== 0 ? week : 0)
+  }
+
+  const elapsedWeeks = (date.getTime() - REFERENCE.date.getTime()) / MS_IN_WEEK;
+  const completedSeasons = Math.floor(elapsedWeeks / WEEKS_IN_SEASON);
+  const season = REFERENCE.season + completedSeasons;
+
+  return {
+      week: getWeek(elapsedWeeks),
+      season
+  }
+}
