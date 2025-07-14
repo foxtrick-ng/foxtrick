@@ -12,7 +12,7 @@ Foxtrick.modules['ExtendedPlayerDetails'] = {
 	RADIO_OPTIONS: ['SWD', 'SW', 'SD', 'WD', 'D'],
 	OPTIONS: ['Language'],
 
-	run: function(doc) {
+	run: function (doc) {
 		var module = this;
 		if (Foxtrick.Pages.Player.wasFired(doc))
 			return;
@@ -43,7 +43,7 @@ Foxtrick.modules['ExtendedPlayerDetails'] = {
 	},
 
 	// Player in team since...
-	playerJoined: function(doc) {
+	playerJoined: function (doc) {
 		var module = this;
 		var HTDateFormat = Foxtrick.modules.HTDateFormat;
 		let processed = doc.querySelectorAll('.ft-since');
@@ -95,14 +95,14 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 	PAGES: ['playerDetails'],
 	OPTIONS: ['WageWithoutBonus', 'SeasonWage'],
 
-	run: function(doc) {
+	run: function (doc) {
 		var module = this;
 		const NBSP = '\u00a0';
 
 		if (Foxtrick.Pages.Player.wasFired(doc))
 			return;
 
-		Foxtrick.util.currency.detect(doc).then(function({ symbol }) {
+		Foxtrick.util.currency.detect(doc).then(function ({ symbol }) {
 			let done = doc.querySelector('#ft_bonuswage, #ft_seasonwage');
 			if (done)
 				return;
@@ -174,9 +174,57 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 				wageCell.appendChild(spanSeason);
 			}
 
-		}).catch(function(reason) {
+		}).catch(function (reason) {
 			Foxtrick.log('WARNING: currency.detect aborted:', reason);
 		});
 
 	},
 };
+
+/**
+ * @param {string} playerName The name of the player
+ * @param {number} mode 0 = no changes, 1 = only logograms 2 = only letters 
+ * @returns {string} The name of the player fixed
+ * @description TODO
+ */
+
+// TODO: change function name
+function fixLogogramPlayerName(playerName, mode) {
+	switch (mode) {
+		case 0:
+		default:
+			return playerName;
+
+		case 1:
+			return extractLogograms(playerName)
+
+		case 2:
+			return extractLetters(playerName)
+
+	}
+
+	/**
+	 * @param {string} playerName
+	 * @return {string}
+	 */
+	function extractLogograms(playerName) {
+		return playerName.replace(/\s*\([^)]+\)/g, '').trim();
+	}
+
+	/**
+	 * @param {string} playerName
+	 * @return {string}
+	 */
+	function extractLetters(playerName) {
+		const regex = /\(\s*([^)]+?)\s*\)/g;
+
+        let match;
+        const results = [];
+        
+        while ((match = regex.exec(playerName)) !== null) {
+          results.push(match[1]);
+        }
+        
+        return results.length > 0 ? results.join(' ') : playerName;
+	}
+}
