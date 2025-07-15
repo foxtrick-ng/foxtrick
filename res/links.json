@@ -458,5 +458,12 @@
 		"playedyouthmatchlink": {
 			"url": "https://ho-dev.github.io/HattrickOrganizer/"
 		}
+	},
+	"tppc": {
+		"serieslink": {
+			"url": "https://www.adrianomoutinho.com/hattrick/index.php?LeagueId=[seriesid]"
+		},
+		"title": "Team Position Probability Calculator",
+		"img": "https://foxtrick-ng.github.io/foxtrick/linkicons/tppc.png"
 	}
 }
