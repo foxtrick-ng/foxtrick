@@ -215,6 +215,36 @@
 		"leagueidranges": [[5, 5]],
 		"nationalityranges": [[5, 5]]
 	},
+	"mexicotracker": {
+		"img": "https://www.hattrick.org/Img/flags/6.png",
+		"title": "Sistema Integral de la Seleccion Mexicana (SISMex)",
+		"trackernationalteamlink": {
+			"url": "https://sismex-ht.com/VerEspirituSeleccion.aspx?teamId=[ntteamid]",
+			"filters": ["leagueid"]
+		},
+		"trackerleaguelink": {
+			"url": "https://sismex-ht.com/",
+			"filters": ["leagueid"]
+		},
+		"trackerplayerlink": {
+			"url": "https://sismex-ht.com/EditarJugadorSenior.aspx?playerId=[playerid]",
+			"filters": ["nationality"]
+		},
+		"trackeryouthlink": {
+			"url": "https://sismex-ht.com/",
+			"filters": ["leagueid"]
+		},
+		"trackeryouthplayerlistlink": {
+			"url": "https://sismex-ht.com/",
+			"filters": ["leagueid"]
+		},
+		"trackeryouthplayerlink": {
+			"url": "https://sismex-ht.com/EditarJugadorNuevaCantera.aspx?playerId=[playerid]",
+			"filters": ["nationality"]
+		},
+		"leagueidranges": [[6, 6]],
+		"nationalityranges": [[6, 6]]
+	},
 	"turkiyetracker": {
 		"img": "https://www.hattrick.org/Img/flags/32.png",
 		"title": "TÜRKIYE NT/U-21 Tracker",
