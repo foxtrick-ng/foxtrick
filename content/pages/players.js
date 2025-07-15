@@ -1588,7 +1588,7 @@ Foxtrick.Pages.Players.getPlayerList = function(doc, callback, options) {
 							// README: this will break with localized league names
 							let id = parseInt(j, 10);
 							let league = Foxtrick.L10n.getCountryNameNative(id);
-							if (leagueText.indexOf(league) >= -1) {
+							if (leagueText.indexOf(league) > -1) {
 								player.currentLeagueId = id;
 								break;
 							}
