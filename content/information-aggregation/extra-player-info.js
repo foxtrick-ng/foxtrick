@@ -8,7 +8,7 @@
 
 Foxtrick.modules['ExtraPlayerInfo'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.INFORMATION_AGGREGATION,
-	PAGES: ['allPlayers'],
+	PAGES: ['allPlayers', 'ntPlayers'],
 	OPTIONS: ['CoachInfo', 'Flag', 'Language'],
 
 	addCoachWrapper: function(playerNode, { skill, type }) {

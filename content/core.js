@@ -68,7 +68,7 @@ Foxtrick.modules.Core = {
 		}
 
 		CORE.parseSelfTeamInfo(doc);
-		if (Foxtrick.isPage(doc, 'allPlayers') || Foxtrick.isPage(doc, 'youthPlayers'))
+		if (Foxtrick.isPage(doc, 'allPlayers') || Foxtrick.isPage(doc, 'youthPlayers') || Foxtrick.isPage(doc, 'ntPlayers'))
 			CORE.parsePlayerList(doc);
 
 		CORE.updateLastPage(doc);

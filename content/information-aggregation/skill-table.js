@@ -9,7 +9,7 @@
 
 Foxtrick.modules.SkillTable = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.INFORMATION_AGGREGATION,
-	PAGES: ['allPlayers', 'youthPlayers', 'transferSearchResult'],
+	PAGES: ['allPlayers', 'youthPlayers', 'transferSearchResult', 'ntPlayers'],
 	OPTIONS: ['FrozenColumns', 'OtherTeams', 'ColouredYouth', 'FullNames'],
 	CSS: Foxtrick.InternalPath + 'resources/css/skilltable.css',
 

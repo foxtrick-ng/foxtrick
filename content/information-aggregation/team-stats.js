@@ -8,7 +8,7 @@
 
 Foxtrick.modules.TeamStats = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.INFORMATION_AGGREGATION,
-	PAGES: ['allPlayers', 'youthPlayers'],
+	PAGES: ['allPlayers', 'youthPlayers', 'ntPlayers'],
 	OPTIONS: [
 		'General', 'Attributes', 'Skills', 'Match', 'Specialty',
 		'Personality', 'Status', 'Current_league',

@@ -13,7 +13,7 @@ Foxtrick.modules.U21LastMatch = {
 	PAGES: [
 		'youthPlayerDetails', 'playerDetails',
 		'allPlayers', 'youthPlayers',
-		'transferSearchResult',
+		'transferSearchResult', 'ntPlayers'
 	],
 	OPTIONS: ['YouthPlayers', 'SeniorPlayers', 'AllPlayers'],
 	DATE_CUTOFFS: [
