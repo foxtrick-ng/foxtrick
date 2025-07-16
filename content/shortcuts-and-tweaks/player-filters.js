@@ -8,7 +8,7 @@
 
 Foxtrick.modules['PlayerFilters'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.SHORTCUTS_AND_TWEAKS,
-	PAGES: ['allPlayers', 'youthPlayers'],
+	PAGES: ['allPlayers', 'youthPlayers', 'ntPlayers'],
 
 	FILTER_SELECT_ID: 'foxtrick-filter-select',
 

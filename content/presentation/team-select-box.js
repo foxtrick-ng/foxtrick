@@ -11,7 +11,7 @@
 
 Foxtrick.modules['TeamSelectBox'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.PRESENTATION,
-	PAGES: ['allPlayers', 'youthPlayers'],
+	PAGES: ['allPlayers', 'youthPlayers', 'ntPlayers'],
 
 	OPTIONS: ['RememberState'],
 
