@@ -353,7 +353,9 @@ Foxtrick.psico = {
 		var magicNumbers = [
 			'', '', 'Playmaking', 'Winger', 'Scoring', 'Keeper', 'Passing', 'Defending'
 		];
-
+		
+		const hasSpeciality = !!document.querySelector('i[class^="icon-speciality-"]');
+		
 		var comparing_wage = wage;
 		//DEBUG
 		var debug = '\n';
@@ -361,6 +363,12 @@ Foxtrick.psico = {
 
 		//removing base salary from wage
 		wage -= 250;
+
+		// removing 10% for specialty from wage (only for players 18 and older; 17-year-olds exempt - I can bet)
+	        if (age >= 18 && hasSpeciality) {
+		        wage = wage / 1.1;
+		        debug += `WAGE (without specialty): ${parseInt(wage, 10)}\n`;
+		}
 
 		//removing set pieces from wage
 		wage = wage / (1 + 0.0025 * Math.max(0, playerskills[8]));
