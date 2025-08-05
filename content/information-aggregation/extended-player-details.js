@@ -183,7 +183,7 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 
 Foxtrick.modules['FixPlayerName'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.PRESENTATION,
-	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers'],
+	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers', 'youthPlayers'],
 	RADIO_OPTIONS: ['NO_LATIN', 'NO_LOGOGRAMS', 'NO_CHANGES'],
 
 	run: function (doc) {
@@ -194,14 +194,6 @@ Foxtrick.modules['FixPlayerName'] = {
 			// Player name in player details
 			{
 				elements: [document.querySelector('#mainBody h1').childNodes[2]],
-				getPlayerName: element => element.textContent,
-				updatePlayerName: (element, playerName) => {
-					element.textContent = playerName;
-				}
-			},
-			// Player name in header of player details 
-			{
-				elements: [document.querySelector('#content .main .boxHead h2').childNodes[5].querySelector('a')],
 				getPlayerName: element => element.textContent,
 				updatePlayerName: (element, playerName) => {
 					element.textContent = playerName;
@@ -218,13 +210,15 @@ Foxtrick.modules['FixPlayerName'] = {
 					element.textContent = titleSplitted.join(separator);
 				}
 			},
-			// Senior Player list
+			// All links to player details
 			{
-				elements: document.querySelectorAll('#mainBody .playerList .teamphoto-player h3 a'),
+				elements: Array.from(document.querySelectorAll('a[href]')).filter(a => new RegExp(/https:\/\/www\d*\.hattrick\.org\/Club\/Players\/(YouthPlayer|Player)\.aspx/).test(a.href)),
 				getPlayerName: element => element.textContent,
 				updatePlayerName: (element, playerName) => {
 					element.textContent = playerName;
-					element.attributes['title'].textContent = playerName
+					if (element.attributes['title']) {
+						element.attributes['title'].textContent = playerName;
+					}
 				}
 			}
 		]
