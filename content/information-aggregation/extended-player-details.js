@@ -204,7 +204,17 @@ Foxtrick.modules['FixPlayerName'] = {
 				updatePlayerName: (element, playerName) => {
 					element.textContent = playerName;
 				}
-			}			
+			},
+			{
+				element: document.querySelector('head title'),
+				getPlayerName: element => element.textContent.split('»')[0],
+				updatePlayerName: (element, playerName) => {
+					const separator = '»';
+					const titleSplitted = element.textContent.split(separator)
+					titleSplitted[0] = playerName;
+					element.textContent = titleSplitted.join(separator);
+				}
+			}	
 		]
 
 		console.log('FixPlayerName nodes:', nodes);
