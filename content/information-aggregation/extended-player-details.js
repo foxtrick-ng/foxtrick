@@ -181,50 +181,91 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 	},
 };
 
-/**
- * @param {string} playerName The name of the player
- * @param {number} mode 0 = no changes, 1 = only logograms 2 = only letters 
- * @returns {string} The name of the player fixed
- * @description TODO
- */
+Foxtrick.modules['FixPlayerName'] = {
+	MODULE_CATEGORY: Foxtrick.moduleCategories.INFORMATION_AGGREGATION,
+	PAGES: ['playerDetails'],
+	RADIO_OPTIONS: ['NO_LATIN', 'NO_LOGOGRAMS', 'NO_CHANGES'],
 
-// TODO: change function name
-function fixLogogramPlayerName(playerName, mode) {
-	switch (mode) {
-		case 0:
-		default:
-			return playerName;
+	run: function (doc) {
+		var module = this;
+		const option = Foxtrick.Prefs.getModuleValue(module);
 
-		case 1:
-			return extractLogograms(playerName)
+		const nodes = [
+			{
+				element: document.querySelector('#mainBody h1').childNodes[2],
+				getPlayerName: element => element.textContent,
+				updatePlayerName: (element, playerName) => {
+					element.textContent = playerName;
+				}
+			},
+			{
+				element: document.querySelector('#content .main .boxHead h2').childNodes[5].querySelector('a'),
+				getPlayerName: element => element.textContent,
+				updatePlayerName: (element, playerName) => {
+					element.textContent = playerName;
+				}
+			}			
+		]
 
-		case 2:
-			return extractLetters(playerName)
+		console.log('FixPlayerName nodes:', nodes);
+		nodes.forEach(node => {
+			if (!node.element) {
+				console.warn('FixPlayerName: No element found for player name');
+				return;
+			}
+			const originalPlayerName = node.getPlayerName(node.element);
+			if (!originalPlayerName) {
+				console.warn('FixPlayerName: No player name found');
+				return;
+			}
+			const fixedPlayerName = fixLogogramPlayerName(originalPlayerName, option);
+			node.updatePlayerName(node.element, fixedPlayerName);
+		})
+
+		/**
+		 * @param {string} playerName The name of the player
+		 * @param {number} mode 0 = no changes, 1 = only logograms 2 = only letters 
+		 * @returns {string} The name of the player fixed
+		 * @description TODO
+		 */
+		
+		// TODO: change function name
+		function fixLogogramPlayerName(playerName, mode) {
+			switch (mode) {
+				case 0:
+					return extractLogograms(playerName)
+				case 1:
+					return extractLetters(playerName)
+				case 2:
+				default:
+					return playerName;		
+			}
+		
+			/**
+			 * @param {string} playerName
+			 * @return {string}
+			 */
+			function extractLogograms(playerName) {
+				return playerName.replace(/\s*\([^)]+\)/g, '');
+			}
+		
+			/**
+			 * @param {string} playerName
+			 * @return {string}
+			 */
+			function extractLetters(playerName) {
+				// FIXME: this regex is not perfect, it trim spaces after the last letter
+				const regex = /\(\s*([^)]+?)\s*\)/g;		
+				let match;
+				const results = [];
+				
+				while ((match = regex.exec(playerName)) !== null) {
+					results.push(match[1]);
+				}
+				
+				return results.length > 0 ? results.join(' ') : playerName;
+			}
+		}
 
 	}
-
-	/**
-	 * @param {string} playerName
-	 * @return {string}
-	 */
-	function extractLogograms(playerName) {
-		return playerName.replace(/\s*\([^)]+\)/g, '').trim();
-	}
-
-	/**
-	 * @param {string} playerName
-	 * @return {string}
-	 */
-	function extractLetters(playerName) {
-		const regex = /\(\s*([^)]+?)\s*\)/g;
-
-        let match;
-        const results = [];
-        
-        while ((match = regex.exec(playerName)) !== null) {
-          results.push(match[1]);
-        }
-        
-        return results.length > 0 ? results.join(' ') : playerName;
-	}
-}
+};

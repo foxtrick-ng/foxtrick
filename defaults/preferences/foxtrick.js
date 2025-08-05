@@ -1,8 +1,8 @@
 /* eslint-disable */
 // @ts-nocheck
 pref("extensions.foxtrick.prefs.CopyPostingStyle", "ht-ml");
-pref("extensions.foxtrick.prefs.version", "0.19.0");
-pref("extensions.foxtrick.prefs.branch", "dev");
+pref("extensions.foxtrick.prefs.version", "0.19.0.0");
+pref("extensions.foxtrick.prefs.branch", "release-b557e7c95 chrome");
 pref("extensions.foxtrick.prefs.disableOnStage", false);
 pref("extensions.foxtrick.prefs.disableTemporary", false);
 pref("extensions.foxtrick.prefs.DisplayHTMLDebugOutput", false);
@@ -80,6 +80,8 @@ pref("extensions.foxtrick.prefs.module.ExtendedPlayerDetailsWage.enabled", true)
 pref("extensions.foxtrick.prefs.module.ExtendedPlayerDetailsWage.SeasonWage.enabled", true);
 pref("extensions.foxtrick.prefs.module.ExtendedPlayerDetailsWage.WageWithoutBonus.enabled", true);
 pref("extensions.foxtrick.prefs.module.ExtendedPlayerDetails.Language.enabled", false);
+pref("extensions.foxtrick.prefs.module.FixPlayerName.enabled", false);
+pref("extensions.foxtrick.prefs.module.FixPlayerName.value", 0);
 pref("extensions.foxtrick.prefs.module.ExtraPlayerInfo.Language.enabled", false);
 pref("extensions.foxtrick.prefs.module.ExtraPlayerInfo.CoachInfo.enabled", true);
 pref("extensions.foxtrick.prefs.module.ExtraPlayerInfo.enabled", true);
