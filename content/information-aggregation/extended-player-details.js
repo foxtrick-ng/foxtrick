@@ -183,7 +183,7 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 
 Foxtrick.modules['FixPlayerName'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.PRESENTATION,
-	PAGES: ['playerDetails', 'allPlayers'],
+	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers'],
 	RADIO_OPTIONS: ['NO_LATIN', 'NO_LOGOGRAMS', 'NO_CHANGES'],
 
 	run: function (doc) {
