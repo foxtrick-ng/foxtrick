@@ -12,10 +12,10 @@ Foxtrick.modules['LogogramPlayerNames'] = {
 		const nodes = [
 			// Player name in player details
 			{
-				elements: [document.querySelector('#mainBody h1').childNodes[2]],
-				getPlayerName: element => element.textContent,
+				elements: [document.querySelector('#mainBody h1.hasByline.flex-inline')],
+				getPlayerName: element => element.childNodes[2].textContent,
 				updatePlayerName: (element, playerName) => {
-					element.textContent = playerName;
+					element.childNodes[2].textContent = playerName;
 				}
 			},
 			// Page title
