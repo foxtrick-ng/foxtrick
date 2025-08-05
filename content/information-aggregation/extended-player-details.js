@@ -183,7 +183,7 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 
 Foxtrick.modules['FixPlayerName'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.PRESENTATION,
-	PAGES: ['playerDetails'],
+	PAGES: ['playerDetails', 'allPlayers'],
 	RADIO_OPTIONS: ['NO_LATIN', 'NO_LOGOGRAMS', 'NO_CHANGES'],
 
 	run: function (doc) {
@@ -191,22 +191,25 @@ Foxtrick.modules['FixPlayerName'] = {
 		const option = Foxtrick.Prefs.getModuleValue(module);
 
 		const nodes = [
+			// Player name in player details
 			{
-				element: document.querySelector('#mainBody h1').childNodes[2],
+				elements: [document.querySelector('#mainBody h1').childNodes[2]],
 				getPlayerName: element => element.textContent,
 				updatePlayerName: (element, playerName) => {
 					element.textContent = playerName;
 				}
 			},
+			// Player name in header of player details 
 			{
-				element: document.querySelector('#content .main .boxHead h2').childNodes[5].querySelector('a'),
+				elements: [document.querySelector('#content .main .boxHead h2').childNodes[5].querySelector('a')],
 				getPlayerName: element => element.textContent,
 				updatePlayerName: (element, playerName) => {
 					element.textContent = playerName;
 				}
 			},
+			// Page title
 			{
-				element: document.querySelector('head title'),
+				elements: [document.querySelector('head title')],
 				getPlayerName: element => element.textContent.split('»')[0],
 				updatePlayerName: (element, playerName) => {
 					const separator = '»';
@@ -214,22 +217,33 @@ Foxtrick.modules['FixPlayerName'] = {
 					titleSplitted[0] = playerName;
 					element.textContent = titleSplitted.join(separator);
 				}
-			}	
+			},
+			// Senior Player list
+			{
+				elements: document.querySelectorAll('#mainBody .playerList .teamphoto-player h3 a'),
+				getPlayerName: element => element.textContent,
+				updatePlayerName: (element, playerName) => {
+					element.textContent = playerName;
+					element.attributes['title'].textContent = playerName
+				}
+			}
 		]
 
 		console.log('FixPlayerName nodes:', nodes);
 		nodes.forEach(node => {
-			if (!node.element) {
-				console.warn('FixPlayerName: No element found for player name');
+			if (!node.elements || Array.from(node.elements).filter(el => el).length === 0) {
+				console.warn('FixPlayerName: No elements found for player name');
 				return;
 			}
-			const originalPlayerName = node.getPlayerName(node.element);
-			if (!originalPlayerName) {
-				console.warn('FixPlayerName: No player name found');
-				return;
-			}
-			const fixedPlayerName = fixLogogramPlayerName(originalPlayerName, option);
-			node.updatePlayerName(node.element, fixedPlayerName);
+			node.elements.forEach(element => {
+				const originalPlayerName = node.getPlayerName(element);
+				if (!originalPlayerName) {
+					console.warn('FixPlayerName: No player name found');
+					return;
+				}
+				const fixedPlayerName = fixLogogramPlayerName(originalPlayerName, option);
+				node.updatePlayerName(element, fixedPlayerName);
+			})
 		})
 
 		/**
