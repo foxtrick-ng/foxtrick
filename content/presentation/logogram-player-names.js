@@ -2,7 +2,7 @@
 
 Foxtrick.modules['LogogramPlayerNames'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.PRESENTATION,
-	PAGES: ['all', 'playerDetails', 'youthPlayerDetails', 'allPlayers', 'youthPlayers', 'youthOverview', 'trainerDetails'],
+	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers', 'youthPlayers', 'youthOverview', 'trainerDetails', 'match'],
 	RADIO_OPTIONS: ['NO_LATIN', 'NO_LOGOGRAMS', 'NO_CHANGES'],
 
 	run: function (doc) {
@@ -31,7 +31,7 @@ Foxtrick.modules['LogogramPlayerNames'] = {
 			},
 			// All links to player details
 			{
-				elements: Array.from(document.querySelectorAll('a[href]')).filter(a => new RegExp(/https:\/\/www\d*\.hattrick\.org\/Club\/Players\/(YouthPlayer|Player)\.aspx/).test(a.href)),
+				elements: Array.from(document.querySelectorAll('a[href]')).filter(a => new RegExp(/https:\/\/www\d*\.hattrick\.org\/Club\/Players\/(YouthPlayer|Player)\.aspx/).test(a.href)).filter(elem => elem.childElementCount === 0),
 				getPlayerName: element => element.textContent,
 				updatePlayerName: (element, playerName) => {
 					element.textContent = playerName;
@@ -51,7 +51,25 @@ Foxtrick.modules['LogogramPlayerNames'] = {
 				elements: document.querySelectorAll('#mainBody .hasByline'),
 				getPlayerName: element => element.childNodes[0].textContent,
 				updatePlayerName: (element, playerName) => element.childNodes[0].textContent = playerName
-			}
+			},
+      // Last name in match report
+      {
+        elements: document.querySelectorAll('a .playerName .lastName'),
+        getPlayerName: element => element.textContent,
+        updatePlayerName: (element, playerName) => element.textContent = playerName
+      },
+      // First name of full name in match report
+      {
+        elements: document.querySelectorAll('a .playerName .fullName'),
+        getPlayerName: element => element.childNodes[0].textContent,
+        updatePlayerName: (element, playerName) => element.childNodes[0].textContent = playerName
+      },
+      // Last name of full name in match report
+      {
+        elements: document.querySelectorAll('a .playerName .fullName'),
+        getPlayerName: element => element.childNodes[2].textContent,
+        updatePlayerName: (element, playerName) => element.childNodes[2].textContent = playerName
+      }
 		]
 
 		console.log('LogogramPlayerNames nodes:', nodes);
