@@ -182,7 +182,7 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 };
 
 Foxtrick.modules['FixPlayerName'] = {
-	MODULE_CATEGORY: Foxtrick.moduleCategories.INFORMATION_AGGREGATION,
+	MODULE_CATEGORY: Foxtrick.moduleCategories.PRESENTATION,
 	PAGES: ['playerDetails'],
 	RADIO_OPTIONS: ['NO_LATIN', 'NO_LOGOGRAMS', 'NO_CHANGES'],
 
