@@ -80,8 +80,8 @@ pref("extensions.foxtrick.prefs.module.ExtendedPlayerDetailsWage.enabled", true)
 pref("extensions.foxtrick.prefs.module.ExtendedPlayerDetailsWage.SeasonWage.enabled", true);
 pref("extensions.foxtrick.prefs.module.ExtendedPlayerDetailsWage.WageWithoutBonus.enabled", true);
 pref("extensions.foxtrick.prefs.module.ExtendedPlayerDetails.Language.enabled", false);
-pref("extensions.foxtrick.prefs.module.FixPlayerName.enabled", false);
-pref("extensions.foxtrick.prefs.module.FixPlayerName.value", 0);
+pref("extensions.foxtrick.prefs.module.LogogramPlayerNames.enabled", false);
+pref("extensions.foxtrick.prefs.module.LogogramPlayerNames.value", 0);
 pref("extensions.foxtrick.prefs.module.ExtraPlayerInfo.Language.enabled", false);
 pref("extensions.foxtrick.prefs.module.ExtraPlayerInfo.CoachInfo.enabled", true);
 pref("extensions.foxtrick.prefs.module.ExtraPlayerInfo.enabled", true);
