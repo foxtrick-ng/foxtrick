@@ -183,7 +183,7 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 
 Foxtrick.modules['FixPlayerName'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.PRESENTATION,
-	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers', 'youthPlayers'],
+	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers', 'youthPlayers', 'youthOverview'],
 	RADIO_OPTIONS: ['NO_LATIN', 'NO_LOGOGRAMS', 'NO_CHANGES'],
 
 	run: function (doc) {
@@ -220,6 +220,12 @@ Foxtrick.modules['FixPlayerName'] = {
 						element.attributes['title'].textContent = playerName;
 					}
 				}
+			},
+			// Scouts
+			{
+				elements: document.querySelectorAll('.scout-details-text-name span b'),
+				getPlayerName: element => element.textContent,
+				updatePlayerName: (element, playerName) => element.textContent = playerName
 			}
 		]
 
