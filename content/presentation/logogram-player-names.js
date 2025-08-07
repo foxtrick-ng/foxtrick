@@ -2,7 +2,7 @@
 
 Foxtrick.modules['LogogramPlayerNames'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.PRESENTATION,
-	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers', 'youthPlayers', 'youthOverview', 'trainerDetails', 'match', 'transfersTeam'],
+	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers', 'youthPlayers', 'youthOverview', 'trainerDetails', 'match', 'transfersTeam', 'coach'],
 	RADIO_OPTIONS: ['NO_LATIN', 'NO_LOGOGRAMS', 'NO_CHANGES'],
 
 	run: function (doc) {
@@ -69,7 +69,17 @@ Foxtrick.modules['LogogramPlayerNames'] = {
         elements: document.querySelectorAll('a .playerName .fullName'),
         getPlayerName: element => element.childNodes[2].textContent,
         updatePlayerName: (element, playerName) => element.childNodes[2].textContent = playerName
-      }
+      },
+			// Change coach select
+			{
+				elements: document.querySelectorAll('.box.mainBox select optgroup option'),
+				getPlayerName: element => element.textContent.match(/\b\d+\.\s(.*?)\s+-/)[1],
+				updatePlayerName: (element, playerName) => {
+					const originalPlayerName = element.textContent.match(/\b\d+\.\s(.*?)\s+-/)[1];
+					if (!originalPlayerName) return;
+					element.textContent = element.textContent.replace(originalPlayerName, playerName);
+				}
+			}
 		]
 
 		console.log('LogogramPlayerNames nodes:', nodes);
