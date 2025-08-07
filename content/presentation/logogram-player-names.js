@@ -2,7 +2,7 @@
 
 Foxtrick.modules['LogogramPlayerNames'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.PRESENTATION,
-	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers', 'youthPlayers', 'youthOverview', 'trainerDetails', 'match', 'transfersTeam', 'coach'],
+	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers', 'youthPlayers', 'youthOverview', 'trainerDetails', 'match', 'transfersTeam', 'coach', 'specialistDetails'],
 	RADIO_OPTIONS: ['NO_LATIN', 'NO_LOGOGRAMS', 'NO_CHANGES'],
 
 	run: function (doc) {
@@ -46,7 +46,7 @@ Foxtrick.modules['LogogramPlayerNames'] = {
 				getPlayerName: element => element.textContent,
 				updatePlayerName: (element, playerName) => element.textContent = playerName
 			},
-			// Coach
+			// Title of the Player/Coach
 			{
 				elements: document.querySelectorAll('#mainBody .hasByline'),
 				getPlayerName: element => element.childNodes[0].textContent,

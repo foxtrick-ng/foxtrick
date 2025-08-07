@@ -67,6 +67,7 @@ Foxtrick.htPages = {
 	'fans'                      : '/Club/Fans/(Default.aspx|?|$)',
 	'coach'                     : '/Club/Training/ChangeCoach.aspx',
 	'trainerDetails'            : '/Club/Specialists/Trainer.aspx',
+	'specialistDetails'         : '/Club/Specialists/Specialist.aspx',
 	'transfer'                  : '/Club/Transfers/(Default.aspx|?|$)',
 	'transferCompare'           : '/Club/Transfers/TransferCompare.aspx',
 	'transfersTeam'             : '/Club/Transfers/TransfersTeam.aspx',
