@@ -6,6 +6,15 @@
 
 'use strict';
 
+/**
+ * @param {Date} date
+ */
+const calculateWeekAndSeason = (date) => {
+		const weekOffsetText = parseInt(Foxtrick.Prefs.getString(`module.HTDateFormat.FirstDayOfWeekOffset_text`));
+		const useLocal = Foxtrick.Prefs.isModuleOptionEnabled('HTDateFormat', 'LocalSeason');
+		return Foxtrick.util.time.gregorianToHT(date, weekOffsetText, useLocal);
+}
+
 Foxtrick.modules.YouthPromotes = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.INFORMATION_AGGREGATION,
 	PAGES: ['youthPlayerDetails'],
@@ -38,12 +47,12 @@ Foxtrick.modules.YouthPromotes = {
 		if (promoDate > now) { // you have to wait to promote
 			let date = Foxtrick.util.time.buildDate(promoDate);
 			let daysToPromote = Math.ceil((promoDate.getTime() - now.getTime()) / MSECS_IN_DAY);
-			const weekAndSeasonToPromote = calculateWeekAndSeason(promoDate)
+			const { week, season } = calculateWeekAndSeason(promoDate);
 			let message = Foxtrick.L10n.getString('YouthPromotes.future', daysToPromote);
 			message = message
 				.replace(/%1/, daysToPromote.toString())
 				.replace(/%2/, date)
-				.replace(/%3/,`${weekAndSeasonToPromote.week}/${weekAndSeasonToPromote.season}`);
+				.replace(/%3/,`${week}/${season}`);
 			promotionCounter.textContent = message;
 
 			let age = Foxtrick.Pages.Player.getAge(doc);
@@ -77,31 +86,3 @@ Foxtrick.modules.YouthPromotes = {
 
 	},
 };
-
-/**
- * @param {Date} date
- */
-function calculateWeekAndSeason(date) {
-  const REFERENCE = {
-    week: 1,
-    season: 1,
-    date: new Date("1997-09-27"),
-  };
-
-  const WEEKS_IN_SEASON = 16;
-  const MS_IN_WEEK = 1000 * 60 * 60 * 24 * 7;
-  
-  function getWeek(elapsedWeeks) {
-      const week = (REFERENCE.week + Math.floor(elapsedWeeks)) % WEEKS_IN_SEASON
-      return  (week <= 0 ? WEEKS_IN_SEASON : 0) + (week !== 0 ? week : 0)
-  }
-
-  const elapsedWeeks = (date.getTime() - REFERENCE.date.getTime()) / MS_IN_WEEK;
-  const completedSeasons = Math.floor(elapsedWeeks / WEEKS_IN_SEASON);
-  const season = REFERENCE.season + completedSeasons;
-
-  return {
-      week: getWeek(elapsedWeeks),
-      season
-  }
-}
