@@ -12,7 +12,7 @@ Foxtrick.modules['ExtendedPlayerDetails'] = {
 	RADIO_OPTIONS: ['SWD', 'SW', 'SD', 'WD', 'D'],
 	OPTIONS: ['Language'],
 
-	run: function (doc) {
+	run: function(doc) {
 		var module = this;
 		if (Foxtrick.Pages.Player.wasFired(doc))
 			return;
@@ -43,7 +43,7 @@ Foxtrick.modules['ExtendedPlayerDetails'] = {
 	},
 
 	// Player in team since...
-	playerJoined: function (doc) {
+	playerJoined: function(doc) {
 		var module = this;
 		var HTDateFormat = Foxtrick.modules.HTDateFormat;
 		let processed = doc.querySelectorAll('.ft-since');
@@ -95,14 +95,14 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 	PAGES: ['playerDetails'],
 	OPTIONS: ['WageWithoutBonus', 'SeasonWage'],
 
-	run: function (doc) {
+	run: function(doc) {
 		var module = this;
 		const NBSP = '\u00a0';
 
 		if (Foxtrick.Pages.Player.wasFired(doc))
 			return;
 
-		Foxtrick.util.currency.detect(doc).then(function ({ symbol }) {
+		Foxtrick.util.currency.detect(doc).then(function({ symbol }) {
 			let done = doc.querySelector('#ft_bonuswage, #ft_seasonwage');
 			if (done)
 				return;
@@ -174,7 +174,7 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 				wageCell.appendChild(spanSeason);
 			}
 
-		}).catch(function (reason) {
+		}).catch(function(reason) {
 			Foxtrick.log('WARNING: currency.detect aborted:', reason);
 		});
 
