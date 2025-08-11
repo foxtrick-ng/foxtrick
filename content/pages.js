@@ -180,6 +180,7 @@ Foxtrick.htPages = {
 	'statsArena'                : '/World/Stats/StatsArena.aspx',
 	'statsMatchesHeadToHead'    : '/World/Stats/StatsMatchesHeadToHead.aspx',
 	'statsSeries'               : '/World/Series/Stats.aspx',
+	'teamOfTheWeek'							: '/World/Series/TeamOfTheWeek.aspx',
 	'statsTopPlayers'           : '/World/Players/TopPlayers.aspx',
 	'supporters'                : '/Club/Supporters/(Default.aspx?|?)actionType=mysupporters',
 	'supported'                 : '/Club/Supporters/(Default.aspx$|$)',

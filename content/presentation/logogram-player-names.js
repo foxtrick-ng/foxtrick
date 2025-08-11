@@ -2,102 +2,111 @@
 
 Foxtrick.modules['LogogramPlayerNames'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.PRESENTATION,
-	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers', 'youthPlayers', 'youthOverview', 'trainerDetails', 'match', 'transfersTeam', 'coach', 'specialistDetails', 'transferSearchResult'],
+	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers', 'youthPlayers', 'youthOverview', 'trainerDetails', 'match', 'transfersTeam', 'coach', 'specialistDetails', 'transferSearchResult', 'teamOfTheWeek'],
 	RADIO_OPTIONS: ['NO_LATIN', 'NO_LOGOGRAMS', 'NO_CHANGES'],
 
 	run: function (doc) {
 		var module = this;
 		const option = Foxtrick.Prefs.getModuleValue(module);
 
-		const nodes = [
-			// Player name in player details
-			{
-				elements: [document.querySelector('#mainBody h1.hasByline.flex-inline')],
-				getPlayerName: element => element.childNodes[2].textContent,
-				updatePlayerName: (element, playerName) => {
-					element.childNodes[2].textContent = playerName;
-				}
-			},
-			// Page title
-			{
-				elements: [document.querySelector('head title')],
-				getPlayerName: element => element.textContent.split('»')[0],
-				updatePlayerName: (element, playerName) => {
-					const separator = '»';
-					const titleSplitted = element.textContent.split(separator)
-					titleSplitted[0] = playerName;
-					element.textContent = titleSplitted.join(separator);
-				}
-			},
-			// All links to player details
-			{
-				elements: Array.from(document.querySelectorAll('a[href]')).filter(a => new RegExp(/https:\/\/www\d*\.hattrick\.org\/Club\/Players\/(YouthPlayer|Player)\.aspx/).test(a.href)).filter(elem => elem.childElementCount === 0),
-				getPlayerName: element => element.textContent,
-				updatePlayerName: (element, playerName) => {
-					element.textContent = playerName;
-					if (element.attributes['title']) {
-						element.attributes['title'].textContent = playerName;
+		window.addEventListener("load", function() {
+			const nodes = [
+				// Player name in player details
+				{
+					elements: [document.querySelector('#mainBody h1.hasByline.flex-inline')],
+					getPlayerName: element => element.childNodes[2].textContent,
+					updatePlayerName: (element, playerName) => {
+						element.childNodes[2].textContent = playerName;
 					}
+				},
+				// Page title
+				{
+					elements: [document.querySelector('head title')],
+					getPlayerName: element => element.textContent.split('»')[0],
+					updatePlayerName: (element, playerName) => {
+						const separator = '»';
+						const titleSplitted = element.textContent.split(separator)
+						titleSplitted[0] = playerName;
+						element.textContent = titleSplitted.join(separator);
+					}
+				},
+				// All links to player details
+				{
+					elements: Array.from(document.querySelectorAll('a[href]')).filter(a => new RegExp(/https:\/\/www\d*\.hattrick\.org\/Club\/Players\/(YouthPlayer|Player)\.aspx/).test(a.href)).filter(elem => elem.childElementCount === 0),
+					getPlayerName: element => element.textContent,
+					updatePlayerName: (element, playerName) => {
+						element.textContent = playerName;
+						if (element.attributes['title']) {
+							element.attributes['title'].textContent = playerName;
+						}
+					}
+				},
+				// Scouts
+				{
+					elements: document.querySelectorAll('.scout-details-text-name span b'),
+					getPlayerName: element => element.textContent,
+					updatePlayerName: (element, playerName) => element.textContent = playerName
+				},
+				// Title of the Player/Coach
+				{
+					elements: document.querySelectorAll('#mainBody .hasByline'),
+					getPlayerName: element => element.childNodes[0].textContent,
+					updatePlayerName: (element, playerName) => element.childNodes[0].textContent = playerName
+				},
+				// Last name in match report
+				{
+				  elements: document.querySelectorAll('a .playerName .lastName'),
+				  getPlayerName: element => element.textContent,
+				  updatePlayerName: (element, playerName) => element.textContent = playerName
+				},
+				// First name of full name in match report
+				{
+				  elements: document.querySelectorAll('a .playerName .fullName'),
+				  getPlayerName: element => element.childNodes[0].textContent,
+				  updatePlayerName: (element, playerName) => element.childNodes[0].textContent = playerName
+				},
+				// Last name of full name in match report
+				{
+				  elements: document.querySelectorAll('a .playerName .fullName'),
+				  getPlayerName: element => element.childNodes[2].textContent,
+				  updatePlayerName: (element, playerName) => element.childNodes[2].textContent = playerName
+				},
+				// Change coach select
+				{
+					elements: document.querySelectorAll('.box.mainBox select optgroup option'),
+					getPlayerName: element => element.textContent.match(/\b\d+\.\s(.*?)\s+-/)[1],
+					updatePlayerName: (element, playerName) => {
+						const originalPlayerName = element.textContent.match(/\b\d+\.\s(.*?)\s+-/)[1];
+						if (!originalPlayerName) return;
+						element.textContent = element.textContent.replace(originalPlayerName, playerName);
+					}
+				},
+				// Team of the week
+				{
+					elements: document.querySelectorAll('a .playerName .fullName'),
+					getPlayerName: element => element.textContent,
+					updatePlayerName: (element, playerName) => element.textContent = playerName
 				}
-			},
-			// Scouts
-			{
-				elements: document.querySelectorAll('.scout-details-text-name span b'),
-				getPlayerName: element => element.textContent,
-				updatePlayerName: (element, playerName) => element.textContent = playerName
-			},
-			// Title of the Player/Coach
-			{
-				elements: document.querySelectorAll('#mainBody .hasByline'),
-				getPlayerName: element => element.childNodes[0].textContent,
-				updatePlayerName: (element, playerName) => element.childNodes[0].textContent = playerName
-			},
-      // Last name in match report
-      {
-        elements: document.querySelectorAll('a .playerName .lastName'),
-        getPlayerName: element => element.textContent,
-        updatePlayerName: (element, playerName) => element.textContent = playerName
-      },
-      // First name of full name in match report
-      {
-        elements: document.querySelectorAll('a .playerName .fullName'),
-        getPlayerName: element => element.childNodes[0].textContent,
-        updatePlayerName: (element, playerName) => element.childNodes[0].textContent = playerName
-      },
-      // Last name of full name in match report
-      {
-        elements: document.querySelectorAll('a .playerName .fullName'),
-        getPlayerName: element => element.childNodes[2].textContent,
-        updatePlayerName: (element, playerName) => element.childNodes[2].textContent = playerName
-      },
-			// Change coach select
-			{
-				elements: document.querySelectorAll('.box.mainBox select optgroup option'),
-				getPlayerName: element => element.textContent.match(/\b\d+\.\s(.*?)\s+-/)[1],
-				updatePlayerName: (element, playerName) => {
-					const originalPlayerName = element.textContent.match(/\b\d+\.\s(.*?)\s+-/)[1];
-					if (!originalPlayerName) return;
-					element.textContent = element.textContent.replace(originalPlayerName, playerName);
-				}
-			}
-		]
+			]
 
-		console.log('LogogramPlayerNames nodes:', nodes);
-		nodes.forEach(node => {
-			if (!node.elements || Array.from(node.elements).filter(el => el).length === 0) {
-				console.warn('LogogramPlayerNames: No elements found for player name');
-				return;
-			}
-			node.elements.forEach(element => {
-				const originalPlayerName = node.getPlayerName(element);
-				if (!originalPlayerName) {
-					console.warn('LogogramPlayerNames: No player name found');
+			console.log('LogogramPlayerNames nodes:', nodes);
+			nodes.forEach(node => {
+				if (!node.elements || Array.from(node.elements).filter(el => el).length === 0) {
+					console.warn('LogogramPlayerNames: No elements found for player name');
 					return;
 				}
-				const fixedPlayerName = fixLogogramPlayerName(originalPlayerName, option);
-				node.updatePlayerName(element, fixedPlayerName);
+				node.elements.forEach(element => {
+					const originalPlayerName = node.getPlayerName(element);
+					if (!originalPlayerName) {
+						console.warn('LogogramPlayerNames: No player name found');
+						return;
+					}
+					const fixedPlayerName = fixLogogramPlayerName(originalPlayerName, option);
+					node.updatePlayerName(element, fixedPlayerName);
+				})
 			})
-		})
+		
+		});
 
 		/**
 		 * @param {string} playerName The name of the player
@@ -123,6 +132,7 @@ Foxtrick.modules['LogogramPlayerNames'] = {
 			 * @return {string}
 			 */
 			function extractLogograms(playerName) {
+				// FIXME: 姚. 崇晖 (Chonghui -> DONT'T WORKS
 				return playerName.replace(/\s*\([^)]+\)/g, '');
 			}
 		
