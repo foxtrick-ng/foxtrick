@@ -60,6 +60,9 @@ Foxtrick.entry.docLoad = function(doc) {
 		// listen to page content changes
 		Foxtrick.startObserver(doc);
 	}
+
+	// Send a browser session update to remote logging server.
+	Foxtrick.log.Reporter.sendSession();
 };
 
 /**
