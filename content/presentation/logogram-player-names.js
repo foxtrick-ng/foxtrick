@@ -2,7 +2,7 @@
 
 Foxtrick.modules['LogogramPlayerNames'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.PRESENTATION,
-	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers', 'youthPlayers', 'youthOverview', 'trainerDetails', 'match', 'transfersTeam', 'coach', 'specialistDetails', 'transferSearchResult', 'teamOfTheWeek'],
+	PAGES: ['playerDetails', 'youthPlayerDetails', 'allPlayers', 'youthPlayers', 'youthOverview', 'trainerDetails', 'match', 'transfersTeam', 'coach', 'specialistDetails', 'transferSearchResult', 'teamOfTheWeek', 'finances'],
 	RADIO_OPTIONS: ['NO_LATIN', 'NO_LOGOGRAMS', 'NO_CHANGES'],
 
 	run: function (doc) {
