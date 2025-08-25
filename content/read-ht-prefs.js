@@ -119,15 +119,15 @@ Foxtrick.modules.ReadHtPrefs = {
 	readDateFormat: function(doc) {
 		var clockRe = /HT\.Clock\.init\((?!\))/i;
 		var formatRe = /HT\.Clock\.init\(\s*(?:\d+\s*,\s*)*['"](.+?)['"](?:\s*,\s*-?\d+)*\s*\)/i;
-		var scripts = doc.querySelectorAll('script');
-		Foxtrick.forEach(function(tag) {
-			var script = tag.textContent;
-			var clockMatch = script.match(clockRe);
+		var htForm = doc.querySelector('#aspnetForm');
+		Foxtrick.forEach(function(node) {
+			var textContent = node.textContent;
+			var clockMatch = textContent.match(clockRe);
 			if (!clockMatch) // TODO test
 				return;
 
 			// function call to timeDiff in the script
-			var formatMatch = script.match(formatRe);
+			var formatMatch = textContent.match(formatRe);
 			if (formatMatch) {
 				let [_, dateFormat] = formatMatch;
 
@@ -143,9 +143,9 @@ Foxtrick.modules.ReadHtPrefs = {
 			}
 			else {
 				// failed to match regular expression
-				let msg = `Cannot find date format: ${script.slice(clockMatch.index)}`;
+				let msg = `Cannot find date format: ${textContent.slice(clockMatch.index)}`;
 				Foxtrick.log(new Error(msg));
 			}
-		}, scripts);
+		}, htForm.childNodes);
 	},
 };
