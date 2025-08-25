@@ -1876,7 +1876,7 @@ async function init() {
 		// }
 	}
 	catch (e) {
-		Foxtrick.log('Preferences init:', e);
+		Foxtrick.logFatalError('Preferences init:', e);
 	}
 }
 

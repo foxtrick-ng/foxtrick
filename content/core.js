@@ -388,10 +388,7 @@ Foxtrick.modules.Core = {
 			Foxtrick.util.note.add(doc, info, NOTE_ID, { closable: true, focus: true });
 		});
 
-		// Disabled for mv3 port - exceptionless uses XMLHttpRequest
-		if (Foxtrick.Manifest.manifest_version == 2) {
-			bottom.insertBefore(reportBugSpan, bottom.firstChild);
-		}
+		bottom.insertBefore(reportBugSpan, bottom.firstChild);
 	},
 
 	/**
@@ -401,22 +398,6 @@ Foxtrick.modules.Core = {
 		var reportBug = function(log) {
 			if (log === '')
 				return;
-
-
-			// set to 50K for free exceptionless.io
-			const Ki = 1024, KB = 50, MAX_LENGTH = KB * Ki;
-
-			var bug = log;
-			if (bug.length > MAX_LENGTH)
-				bug = bug.slice(bug.length - MAX_LENGTH);
-
-			let url = new URL(doc.URL);
-			let header = {
-				summary: `BUG URL: ${url.pathname}?${url.searchParams.toString()}`,
-				stackKey: url.pathname
-			};
-
-			var prefs = Foxtrick.Prefs.save({ notes: true, skipFiles: true });
 
 			var showNote = function(refId) {
 				const FORUM_URL = '/Forum/Overview.aspx?v=0&f=173635';
@@ -443,8 +424,10 @@ Foxtrick.modules.Core = {
 				Foxtrick.util.note.add(doc, info, NOTE_ID, { closable: true, focus: true });
 			};
 
-			Foxtrick.reportBug(header, bug, prefs, showNote);
+			var prefs = Foxtrick.Prefs.save({ skipFiles: true });
+			Foxtrick.reportBug(log, prefs, showNote);
 		};
+
 		Foxtrick.SB.ext.sendRequest({ req: 'getDebugLog' }, ({ log }) => {
 			reportBug(log);
 		});

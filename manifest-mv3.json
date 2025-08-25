@@ -38,6 +38,7 @@
 			"content/lib/PluralForm.js",
 			"content/lib/psico.js",
 			"content/lib/gauge.js",
+			"content/lib/sentry.js",
 			// <!-- end ext-lib -->
 
 			"content/lib/integration.js",
@@ -300,7 +301,8 @@
 		"http://backend.deviantart.com/*",
 		"https://soundcloud.com/*",
 		"https://imageshack.us/*",
-		"http://api.openweathermap.org/*"
+		"http://api.openweathermap.org/*",
+		"https://*.sentry.io/*"
 	],
 	"action": {
 		"default_icon": "skin/disabled.png",
