@@ -295,9 +295,10 @@
 		</ul>
 		<div class="navigation-header nav" data-text="prefs.info"></div>
 		<ul class="tabs nav">
-		<li id="tab-changes"><a data-text="tab.changes"></a></li>
+		<li id="tab-changes" style="display: none"><a data-text="tab.changes"></a></li>
 		<li id="tab-help"><a data-text="tab.help"></a></li>
 		<li id="tab-about"><a data-text="tab.about"></a></li>
+		<li id="tab-contribute"><a data-text="tab.contribute"></a></li>
 		</ul>
 
 	</div>
@@ -573,6 +574,28 @@
 				<h3 data-text="about.translators"></h3>
 				<div class="module-content">
 					<ul id="about-translators" class="about-list" path="translations"></ul>
+				</div>
+			</div>
+
+			<!-- contribute -->
+			<div class="module" x-on="contribute search">
+				<h2 data-text="about.contribute"></h2>
+				<div class="module-content">
+					<h4>Donations</h4>
+					<p>If you wish to make a small donation to show your appreciation or cover costs
+						there are donation links here: 
+						<a href="https://foxtrick-ng.github.io/staff.html" target="_blank">https://foxtrick-ng.github.io/staff.html</a></p>
+					<h4>Other ways to help out</h4>
+					<ul>
+						<li>● Posting bug reports and feedback on the 
+							<a href="https://www.hattrick.org/goto.ashx?path=/Forum/Overview.aspx?v=0%26f=173635" target="_blank">
+							Foxtrick forum
+							</a></li>
+						<li>● Making issues on <a href="https://github.com/foxtrick-ng/foxtrick/issues" target="_blank">GitHub</a></li>
+						<li>● Submitting fixes for outstanding issues on 
+							<a href="https://github.com/foxtrick-ng/foxtrick/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug" target="_blank">
+							GitHub</a></li>
+					</ul>
 				</div>
 			</div>
 		</div>

@@ -85,7 +85,7 @@ Foxtrick.modules.Core = {
 		// TODO: this needs maintenance:
 		// use release-notes-links.yml directly
 
-		var CONTRIBUTE_URL = 'https://www.foxtrick.org/contribute';
+		var CONTRIBUTE_URL = 'https://foxtrick-ng.github.io/staff.html';
 		var CHANGES_URL = 'https://foxtrick-ng.github.io/releasenotes.html';
 		var UPDATES_URL = 'https://twitter.com/Foxtrick';
 
