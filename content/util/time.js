@@ -341,8 +341,7 @@ Foxtrick.util.time.getDate = function(doc) {
 		return this.getDateFromText(dateEl.textContent);
 	} else {
 		// Fallback: get user ht time zone setting from <html> and synthesize user time from local time
-		const html = doc.documentElement || doc.getElementsByTagName('html')[0];
-		const timezone = html && html.getAttribute('user-time-zone');
+		const timezone = this.getHtTimezone(doc);
 		if (timezone) {
 			const userDate = this.getOffsetDate(timezone);
 			if (userDate)
@@ -352,6 +351,23 @@ Foxtrick.util.time.getDate = function(doc) {
 	// Final fallback: user's local time
 	return new Date();
 };
+
+/**
+ * Retrieves the Hattrick user time zone from the <html> element of the document.
+ * @param {Document} doc
+ * @returns {string|null} The user time zone string, or null if not set.
+ */
+Foxtrick.util.time.getHtTimezone = function(doc) {
+	const html = doc.documentElement || doc.getElementsByTagName('html')[0];
+	if (!html)
+		return null;
+
+	const timezone = html.getAttribute('user-time-zone');
+	if (!timezone || timezone.trim() === '')
+		return null;
+
+	return timezone.trim();
+}
 
 /**
  * Get a Date object representing the current time in the specified time zone.
