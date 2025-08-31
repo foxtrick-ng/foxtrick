@@ -88,7 +88,7 @@ Foxtrick.modules.MatchLineupTweaks = {
 		}
 
 		var toggleDiv = Foxtrick.createFeaturedElement(doc, module, 'div');
-		toggleDiv.id = 'ft-split-lineup-toggle-div';
+		toggleDiv.id = SPLIT_TOGGLE_ID;
 
 		let toggle = doc.createElement('input');
 		toggle.type = 'checkbox';
@@ -111,7 +111,7 @@ Foxtrick.modules.MatchLineupTweaks = {
 		});
 
 		let togLabel = doc.createElement('label');
-		togLabel.setAttribute('for', 'ft-split-lineup-toggle');
+		togLabel.setAttribute('for', SPLIT_TOGGLE_ID);
 		togLabel.textContent = Foxtrick.L10n.getString(`module.${SPLIT_OPT_FULL}.desc`);
 		toggleDiv.appendChild(togLabel);
 
@@ -295,28 +295,31 @@ Foxtrick.modules.MatchLineupTweaks = {
 
 	// adds teamsnames to the field for less confusion
 	/** @param {document} doc */
-	runTeamnNames: function(doc) {
+	runTeamNames: function(doc) {
 		var field = doc.getElementById('playersField');
 		if (!field)
 			return;
 
-		var homeTeamName = Foxtrick.Pages.Match.getHomeTeamName(doc);
-		var awayTeamName = Foxtrick.Pages.Match.getAwayTeamName(doc);
+		// add spans if they don't already exist
+		var homeExists = field.querySelector('.ft-match-lineup-tweaks-teamname-home');
+		if (!homeExists) {
+			var homeSpan = doc.createElement('span');
+			var homeTeamName = Foxtrick.Pages.Match.getHomeTeamName(doc);
+			homeSpan.textContent = homeTeamName;
+			Foxtrick.addClass(homeSpan, 'ft-match-lineup-tweaks-teamname');
+			Foxtrick.addClass(homeSpan, 'ft-match-lineup-tweaks-teamname-home');
+			field.appendChild(homeSpan);
+		}
 
-		var homeSpan = doc.createElement('span');
-		var awaySpan = doc.createElement('span');
-
-		homeSpan.textContent = homeTeamName;
-		awaySpan.textContent = awayTeamName;
-
-		Foxtrick.addClass(homeSpan, 'ft-match-lineup-tweaks-teamname');
-		Foxtrick.addClass(awaySpan, 'ft-match-lineup-tweaks-teamname');
-
-		Foxtrick.addClass(homeSpan, 'ft-match-lineup-tweaks-teamname-home');
-		Foxtrick.addClass(awaySpan, 'ft-match-lineup-tweaks-teamname-away');
-
-		field.appendChild(homeSpan);
-		field.appendChild(awaySpan);
+		var awayExists = field.querySelector('.ft-match-lineup-tweaks-teamname-away');
+		if (!awayExists) {
+			var awaySpan = doc.createElement('span');
+			var awayTeamName = Foxtrick.Pages.Match.getAwayTeamName(doc);
+			awaySpan.textContent = awayTeamName;
+			Foxtrick.addClass(awaySpan, 'ft-match-lineup-tweaks-teamname');
+			Foxtrick.addClass(awaySpan, 'ft-match-lineup-tweaks-teamname-away');
+			field.appendChild(awaySpan);
+		}
 	},
 
 	/**
@@ -1349,7 +1352,7 @@ Foxtrick.modules.MatchLineupTweaks = {
 			module.highlightPlayer(doc, hId);
 
 		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'DisplayTeamNameOnField'))
-			module.runTeamnNames(doc);
+			module.runTeamNames(doc);
 
 		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'HighlighEventPlayers'))
 			module.runEventPlayers(doc);

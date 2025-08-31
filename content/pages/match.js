@@ -603,6 +603,10 @@ Foxtrick.Pages.Match.addLiveListener = function(doc, callback) {
  * @param {Function} callback function(document)
  */
 Foxtrick.Pages.Match.addLiveTabListener = function(doc, tabId, callback) {
+	// ensure per-element observer registry exists
+	if (!Foxtrick.Pages.Match._liveObservers)
+		Foxtrick.Pages.Match._liveObservers = new WeakMap();
+
 	var safeCallback = function(doc) {
 		try {
 			callback(doc);
@@ -616,8 +620,11 @@ Foxtrick.Pages.Match.addLiveTabListener = function(doc, tabId, callback) {
 		safeCallback(doc);
 		var target = doc.getElementById(tabId);
 		if (target) {
-			// found the right tab
-			Foxtrick.onChange(target, safeCallback);
+			// found the right tab - only attach if we haven't already
+			if (!Foxtrick.Pages.Match._liveObservers.has(target)) {
+				var obs = Foxtrick.onChange(target, safeCallback);
+				Foxtrick.Pages.Match._liveObservers.set(target, obs);
+			}
 		}
 	};
 	var registerMatch = function(doc) {
@@ -625,7 +632,11 @@ Foxtrick.Pages.Match.addLiveTabListener = function(doc, tabId, callback) {
 		var target = Foxtrick.getMBElement(doc, 'phLiveStatusPanel');
 		if (target) {
 			// found match view
-			Foxtrick.onChange(target, registerTab, { subtree: false });
+			// only attach once per target
+			if (!Foxtrick.Pages.Match._liveObservers.has(target)) {
+				var obs = Foxtrick.onChange(target, registerTab, { subtree: false });
+				Foxtrick.Pages.Match._liveObservers.set(target, obs);
+			}
 		}
 	};
 
