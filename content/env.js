@@ -413,6 +413,9 @@ Foxtrick.lazyProp = function(obj, prop, calc) {
 		console.log('manifest version: ' + Foxtrick.Manifest.manifest_version);
 		console.log('context: ' + Foxtrick.context);
 
+		const offscreenMarker = new URL(location.href).searchParams.get('_offscreen') === '1';
+		Foxtrick.offscreen = Foxtrick.context === 'background' && offscreenMarker;
+
 		var ACTIVE_TABS = new Set();
 
 		Foxtrick.SB.tabs.getId = function(tab) {

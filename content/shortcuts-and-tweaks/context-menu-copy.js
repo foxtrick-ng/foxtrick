@@ -7,7 +7,7 @@
 'use strict';
 
 (function() {
-	if (Foxtrick.platform == 'Android' || Foxtrick.Manifest.manifest_version == 3)
+	if (Foxtrick.platform == 'Android' || Foxtrick.offscreen)
 		return;
 
 	// option: corresponding to OPTIONS
@@ -197,6 +197,15 @@
 							Foxtrick.SB.ext.sendRequest(msg);
 						}
 					}, false);
+
+					if (Foxtrick.Manifest.manifest_version == 3) {
+						chrome.runtime.onMessage.addListener((msg) => {
+							if (msg?.type === 'ft-context-menu-copy') {
+								Foxtrick.copy(doc, contextEntries[msg.menuId].copyText);
+								return false;
+							}
+						});
+					}
 				}
 			}
 		},

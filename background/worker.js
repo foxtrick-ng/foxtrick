@@ -1,6 +1,7 @@
 import {Notify} from './util/notify.js';
 import {UI} from './ui.js';
 import { Foxtrick as Cookies} from './util/cookies.js';
+import {ContextMenuCopy} from './shortcuts-and-tweaks/context-menu-copy.js';
 
 'use strict';
 
@@ -11,7 +12,7 @@ import { Foxtrick as Cookies} from './util/cookies.js';
  * https://developer.chrome.com/docs/extensions/reference/api/offscreen
  */
 async function setupOffscreenDocument() {
-	const path = 'content/background.html';
+	const path = 'content/background.html?_offscreen=1';
 	// Check all windows controlled by the service worker to see if one
 	// of them is the offscreen document with the given path
 	const offscreenUrl = chrome.runtime.getURL(path);
@@ -55,6 +56,10 @@ chrome.runtime.onMessage.addListener((msg, sender, responseCallback) => {
 		case 'cookiesSet':
 			Cookies.cookies.set(msg.key, msg.value, msg.name) // never rejects
 				.then(responseCallback);
+			return true;
+
+		case 'updateContextMenu':
+			ContextMenuCopy.handler(msg);
 			return true;
 
 		case 'newTab':
