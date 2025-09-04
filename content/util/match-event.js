@@ -1039,37 +1039,62 @@ Foxtrick.util.matchEvent.getAwayIcons = function(evnt) {
 
 /** @param {HTMLElement} evnt */
 Foxtrick.util.matchEvent.addEventIcons = function(evnt) {
-	var doc = evnt.ownerDocument;
-
-	let eventId = Foxtrick.util.matchEvent.getEventId(evnt);
-	var title = Foxtrick.util.matchEvent.getEventTitle(eventId);
-
-	// eslint-disable-next-line consistent-this
-	var module = Foxtrick.modules.MatchReportFormat;
-	var insertBefore = evnt.firstChild.nextSibling;
-
-	let homeIcons = Foxtrick.util.matchEvent.getHomeIcons(evnt);
-	let awayIcons = Foxtrick.util.matchEvent.getAwayIcons(evnt);
-	let hasNeither = !(homeIcons || awayIcons);
-	if (hasNeither) {
-		let container = Foxtrick.createFeaturedElement(doc, module, 'td');
-		Foxtrick.util.matchEvent.appendIcons(doc, container, ['transparent'], title);
-		container.colSpan = 2;
-		evnt.insertBefore(container, insertBefore);
-		return;
+	// dataset lock to avoid concurrent duplicate insertions
+	try {
+		if (evnt.dataset && evnt.dataset.ftAddEventIcons)
+			return;
+		if (evnt.dataset)
+			evnt.dataset.ftAddEventIcons = 'inserting';
+	}
+	catch {
+		// defensive: dataset access can throw on some environments, continue
 	}
 
-	let homeContainer = Foxtrick.createFeaturedElement(doc, module, 'td');
-	evnt.insertBefore(homeContainer, insertBefore);
-	let awayContainer = Foxtrick.createFeaturedElement(doc, module, 'td');
-	evnt.insertBefore(awayContainer, insertBefore);
+	try {
+		// avoid adding icons multiple times
+		if (evnt.querySelector && evnt.querySelector('td.ft-dummy'))
+			return;
 
-	if (homeIcons)
-		Foxtrick.util.matchEvent.appendIcons(doc, homeContainer, homeIcons, title);
+		var doc = evnt.ownerDocument;
 
-	if (awayIcons)
-		Foxtrick.util.matchEvent.appendIcons(doc, awayContainer, awayIcons, homeIcons ? '' : title);
+		let eventId = Foxtrick.util.matchEvent.getEventId(evnt);
+		var title = Foxtrick.util.matchEvent.getEventTitle(eventId);
 
+		// eslint-disable-next-line consistent-this
+		var module = Foxtrick.modules.MatchReportFormat;
+		var insertBefore = evnt.firstChild.nextSibling;
+
+		let homeIcons = Foxtrick.util.matchEvent.getHomeIcons(evnt);
+		let awayIcons = Foxtrick.util.matchEvent.getAwayIcons(evnt);
+		let hasNeither = !(homeIcons || awayIcons);
+		if (hasNeither) {
+			let container = Foxtrick.createFeaturedElement(doc, module, 'td');
+			Foxtrick.util.matchEvent.appendIcons(doc, container, ['transparent'], title);
+			container.colSpan = 2;
+			evnt.insertBefore(container, insertBefore);
+			return;
+		}
+
+		let homeContainer = Foxtrick.createFeaturedElement(doc, module, 'td');
+		evnt.insertBefore(homeContainer, insertBefore);
+		let awayContainer = Foxtrick.createFeaturedElement(doc, module, 'td');
+		evnt.insertBefore(awayContainer, insertBefore);
+
+		if (homeIcons)
+			Foxtrick.util.matchEvent.appendIcons(doc, homeContainer, homeIcons, title);
+
+		if (awayIcons)
+			Foxtrick.util.matchEvent.appendIcons(doc, awayContainer, awayIcons, homeIcons ? '' : title);
+	}
+	finally {
+		try {
+			if (evnt.dataset)
+				evnt.dataset.ftAddEventIcons = 'done';
+		}
+		catch {
+			// ignore
+		 }
+	}
 };
 
 /**
@@ -1213,6 +1238,18 @@ Foxtrick.util.matchEvent.addEventIndicator = function(evnt, invert) {
 
 	if (indType) {
 		// found a matching indicator
+
+		// avoid duplicates: if an indicator of this type already exists in the table, skip
+		try {
+			let existingClass = 'ft-match-report-' + indType.class;
+			if (table.querySelector && table.querySelector('tr.' + existingClass))
+				return;
+		}
+		catch (e) {
+			// defensive: if querySelector throws for any reason, continue and try to insert
+			Foxtrick.log(e);
+		}
+
 		let indicator = doc.createElement('tr');
 		let indicatorCell = doc.createElement('td');
 		indicator.appendChild(indicatorCell);
