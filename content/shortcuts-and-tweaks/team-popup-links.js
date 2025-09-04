@@ -164,10 +164,10 @@ Foxtrick.modules['TeamPopupLinks'] = {
 	run: function(doc) {
 		const module = this;
 
-		// show last 5 logins
-		if (/ShowOldConnections=true/i.test(doc.URL)) {
-			let a = Foxtrick.getMBElement(doc, 'lnkShowLogins');
-			a && a.click();
+		// show last 6 logins
+		if (Foxtrick.isPage(doc, 'managerPage') && /ShowOldConnections=true/i.test(doc.URL)) {
+			const scriptTag = Foxtrick.util.inject.jsLink(doc, `${Foxtrick.InternalPath}resources/js/ShowOldConnectionsInjected.js`);
+			scriptTag.onload  = () => scriptTag.remove();
 		}
 
 		module.addPopupLinks(doc);
@@ -224,6 +224,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 				}
 
 				const pages = ['forumViewThread', 'forumWritePost', 'forumModWritePost', 'region'];
+				// @ts-ignore
 				if (!Foxtrick.isPage(doc, pages) &&
 					(Foxtrick.util.layout.isStandard(doc) || parent.nodeName != 'TD')) {
 					// Foxtrick.addClass(aLink, 'ft-nowrap');
@@ -264,6 +265,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 					var teamId = Foxtrick.util.id.getTeamIdFromUrl(orgLink.href);
 					if (teamId) {
 						// eslint-disable-next-line no-unused-vars
+						// @ts-ignore
 						let teamName = orgLink.textContent; // lgtm[js/unused-local-variable]
 					}
 
