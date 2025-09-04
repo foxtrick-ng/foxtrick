@@ -251,7 +251,7 @@ Foxtrick.modules['MatchLineupFixes'] = {
 			// // these players both entersField and leavesField later
 			// var comesAndGoes = Foxtrick.intersect(leavesField, entersField);
 			//
-			// // some exlusive groups
+			// // some exclusive groups
 			// var leavesFieldOnly = Foxtrick.filter(function(player) {
 			// 	return !Foxtrick.has(comesAndGoes, player);
 			// }, leavesField);
