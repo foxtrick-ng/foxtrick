@@ -212,6 +212,48 @@ Foxtrick.Pages.All.getTeamName = function(doc) {
 };
 
 /**
+ * Get user/manager information from the ht menu.
+ * @param {Document} doc The document object.
+ * @returns {object} An object containing userId and userName, or undefined if not found.
+ */
+Foxtrick.Pages.All.getUser = function(doc) {
+	let userId, userName;
+
+	const menuLinks =  doc.querySelectorAll('#menu a');
+	const managerLink = Foxtrick.nth((link) => {
+		return /\/Club\/Manager.*[?&]userId=\d+/i.test(link.href);
+	}, menuLinks);
+
+	if (managerLink) {
+		userId = Foxtrick.util.id.getUserIdFromUrl(managerLink.href);
+		userName = managerLink.textContent.trim();
+	}
+
+	return {
+		userId,
+		userName,
+	};
+};
+
+/**
+ * Get user/manager ID from the ht menu.
+ * @param {Document} doc The document object.
+ * @returns {number|undefined} The user ID, or undefined if not found.
+ */
+Foxtrick.Pages.All.getUserId = function(doc) {
+	return Foxtrick.Pages.All.getUser(doc).userId;
+};
+
+/**
+ * Get user/manager name from the ht menu.
+ * @param {Document} doc The document object.
+ * @returns {string|undefined} The user name, or undefined if not found.
+ */
+Foxtrick.Pages.All.getUserName = function(doc) {
+	return Foxtrick.Pages.All.getUser(doc).userName;
+};
+
+/**
  * Test whether user is logged in
  * @param  {document}  doc
  * @return {boolean}

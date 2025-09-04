@@ -14,7 +14,7 @@
 		'BaseDonut',
 		'TextRenderer',
 		'AnimationUpdater',
-		'exceptionless',
+		'Sentry',
 	];
 
 	LIBS.forEach((lib) => {

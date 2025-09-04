@@ -439,7 +439,7 @@ Foxtrick.loader.background.browserLoad = async function() {
 
 	}
 	catch (e) {
-		Foxtrick.log(e);
+		Foxtrick.logFatalError('Background page init: ', e);
 	}
 };
 

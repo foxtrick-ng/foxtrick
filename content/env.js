@@ -410,8 +410,6 @@ Foxtrick.lazyProp = function(obj, prop, calc) {
 		Foxtrick.Manifest = { manifest_version: 3 };
 		if (chrome.runtime.getManifest)
 			Foxtrick.Manifest = chrome.runtime.getManifest();
-		console.log('manifest version: ' + Foxtrick.Manifest.manifest_version);
-		console.log('context: ' + Foxtrick.context);
 
 		var ACTIVE_TABS = new Set();
 
