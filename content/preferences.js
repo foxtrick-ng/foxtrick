@@ -1138,7 +1138,7 @@ function initModules() {
  */
 function initMainTab() {
 	var desc = $('#pref-setup-desc')[0];
-	var ISSUES_URL = 'https://github.com/minj/foxtrick/issues';
+	var ISSUES_URL = 'https://www.hattrick.org/goto.ashx?path=%2FForum%2FOverview.aspx%3Ff%3D173635%26v%3D0';
 	Foxtrick.L10n.appendLink('prefs.setup.desc', desc, ISSUES_URL);
 
 	// add links to main tab prefs
