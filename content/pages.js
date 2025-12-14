@@ -29,8 +29,6 @@ if (!this.Foxtrick)
 /* eslint-disable key-spacing, quote-props */
 Foxtrick.htPages = {
 	// following are mainly used for information gathering. keep on top
-	'myHattrick'                : '/MyHattrick/$', // that's the news page
-	'myHattrickAll'             : '/MyHattrick/|.(org|fm|ws|name|net|pl|br)/$', // TLD
 	'teamPageAny'               : '/Club/|/World/Series/|/Community/Tournaments/',
 
 	'all'                       : '.*',
