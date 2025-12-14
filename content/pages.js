@@ -35,6 +35,7 @@ Foxtrick.htPages = {
 
 	'all'                       : '.*',
 	'dashboard'                 : '/MyHattrick/Dashboard.aspx',
+	'office'					: '/MyHattrick/Office.aspx',
 	'playerDetails'             : '/Club/Players/Player(.|.Classic.)aspx',
 	'forum'                     : '/Forum/',
 	'forumViewThread'           : '/Forum/Read.aspx',
