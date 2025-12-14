@@ -9,7 +9,7 @@
 
 Foxtrick.modules['SupportershipExpirationDate'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.SHORTCUTS_AND_TWEAKS,
-	PAGES: ['dashboard'],
+	PAGES: ['dashboard', 'office'],
 
 	/** @param {document} doc */
 	run: function(doc) {
@@ -17,8 +17,11 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 			return;
 
 		// get the content, translate days to date
-		let packageType =
-			doc.getElementById('ctl00_ctl00_CPContent_CPSidebar_ucMyAccount_pnlSubscriptionPackageType');
+		let packageType;
+		if (Foxtrick.isPage(doc, 'dashboard'))
+			packageType = doc.getElementById('ctl00_ctl00_CPContent_CPSidebar_ucMyAccount_pnlSubscriptionPackageType');
+		else
+			packageType = doc.getElementById('ctl00_ctl00_CPContent_CPMain_ucMyOfficeCalendar_ucMyAccount_pnlSubscriptionPackageType');
 
 		if (!packageType)
 			return;
@@ -26,7 +29,11 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 		let box = packageType.closest('.sidebarBox');
 
 		/** @type {HTMLElement} */
-		let container = box.querySelector('#ctl00_ctl00_CPContent_CPSidebar_ucMyAccount_pnlSupporter');
+		let container;
+		if (Foxtrick.isPage(doc, 'dashboard'))
+			container = box.querySelector('#ctl00_ctl00_CPContent_CPSidebar_ucMyAccount_pnlSupporter');
+		else
+			container = box.querySelector('#ctl00_ctl00_CPContent_CPMain_ucMyOfficeCalendar_ucMyAccount_pnlSupporter');
 		if (!container)
 			return;
 
