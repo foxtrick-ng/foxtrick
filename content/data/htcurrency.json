@@ -1073,6 +1073,24 @@
 			"symbol": "franc"
 		},
 		{
+			"code": "BTN",
+			"eurorate": "0.025",
+			"leagues": {
+				"177": "Bhutan"
+			},
+			"name": "Bhutanese ngultrum",
+			"symbol": "Ngultrum"
+		},
+		{
+			"code": "GIP",
+			"eurorate": "1.0",
+			"leagues": {
+				"176": "Gibraltar"
+			},
+			"name": "Gibraltar pound",
+			"symbol": "pounds"
+		},
+		{
 			"code": "HRK",
 			"eurorate": "0.1",
 			"name": "Kuna (Croatian)",

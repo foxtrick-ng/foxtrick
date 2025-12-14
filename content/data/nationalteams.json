@@ -3,42 +3,1979 @@
 		"Cups": [
 			{
 				"CupID": "4892549",
-				"CupTeams": ""
+				"CupTeams": [
+					{
+						"CupNationalTeamID": "3041",
+						"CupNationalTeamName": "U21 Sverige"
+					},
+					{
+						"CupNationalTeamID": "3043",
+						"CupNationalTeamName": "U21 Deutschland"
+					},
+					{
+						"CupNationalTeamID": "3044",
+						"CupNationalTeamName": "U21 Italia"
+					},
+					{
+						"CupNationalTeamID": "3045",
+						"CupNationalTeamName": "U21 France"
+					},
+					{
+						"CupNationalTeamID": "3046",
+						"CupNationalTeamName": "U21 México"
+					},
+					{
+						"CupNationalTeamID": "3047",
+						"CupNationalTeamName": "U21 Argentina"
+					},
+					{
+						"CupNationalTeamID": "3048",
+						"CupNationalTeamName": "U21 USA"
+					},
+					{
+						"CupNationalTeamID": "3049",
+						"CupNationalTeamName": "U21 Norge"
+					},
+					{
+						"CupNationalTeamID": "3050",
+						"CupNationalTeamName": "U21 Oceania"
+					},
+					{
+						"CupNationalTeamID": "3053",
+						"CupNationalTeamName": "U21 Ireland"
+					},
+					{
+						"CupNationalTeamID": "3054",
+						"CupNationalTeamName": "U21 Perú"
+					},
+					{
+						"CupNationalTeamID": "3055",
+						"CupNationalTeamName": "U21 Portugal"
+					},
+					{
+						"CupNationalTeamID": "3056",
+						"CupNationalTeamName": "U21 South Africa"
+					},
+					{
+						"CupNationalTeamID": "3057",
+						"CupNationalTeamName": "U21 Venezuela"
+					},
+					{
+						"CupNationalTeamID": "3058",
+						"CupNationalTeamName": "U21 Prathet Thai"
+					},
+					{
+						"CupNationalTeamID": "3059",
+						"CupNationalTeamName": "U21 Misr"
+					},
+					{
+						"CupNationalTeamID": "3060",
+						"CupNationalTeamName": "U21 Rossiya"
+					},
+					{
+						"CupNationalTeamID": "3061",
+						"CupNationalTeamName": "U21 România"
+					},
+					{
+						"CupNationalTeamID": "3063",
+						"CupNationalTeamName": "U21 Danmark"
+					},
+					{
+						"CupNationalTeamID": "3064",
+						"CupNationalTeamName": "U21 Suomi"
+					},
+					{
+						"CupNationalTeamID": "3066",
+						"CupNationalTeamName": "U21 Nederland"
+					},
+					{
+						"CupNationalTeamID": "3067",
+						"CupNationalTeamName": "U21 Chile"
+					},
+					{
+						"CupNationalTeamID": "3068",
+						"CupNationalTeamName": "U21 India"
+					},
+					{
+						"CupNationalTeamID": "3070",
+						"CupNationalTeamName": "U21 Polska"
+					},
+					{
+						"CupNationalTeamID": "3071",
+						"CupNationalTeamName": "U21 Scotland"
+					},
+					{
+						"CupNationalTeamID": "3073",
+						"CupNationalTeamName": "U21 Hanguk"
+					},
+					{
+						"CupNationalTeamID": "3075",
+						"CupNationalTeamName": "U21 China"
+					},
+					{
+						"CupNationalTeamID": "3076",
+						"CupNationalTeamName": "U21 España"
+					},
+					{
+						"CupNationalTeamID": "3078",
+						"CupNationalTeamName": "U21 Belgium"
+					},
+					{
+						"CupNationalTeamID": "3079",
+						"CupNationalTeamName": "U21 Schweiz"
+					},
+					{
+						"CupNationalTeamID": "3080",
+						"CupNationalTeamName": "U21 Österreich"
+					},
+					{
+						"CupNationalTeamID": "3091",
+						"CupNationalTeamName": "U21 Magyarország"
+					},
+					{
+						"CupNationalTeamID": "3092",
+						"CupNationalTeamName": "U21 Latvija"
+					},
+					{
+						"CupNationalTeamID": "3093",
+						"CupNationalTeamName": "U21 Indonesia"
+					},
+					{
+						"CupNationalTeamID": "3094",
+						"CupNationalTeamName": "U21 Pilipinas"
+					},
+					{
+						"CupNationalTeamID": "3096",
+						"CupNationalTeamName": "U21 Srbija"
+					},
+					{
+						"CupNationalTeamID": "3098",
+						"CupNationalTeamName": "U21 Hellas"
+					},
+					{
+						"CupNationalTeamID": "3099",
+						"CupNationalTeamName": "U21 Česko"
+					},
+					{
+						"CupNationalTeamID": "3101",
+						"CupNationalTeamName": "U21 Chinese Taipei"
+					},
+					{
+						"CupNationalTeamID": "3103",
+						"CupNationalTeamName": "U21 Hong Kong"
+					},
+					{
+						"CupNationalTeamID": "3107",
+						"CupNationalTeamName": "U21 Bulgaria"
+					},
+					{
+						"CupNationalTeamID": "3109",
+						"CupNationalTeamName": "U21 Israel"
+					},
+					{
+						"CupNationalTeamID": "3114",
+						"CupNationalTeamName": "U21 Lietuva"
+					},
+					{
+						"CupNationalTeamID": "3115",
+						"CupNationalTeamName": "U21 Bosna i Hercegovina"
+					},
+					{
+						"CupNationalTeamID": "3117",
+						"CupNationalTeamName": "U21 Slovensko"
+					},
+					{
+						"CupNationalTeamID": "3119",
+						"CupNationalTeamName": "U21 Ukraina"
+					},
+					{
+						"CupNationalTeamID": "3121",
+						"CupNationalTeamName": "U21 Việt Nam"
+					},
+					{
+						"CupNationalTeamID": "3125",
+						"CupNationalTeamName": "U21 Paraguay"
+					},
+					{
+						"CupNationalTeamID": "3127",
+						"CupNationalTeamName": "U21 Nigeria"
+					},
+					{
+						"CupNationalTeamID": "3129",
+						"CupNationalTeamName": "U21 Ecuador"
+					},
+					{
+						"CupNationalTeamID": "3131",
+						"CupNationalTeamName": "U21 Bolivia"
+					},
+					{
+						"CupNationalTeamID": "3135",
+						"CupNationalTeamName": "U21 Al Maghrib"
+					},
+					{
+						"CupNationalTeamID": "3143",
+						"CupNationalTeamName": "U21 United Arab Emirates"
+					},
+					{
+						"CupNationalTeamID": "3147",
+						"CupNationalTeamName": "U21 Lëtzebuerg"
+					},
+					{
+						"CupNationalTeamID": "3153",
+						"CupNationalTeamName": "U21 República Dominicana"
+					},
+					{
+						"CupNationalTeamID": "3159",
+						"CupNationalTeamName": "U21 Severna Makedonija"
+					},
+					{
+						"CupNationalTeamID": "3161",
+						"CupNationalTeamName": "U21 Jamaica"
+					},
+					{
+						"CupNationalTeamID": "3163",
+						"CupNationalTeamName": "U21 Kenya"
+					},
+					{
+						"CupNationalTeamID": "3165",
+						"CupNationalTeamName": "U21 Northern Ireland"
+					},
+					{
+						"CupNationalTeamID": "3169",
+						"CupNationalTeamName": "U21 El Salvador"
+					},
+					{
+						"CupNationalTeamID": "3175",
+						"CupNationalTeamName": "U21 Malta"
+					},
+					{
+						"CupNationalTeamID": "3177",
+						"CupNationalTeamName": "U21 Moldova"
+					},
+					{
+						"CupNationalTeamID": "3181",
+						"CupNationalTeamName": "U21 Al Urdun"
+					},
+					{
+						"CupNationalTeamID": "3183",
+						"CupNationalTeamName": "U21 Sakartvelo"
+					},
+					{
+						"CupNationalTeamID": "3185",
+						"CupNationalTeamName": "U21 Guatemala"
+					},
+					{
+						"CupNationalTeamID": "3189",
+						"CupNationalTeamName": "U21 Kazakhstan"
+					},
+					{
+						"CupNationalTeamID": "3193",
+						"CupNationalTeamName": "U21 Suriname"
+					},
+					{
+						"CupNationalTeamID": "3195",
+						"CupNationalTeamName": "U21 Trinidad & Tobago"
+					},
+					{
+						"CupNationalTeamID": "3201",
+						"CupNationalTeamName": "U21 Mongol Uls"
+					},
+					{
+						"CupNationalTeamID": "3203",
+						"CupNationalTeamName": "U21 Lubnan"
+					},
+					{
+						"CupNationalTeamID": "3211",
+						"CupNationalTeamName": "U21 Cabo Verde"
+					},
+					{
+						"CupNationalTeamID": "3213",
+						"CupNationalTeamName": "U21 Barbados"
+					},
+					{
+						"CupNationalTeamID": "3219",
+						"CupNationalTeamName": "U21 Azərbaycan"
+					},
+					{
+						"CupNationalTeamID": "3221",
+						"CupNationalTeamName": "U21 Al Kuwayt"
+					},
+					{
+						"CupNationalTeamID": "3229",
+						"CupNationalTeamName": "U21 Al Yaman"
+					},
+					{
+						"CupNationalTeamID": "3231",
+						"CupNationalTeamName": "U21 Oman"
+					},
+					{
+						"CupNationalTeamID": "3235",
+						"CupNationalTeamName": "U21 Brunei"
+					},
+					{
+						"CupNationalTeamID": "3237",
+						"CupNationalTeamName": "U21 Ghana"
+					},
+					{
+						"CupNationalTeamID": "3239",
+						"CupNationalTeamName": "U21 Prateh Kampuchea"
+					},
+					{
+						"CupNationalTeamID": "3241",
+						"CupNationalTeamName": "U21 Bénin"
+					},
+					{
+						"CupNationalTeamID": "3243",
+						"CupNationalTeamName": "U21 Suriyah"
+					},
+					{
+						"CupNationalTeamID": "3250",
+						"CupNationalTeamName": "U21 Uganda"
+					},
+					{
+						"CupNationalTeamID": "3252",
+						"CupNationalTeamName": "U21 Dhivehi Raajje"
+					},
+					{
+						"CupNationalTeamID": "3280",
+						"CupNationalTeamName": "U21 São Tomé e Príncipe"
+					},
+					{
+						"CupNationalTeamID": "3282",
+						"CupNationalTeamName": "U21 Comoros"
+					},
+					{
+						"CupNationalTeamID": "3283",
+						"CupNationalTeamName": "U21 Sri Lanka"
+					},
+					{
+						"CupNationalTeamID": "3284",
+						"CupNationalTeamName": "U21 Curaçao"
+					},
+					{
+						"CupNationalTeamID": "3285",
+						"CupNationalTeamName": "U21 Guam"
+					},
+					{
+						"CupNationalTeamID": "3286",
+						"CupNationalTeamName": "U21 RD Congo"
+					},
+					{
+						"CupNationalTeamID": "3288",
+						"CupNationalTeamName": "U21 Saint Vincent and the Grenadines"
+					},
+					{
+						"CupNationalTeamID": "3289",
+						"CupNationalTeamName": "U21 Belize"
+					},
+					{
+						"CupNationalTeamID": "3291",
+						"CupNationalTeamName": "U21 Botswana"
+					},
+					{
+						"CupNationalTeamID": "3293",
+						"CupNationalTeamName": "U21 Zambia"
+					},
+					{
+						"CupNationalTeamID": "3294",
+						"CupNationalTeamName": "U21 San Marino"
+					},
+					{
+						"CupNationalTeamID": "3295",
+						"CupNationalTeamName": "U21 Haiti"
+					},
+					{
+						"CupNationalTeamID": "3296",
+						"CupNationalTeamName": "U21 Puerto Rico"
+					}
+				]
 			},
 			{
 				"CupID": "4878483",
-				"CupTeams": ""
+				"CupTeams": [
+					{
+						"CupNationalTeamID": "3041",
+						"CupNationalTeamName": "U21 Sverige"
+					},
+					{
+						"CupNationalTeamID": "3042",
+						"CupNationalTeamName": "U21 England"
+					},
+					{
+						"CupNationalTeamID": "3043",
+						"CupNationalTeamName": "U21 Deutschland"
+					},
+					{
+						"CupNationalTeamID": "3044",
+						"CupNationalTeamName": "U21 Italia"
+					},
+					{
+						"CupNationalTeamID": "3045",
+						"CupNationalTeamName": "U21 France"
+					},
+					{
+						"CupNationalTeamID": "3049",
+						"CupNationalTeamName": "U21 Norge"
+					},
+					{
+						"CupNationalTeamID": "3053",
+						"CupNationalTeamName": "U21 Ireland"
+					},
+					{
+						"CupNationalTeamID": "3055",
+						"CupNationalTeamName": "U21 Portugal"
+					},
+					{
+						"CupNationalTeamID": "3060",
+						"CupNationalTeamName": "U21 Rossiya"
+					},
+					{
+						"CupNationalTeamID": "3061",
+						"CupNationalTeamName": "U21 România"
+					},
+					{
+						"CupNationalTeamID": "3062",
+						"CupNationalTeamName": "U21 Ísland"
+					},
+					{
+						"CupNationalTeamID": "3063",
+						"CupNationalTeamName": "U21 Danmark"
+					},
+					{
+						"CupNationalTeamID": "3064",
+						"CupNationalTeamName": "U21 Suomi"
+					},
+					{
+						"CupNationalTeamID": "3066",
+						"CupNationalTeamName": "U21 Nederland"
+					},
+					{
+						"CupNationalTeamID": "3070",
+						"CupNationalTeamName": "U21 Polska"
+					},
+					{
+						"CupNationalTeamID": "3071",
+						"CupNationalTeamName": "U21 Scotland"
+					},
+					{
+						"CupNationalTeamID": "3074",
+						"CupNationalTeamName": "U21 Türkiye"
+					},
+					{
+						"CupNationalTeamID": "3076",
+						"CupNationalTeamName": "U21 España"
+					},
+					{
+						"CupNationalTeamID": "3078",
+						"CupNationalTeamName": "U21 Belgium"
+					},
+					{
+						"CupNationalTeamID": "3079",
+						"CupNationalTeamName": "U21 Schweiz"
+					},
+					{
+						"CupNationalTeamID": "3080",
+						"CupNationalTeamName": "U21 Österreich"
+					},
+					{
+						"CupNationalTeamID": "3091",
+						"CupNationalTeamName": "U21 Magyarország"
+					},
+					{
+						"CupNationalTeamID": "3092",
+						"CupNationalTeamName": "U21 Latvija"
+					},
+					{
+						"CupNationalTeamID": "3095",
+						"CupNationalTeamName": "U21 Eesti"
+					},
+					{
+						"CupNationalTeamID": "3096",
+						"CupNationalTeamName": "U21 Srbija"
+					},
+					{
+						"CupNationalTeamID": "3097",
+						"CupNationalTeamName": "U21 Hrvatska"
+					},
+					{
+						"CupNationalTeamID": "3098",
+						"CupNationalTeamName": "U21 Hellas"
+					},
+					{
+						"CupNationalTeamID": "3099",
+						"CupNationalTeamName": "U21 Česko"
+					},
+					{
+						"CupNationalTeamID": "3105",
+						"CupNationalTeamName": "U21 Cymru"
+					},
+					{
+						"CupNationalTeamID": "3107",
+						"CupNationalTeamName": "U21 Bulgaria"
+					},
+					{
+						"CupNationalTeamID": "3111",
+						"CupNationalTeamName": "U21 Slovenija"
+					},
+					{
+						"CupNationalTeamID": "3114",
+						"CupNationalTeamName": "U21 Lietuva"
+					},
+					{
+						"CupNationalTeamID": "3115",
+						"CupNationalTeamName": "U21 Bosna i Hercegovina"
+					},
+					{
+						"CupNationalTeamID": "3117",
+						"CupNationalTeamName": "U21 Slovensko"
+					},
+					{
+						"CupNationalTeamID": "3119",
+						"CupNationalTeamName": "U21 Ukraina"
+					},
+					{
+						"CupNationalTeamID": "3133",
+						"CupNationalTeamName": "U21 Føroyar"
+					},
+					{
+						"CupNationalTeamID": "3141",
+						"CupNationalTeamName": "U21 Cyprus"
+					},
+					{
+						"CupNationalTeamID": "3147",
+						"CupNationalTeamName": "U21 Lëtzebuerg"
+					},
+					{
+						"CupNationalTeamID": "3157",
+						"CupNationalTeamName": "U21 Belarus"
+					},
+					{
+						"CupNationalTeamID": "3159",
+						"CupNationalTeamName": "U21 Severna Makedonija"
+					},
+					{
+						"CupNationalTeamID": "3165",
+						"CupNationalTeamName": "U21 Northern Ireland"
+					},
+					{
+						"CupNationalTeamID": "3175",
+						"CupNationalTeamName": "U21 Malta"
+					},
+					{
+						"CupNationalTeamID": "3177",
+						"CupNationalTeamName": "U21 Moldova"
+					},
+					{
+						"CupNationalTeamID": "3179",
+						"CupNationalTeamName": "U21 Shqiperia"
+					},
+					{
+						"CupNationalTeamID": "3187",
+						"CupNationalTeamName": "U21 Andorra"
+					},
+					{
+						"CupNationalTeamID": "3205",
+						"CupNationalTeamName": "U21 Liechtenstein"
+					},
+					{
+						"CupNationalTeamID": "3227",
+						"CupNationalTeamName": "U21 Crna Gora"
+					},
+					{
+						"CupNationalTeamID": "3294",
+						"CupNationalTeamName": "U21 San Marino"
+					}
+				]
 			},
 			{
 				"CupID": "4878490",
-				"CupTeams": ""
+				"CupTeams": [
+					{
+						"CupNationalTeamID": "3046",
+						"CupNationalTeamName": "U21 México"
+					},
+					{
+						"CupNationalTeamID": "3047",
+						"CupNationalTeamName": "U21 Argentina"
+					},
+					{
+						"CupNationalTeamID": "3048",
+						"CupNationalTeamName": "U21 USA"
+					},
+					{
+						"CupNationalTeamID": "3051",
+						"CupNationalTeamName": "U21 Canada"
+					},
+					{
+						"CupNationalTeamID": "3054",
+						"CupNationalTeamName": "U21 Perú"
+					},
+					{
+						"CupNationalTeamID": "3057",
+						"CupNationalTeamName": "U21 Venezuela"
+					},
+					{
+						"CupNationalTeamID": "3065",
+						"CupNationalTeamName": "U21 Brasil"
+					},
+					{
+						"CupNationalTeamID": "3067",
+						"CupNationalTeamName": "U21 Chile"
+					},
+					{
+						"CupNationalTeamID": "3072",
+						"CupNationalTeamName": "U21 Uruguay"
+					},
+					{
+						"CupNationalTeamID": "3125",
+						"CupNationalTeamName": "U21 Paraguay"
+					},
+					{
+						"CupNationalTeamID": "3129",
+						"CupNationalTeamName": "U21 Ecuador"
+					},
+					{
+						"CupNationalTeamID": "3131",
+						"CupNationalTeamName": "U21 Bolivia"
+					},
+					{
+						"CupNationalTeamID": "3139",
+						"CupNationalTeamName": "U21 Costa Rica"
+					},
+					{
+						"CupNationalTeamID": "3153",
+						"CupNationalTeamName": "U21 República Dominicana"
+					},
+					{
+						"CupNationalTeamID": "3161",
+						"CupNationalTeamName": "U21 Jamaica"
+					},
+					{
+						"CupNationalTeamID": "3167",
+						"CupNationalTeamName": "U21 Panama"
+					},
+					{
+						"CupNationalTeamID": "3169",
+						"CupNationalTeamName": "U21 El Salvador"
+					},
+					{
+						"CupNationalTeamID": "3171",
+						"CupNationalTeamName": "U21 Honduras"
+					},
+					{
+						"CupNationalTeamID": "3185",
+						"CupNationalTeamName": "U21 Guatemala"
+					},
+					{
+						"CupNationalTeamID": "3191",
+						"CupNationalTeamName": "U21 Nicaragua"
+					},
+					{
+						"CupNationalTeamID": "3193",
+						"CupNationalTeamName": "U21 Suriname"
+					},
+					{
+						"CupNationalTeamID": "3195",
+						"CupNationalTeamName": "U21 Trinidad & Tobago"
+					},
+					{
+						"CupNationalTeamID": "3213",
+						"CupNationalTeamName": "U21 Barbados"
+					},
+					{
+						"CupNationalTeamID": "3257",
+						"CupNationalTeamName": "U21 Cuba"
+					},
+					{
+						"CupNationalTeamID": "3284",
+						"CupNationalTeamName": "U21 Curaçao"
+					},
+					{
+						"CupNationalTeamID": "3288",
+						"CupNationalTeamName": "U21 Saint Vincent and the Grenadines"
+					},
+					{
+						"CupNationalTeamID": "3289",
+						"CupNationalTeamName": "U21 Belize"
+					},
+					{
+						"CupNationalTeamID": "3295",
+						"CupNationalTeamName": "U21 Haiti"
+					},
+					{
+						"CupNationalTeamID": "3296",
+						"CupNationalTeamName": "U21 Puerto Rico"
+					},
+					{
+						"CupNationalTeamID": "3314",
+						"CupNationalTeamName": "U21 Grenada"
+					}
+				]
 			},
 			{
 				"CupID": "4878492",
-				"CupTeams": ""
+				"CupTeams": [
+					{
+						"CupNationalTeamID": "3056",
+						"CupNationalTeamName": "U21 South Africa"
+					},
+					{
+						"CupNationalTeamID": "3059",
+						"CupNationalTeamName": "U21 Misr"
+					},
+					{
+						"CupNationalTeamID": "3127",
+						"CupNationalTeamName": "U21 Nigeria"
+					},
+					{
+						"CupNationalTeamID": "3135",
+						"CupNationalTeamName": "U21 Al Maghrib"
+					},
+					{
+						"CupNationalTeamID": "3163",
+						"CupNationalTeamName": "U21 Kenya"
+					},
+					{
+						"CupNationalTeamID": "3197",
+						"CupNationalTeamName": "U21 Algérie"
+					},
+					{
+						"CupNationalTeamID": "3199",
+						"CupNationalTeamName": "U21 Senegal"
+					},
+					{
+						"CupNationalTeamID": "3209",
+						"CupNationalTeamName": "U21 Côte d'Ivoire"
+					},
+					{
+						"CupNationalTeamID": "3211",
+						"CupNationalTeamName": "U21 Cabo Verde"
+					},
+					{
+						"CupNationalTeamID": "3223",
+						"CupNationalTeamName": "U21 Angola"
+					},
+					{
+						"CupNationalTeamID": "3233",
+						"CupNationalTeamName": "U21 Moçambique"
+					},
+					{
+						"CupNationalTeamID": "3237",
+						"CupNationalTeamName": "U21 Ghana"
+					},
+					{
+						"CupNationalTeamID": "3241",
+						"CupNationalTeamName": "U21 Bénin"
+					},
+					{
+						"CupNationalTeamID": "3248",
+						"CupNationalTeamName": "U21 Tanzania"
+					},
+					{
+						"CupNationalTeamID": "3250",
+						"CupNationalTeamName": "U21 Uganda"
+					},
+					{
+						"CupNationalTeamID": "3255",
+						"CupNationalTeamName": "U21 Cameroon"
+					},
+					{
+						"CupNationalTeamID": "3280",
+						"CupNationalTeamName": "U21 São Tomé e Príncipe"
+					},
+					{
+						"CupNationalTeamID": "3282",
+						"CupNationalTeamName": "U21 Comoros"
+					},
+					{
+						"CupNationalTeamID": "3286",
+						"CupNationalTeamName": "U21 RD Congo"
+					},
+					{
+						"CupNationalTeamID": "3287",
+						"CupNationalTeamName": "U21 Ītyōṗṗyā"
+					},
+					{
+						"CupNationalTeamID": "3290",
+						"CupNationalTeamName": "U21 Madagasikara"
+					},
+					{
+						"CupNationalTeamID": "3291",
+						"CupNationalTeamName": "U21 Botswana"
+					},
+					{
+						"CupNationalTeamID": "3293",
+						"CupNationalTeamName": "U21 Zambia"
+					},
+					{
+						"CupNationalTeamID": "3316",
+						"CupNationalTeamName": "U21 Burkina Faso"
+					}
+				]
 			},
 			{
 				"CupID": "4878493",
-				"CupTeams": ""
+				"CupTeams": [
+					{
+						"CupNationalTeamID": "3050",
+						"CupNationalTeamName": "U21 Oceania"
+					},
+					{
+						"CupNationalTeamID": "3058",
+						"CupNationalTeamName": "U21 Prathet Thai"
+					},
+					{
+						"CupNationalTeamID": "3068",
+						"CupNationalTeamName": "U21 India"
+					},
+					{
+						"CupNationalTeamID": "3069",
+						"CupNationalTeamName": "U21 Nippon"
+					},
+					{
+						"CupNationalTeamID": "3073",
+						"CupNationalTeamName": "U21 Hanguk"
+					},
+					{
+						"CupNationalTeamID": "3075",
+						"CupNationalTeamName": "U21 China"
+					},
+					{
+						"CupNationalTeamID": "3077",
+						"CupNationalTeamName": "U21 Singapore"
+					},
+					{
+						"CupNationalTeamID": "3081",
+						"CupNationalTeamName": "U21 Malaysia"
+					},
+					{
+						"CupNationalTeamID": "3093",
+						"CupNationalTeamName": "U21 Indonesia"
+					},
+					{
+						"CupNationalTeamID": "3094",
+						"CupNationalTeamName": "U21 Pilipinas"
+					},
+					{
+						"CupNationalTeamID": "3101",
+						"CupNationalTeamName": "U21 Chinese Taipei"
+					},
+					{
+						"CupNationalTeamID": "3103",
+						"CupNationalTeamName": "U21 Hong Kong"
+					},
+					{
+						"CupNationalTeamID": "3109",
+						"CupNationalTeamName": "U21 Israel"
+					},
+					{
+						"CupNationalTeamID": "3121",
+						"CupNationalTeamName": "U21 Việt Nam"
+					},
+					{
+						"CupNationalTeamID": "3123",
+						"CupNationalTeamName": "U21 Pakistan"
+					},
+					{
+						"CupNationalTeamID": "3143",
+						"CupNationalTeamName": "U21 United Arab Emirates"
+					},
+					{
+						"CupNationalTeamID": "3145",
+						"CupNationalTeamName": "U21 Saudi Arabia"
+					},
+					{
+						"CupNationalTeamID": "3151",
+						"CupNationalTeamName": "U21 Iran"
+					},
+					{
+						"CupNationalTeamID": "3173",
+						"CupNationalTeamName": "U21 Kyrgyzstan"
+					},
+					{
+						"CupNationalTeamID": "3181",
+						"CupNationalTeamName": "U21 Al Urdun"
+					},
+					{
+						"CupNationalTeamID": "3183",
+						"CupNationalTeamName": "U21 Sakartvelo"
+					},
+					{
+						"CupNationalTeamID": "3189",
+						"CupNationalTeamName": "U21 Kazakhstan"
+					},
+					{
+						"CupNationalTeamID": "3201",
+						"CupNationalTeamName": "U21 Mongol Uls"
+					},
+					{
+						"CupNationalTeamID": "3203",
+						"CupNationalTeamName": "U21 Lubnan"
+					},
+					{
+						"CupNationalTeamID": "3207",
+						"CupNationalTeamName": "U21 Hayastan"
+					},
+					{
+						"CupNationalTeamID": "3215",
+						"CupNationalTeamName": "U21 Bahrain"
+					},
+					{
+						"CupNationalTeamID": "3217",
+						"CupNationalTeamName": "U21 Al Iraq"
+					},
+					{
+						"CupNationalTeamID": "3219",
+						"CupNationalTeamName": "U21 Azərbaycan"
+					},
+					{
+						"CupNationalTeamID": "3221",
+						"CupNationalTeamName": "U21 Al Kuwayt"
+					},
+					{
+						"CupNationalTeamID": "3225",
+						"CupNationalTeamName": "U21 Bangladesh"
+					},
+					{
+						"CupNationalTeamID": "3229",
+						"CupNationalTeamName": "U21 Al Yaman"
+					},
+					{
+						"CupNationalTeamID": "3231",
+						"CupNationalTeamName": "U21 Oman"
+					},
+					{
+						"CupNationalTeamID": "3235",
+						"CupNationalTeamName": "U21 Brunei"
+					},
+					{
+						"CupNationalTeamID": "3239",
+						"CupNationalTeamName": "U21 Prateh Kampuchea"
+					},
+					{
+						"CupNationalTeamID": "3243",
+						"CupNationalTeamName": "U21 Suriyah"
+					},
+					{
+						"CupNationalTeamID": "3246",
+						"CupNationalTeamName": "U21 Dawlat Qatar"
+					},
+					{
+						"CupNationalTeamID": "3252",
+						"CupNationalTeamName": "U21 Dhivehi Raajje"
+					},
+					{
+						"CupNationalTeamID": "3259",
+						"CupNationalTeamName": "U21 Palestine"
+					},
+					{
+						"CupNationalTeamID": "3261",
+						"CupNationalTeamName": "U21 O'zbekiston"
+					},
+					{
+						"CupNationalTeamID": "3283",
+						"CupNationalTeamName": "U21 Sri Lanka"
+					},
+					{
+						"CupNationalTeamID": "3285",
+						"CupNationalTeamName": "U21 Guam"
+					},
+					{
+						"CupNationalTeamID": "3292",
+						"CupNationalTeamName": "U21 Myanmar"
+					}
+				]
 			},
 			{
 				"CupID": "4892615",
-				"CupTeams": ""
+				"CupTeams": [
+					{
+						"CupNationalTeamID": "3042",
+						"CupNationalTeamName": "U21 England"
+					},
+					{
+						"CupNationalTeamID": "3051",
+						"CupNationalTeamName": "U21 Canada"
+					},
+					{
+						"CupNationalTeamID": "3052",
+						"CupNationalTeamName": "U21 Colombia"
+					},
+					{
+						"CupNationalTeamID": "3062",
+						"CupNationalTeamName": "U21 Ísland"
+					},
+					{
+						"CupNationalTeamID": "3065",
+						"CupNationalTeamName": "U21 Brasil"
+					},
+					{
+						"CupNationalTeamID": "3069",
+						"CupNationalTeamName": "U21 Nippon"
+					},
+					{
+						"CupNationalTeamID": "3072",
+						"CupNationalTeamName": "U21 Uruguay"
+					},
+					{
+						"CupNationalTeamID": "3074",
+						"CupNationalTeamName": "U21 Türkiye"
+					},
+					{
+						"CupNationalTeamID": "3077",
+						"CupNationalTeamName": "U21 Singapore"
+					},
+					{
+						"CupNationalTeamID": "3081",
+						"CupNationalTeamName": "U21 Malaysia"
+					},
+					{
+						"CupNationalTeamID": "3095",
+						"CupNationalTeamName": "U21 Eesti"
+					},
+					{
+						"CupNationalTeamID": "3097",
+						"CupNationalTeamName": "U21 Hrvatska"
+					},
+					{
+						"CupNationalTeamID": "3105",
+						"CupNationalTeamName": "U21 Cymru"
+					},
+					{
+						"CupNationalTeamID": "3111",
+						"CupNationalTeamName": "U21 Slovenija"
+					},
+					{
+						"CupNationalTeamID": "3123",
+						"CupNationalTeamName": "U21 Pakistan"
+					},
+					{
+						"CupNationalTeamID": "3133",
+						"CupNationalTeamName": "U21 Føroyar"
+					},
+					{
+						"CupNationalTeamID": "3139",
+						"CupNationalTeamName": "U21 Costa Rica"
+					},
+					{
+						"CupNationalTeamID": "3141",
+						"CupNationalTeamName": "U21 Cyprus"
+					},
+					{
+						"CupNationalTeamID": "3145",
+						"CupNationalTeamName": "U21 Saudi Arabia"
+					},
+					{
+						"CupNationalTeamID": "3149",
+						"CupNationalTeamName": "U21 Tounes"
+					},
+					{
+						"CupNationalTeamID": "3151",
+						"CupNationalTeamName": "U21 Iran"
+					},
+					{
+						"CupNationalTeamID": "3157",
+						"CupNationalTeamName": "U21 Belarus"
+					},
+					{
+						"CupNationalTeamID": "3167",
+						"CupNationalTeamName": "U21 Panama"
+					},
+					{
+						"CupNationalTeamID": "3171",
+						"CupNationalTeamName": "U21 Honduras"
+					},
+					{
+						"CupNationalTeamID": "3173",
+						"CupNationalTeamName": "U21 Kyrgyzstan"
+					},
+					{
+						"CupNationalTeamID": "3179",
+						"CupNationalTeamName": "U21 Shqiperia"
+					},
+					{
+						"CupNationalTeamID": "3187",
+						"CupNationalTeamName": "U21 Andorra"
+					},
+					{
+						"CupNationalTeamID": "3191",
+						"CupNationalTeamName": "U21 Nicaragua"
+					},
+					{
+						"CupNationalTeamID": "3197",
+						"CupNationalTeamName": "U21 Algérie"
+					},
+					{
+						"CupNationalTeamID": "3199",
+						"CupNationalTeamName": "U21 Senegal"
+					},
+					{
+						"CupNationalTeamID": "3205",
+						"CupNationalTeamName": "U21 Liechtenstein"
+					},
+					{
+						"CupNationalTeamID": "3207",
+						"CupNationalTeamName": "U21 Hayastan"
+					},
+					{
+						"CupNationalTeamID": "3209",
+						"CupNationalTeamName": "U21 Côte d'Ivoire"
+					},
+					{
+						"CupNationalTeamID": "3215",
+						"CupNationalTeamName": "U21 Bahrain"
+					},
+					{
+						"CupNationalTeamID": "3217",
+						"CupNationalTeamName": "U21 Al Iraq"
+					},
+					{
+						"CupNationalTeamID": "3223",
+						"CupNationalTeamName": "U21 Angola"
+					},
+					{
+						"CupNationalTeamID": "3225",
+						"CupNationalTeamName": "U21 Bangladesh"
+					},
+					{
+						"CupNationalTeamID": "3227",
+						"CupNationalTeamName": "U21 Crna Gora"
+					},
+					{
+						"CupNationalTeamID": "3233",
+						"CupNationalTeamName": "U21 Moçambique"
+					},
+					{
+						"CupNationalTeamID": "3246",
+						"CupNationalTeamName": "U21 Dawlat Qatar"
+					},
+					{
+						"CupNationalTeamID": "3248",
+						"CupNationalTeamName": "U21 Tanzania"
+					},
+					{
+						"CupNationalTeamID": "3255",
+						"CupNationalTeamName": "U21 Cameroon"
+					},
+					{
+						"CupNationalTeamID": "3257",
+						"CupNationalTeamName": "U21 Cuba"
+					},
+					{
+						"CupNationalTeamID": "3259",
+						"CupNationalTeamName": "U21 Palestine"
+					},
+					{
+						"CupNationalTeamID": "3261",
+						"CupNationalTeamName": "U21 O'zbekiston"
+					},
+					{
+						"CupNationalTeamID": "3287",
+						"CupNationalTeamName": "U21 Ītyōṗṗyā"
+					},
+					{
+						"CupNationalTeamID": "3290",
+						"CupNationalTeamName": "U21 Madagasikara"
+					},
+					{
+						"CupNationalTeamID": "3292",
+						"CupNationalTeamName": "U21 Myanmar"
+					},
+					{
+						"CupNationalTeamID": "3314",
+						"CupNationalTeamName": "U21 Grenada"
+					},
+					{
+						"CupNationalTeamID": "3316",
+						"CupNationalTeamName": "U21 Burkina Faso"
+					},
+					{
+						"CupNationalTeamID": "3318",
+						"CupNationalTeamName": "U21 Nepal"
+					},
+					{
+						"CupNationalTeamID": "3320",
+						"CupNationalTeamName": "U21 Guyana"
+					},
+					{
+						"CupNationalTeamID": "3322",
+						"CupNationalTeamName": "U21 Tahiti"
+					},
+					{
+						"CupNationalTeamID": "3324",
+						"CupNationalTeamName": "U21 Guinée"
+					},
+					{
+						"CupNationalTeamID": "3326",
+						"CupNationalTeamName": "U21 Bahamas"
+					},
+					{
+						"CupNationalTeamID": "3328",
+						"CupNationalTeamName": "U21 Rwanda"
+					}
+				]
 			},
 			{
 				"CupID": "4891573",
-				"CupTeams": ""
+				"CupTeams": [
+					{
+						"CupNationalTeamID": "3041",
+						"CupNationalTeamName": "U21 Sverige"
+					},
+					{
+						"CupNationalTeamID": "3050",
+						"CupNationalTeamName": "U21 Oceania"
+					},
+					{
+						"CupNationalTeamID": "3055",
+						"CupNationalTeamName": "U21 Portugal"
+					},
+					{
+						"CupNationalTeamID": "3056",
+						"CupNationalTeamName": "U21 South Africa"
+					},
+					{
+						"CupNationalTeamID": "3068",
+						"CupNationalTeamName": "U21 India"
+					},
+					{
+						"CupNationalTeamID": "3081",
+						"CupNationalTeamName": "U21 Malaysia"
+					},
+					{
+						"CupNationalTeamID": "3127",
+						"CupNationalTeamName": "U21 Nigeria"
+					},
+					{
+						"CupNationalTeamID": "3161",
+						"CupNationalTeamName": "U21 Jamaica"
+					},
+					{
+						"CupNationalTeamID": "3171",
+						"CupNationalTeamName": "U21 Honduras"
+					},
+					{
+						"CupNationalTeamID": "3181",
+						"CupNationalTeamName": "U21 Al Urdun"
+					},
+					{
+						"CupNationalTeamID": "3183",
+						"CupNationalTeamName": "U21 Sakartvelo"
+					},
+					{
+						"CupNationalTeamID": "3191",
+						"CupNationalTeamName": "U21 Nicaragua"
+					},
+					{
+						"CupNationalTeamID": "3197",
+						"CupNationalTeamName": "U21 Algérie"
+					},
+					{
+						"CupNationalTeamID": "3203",
+						"CupNationalTeamName": "U21 Lubnan"
+					},
+					{
+						"CupNationalTeamID": "3217",
+						"CupNationalTeamName": "U21 Al Iraq"
+					},
+					{
+						"CupNationalTeamID": "3223",
+						"CupNationalTeamName": "U21 Angola"
+					},
+					{
+						"CupNationalTeamID": "3233",
+						"CupNationalTeamName": "U21 Moçambique"
+					},
+					{
+						"CupNationalTeamID": "3235",
+						"CupNationalTeamName": "U21 Brunei"
+					},
+					{
+						"CupNationalTeamID": "3261",
+						"CupNationalTeamName": "U21 O'zbekiston"
+					},
+					{
+						"CupNationalTeamID": "3290",
+						"CupNationalTeamName": "U21 Madagasikara"
+					},
+					{
+						"CupNationalTeamID": "3314",
+						"CupNationalTeamName": "U21 Grenada"
+					},
+					{
+						"CupNationalTeamID": "3316",
+						"CupNationalTeamName": "U21 Burkina Faso"
+					}
+				]
 			},
 			{
 				"CupID": "4894807",
-				"CupTeams": ""
+				"CupTeams": [
+					{
+						"CupNationalTeamID": "3041",
+						"CupNationalTeamName": "U21 Sverige"
+					},
+					{
+						"CupNationalTeamID": "3042",
+						"CupNationalTeamName": "U21 England"
+					},
+					{
+						"CupNationalTeamID": "3043",
+						"CupNationalTeamName": "U21 Deutschland"
+					},
+					{
+						"CupNationalTeamID": "3044",
+						"CupNationalTeamName": "U21 Italia"
+					},
+					{
+						"CupNationalTeamID": "3045",
+						"CupNationalTeamName": "U21 France"
+					},
+					{
+						"CupNationalTeamID": "3046",
+						"CupNationalTeamName": "U21 México"
+					},
+					{
+						"CupNationalTeamID": "3047",
+						"CupNationalTeamName": "U21 Argentina"
+					},
+					{
+						"CupNationalTeamID": "3048",
+						"CupNationalTeamName": "U21 USA"
+					},
+					{
+						"CupNationalTeamID": "3049",
+						"CupNationalTeamName": "U21 Norge"
+					},
+					{
+						"CupNationalTeamID": "3050",
+						"CupNationalTeamName": "U21 Oceania"
+					},
+					{
+						"CupNationalTeamID": "3051",
+						"CupNationalTeamName": "U21 Canada"
+					},
+					{
+						"CupNationalTeamID": "3052",
+						"CupNationalTeamName": "U21 Colombia"
+					},
+					{
+						"CupNationalTeamID": "3053",
+						"CupNationalTeamName": "U21 Ireland"
+					},
+					{
+						"CupNationalTeamID": "3054",
+						"CupNationalTeamName": "U21 Perú"
+					},
+					{
+						"CupNationalTeamID": "3055",
+						"CupNationalTeamName": "U21 Portugal"
+					},
+					{
+						"CupNationalTeamID": "3056",
+						"CupNationalTeamName": "U21 South Africa"
+					},
+					{
+						"CupNationalTeamID": "3057",
+						"CupNationalTeamName": "U21 Venezuela"
+					},
+					{
+						"CupNationalTeamID": "3058",
+						"CupNationalTeamName": "U21 Prathet Thai"
+					},
+					{
+						"CupNationalTeamID": "3059",
+						"CupNationalTeamName": "U21 Misr"
+					},
+					{
+						"CupNationalTeamID": "3060",
+						"CupNationalTeamName": "U21 Rossiya"
+					},
+					{
+						"CupNationalTeamID": "3061",
+						"CupNationalTeamName": "U21 România"
+					},
+					{
+						"CupNationalTeamID": "3062",
+						"CupNationalTeamName": "U21 Ísland"
+					},
+					{
+						"CupNationalTeamID": "3063",
+						"CupNationalTeamName": "U21 Danmark"
+					},
+					{
+						"CupNationalTeamID": "3064",
+						"CupNationalTeamName": "U21 Suomi"
+					},
+					{
+						"CupNationalTeamID": "3065",
+						"CupNationalTeamName": "U21 Brasil"
+					},
+					{
+						"CupNationalTeamID": "3066",
+						"CupNationalTeamName": "U21 Nederland"
+					},
+					{
+						"CupNationalTeamID": "3067",
+						"CupNationalTeamName": "U21 Chile"
+					},
+					{
+						"CupNationalTeamID": "3068",
+						"CupNationalTeamName": "U21 India"
+					},
+					{
+						"CupNationalTeamID": "3069",
+						"CupNationalTeamName": "U21 Nippon"
+					},
+					{
+						"CupNationalTeamID": "3070",
+						"CupNationalTeamName": "U21 Polska"
+					},
+					{
+						"CupNationalTeamID": "3071",
+						"CupNationalTeamName": "U21 Scotland"
+					},
+					{
+						"CupNationalTeamID": "3072",
+						"CupNationalTeamName": "U21 Uruguay"
+					},
+					{
+						"CupNationalTeamID": "3073",
+						"CupNationalTeamName": "U21 Hanguk"
+					},
+					{
+						"CupNationalTeamID": "3074",
+						"CupNationalTeamName": "U21 Türkiye"
+					},
+					{
+						"CupNationalTeamID": "3075",
+						"CupNationalTeamName": "U21 China"
+					},
+					{
+						"CupNationalTeamID": "3076",
+						"CupNationalTeamName": "U21 España"
+					},
+					{
+						"CupNationalTeamID": "3077",
+						"CupNationalTeamName": "U21 Singapore"
+					},
+					{
+						"CupNationalTeamID": "3078",
+						"CupNationalTeamName": "U21 Belgium"
+					},
+					{
+						"CupNationalTeamID": "3079",
+						"CupNationalTeamName": "U21 Schweiz"
+					},
+					{
+						"CupNationalTeamID": "3080",
+						"CupNationalTeamName": "U21 Österreich"
+					},
+					{
+						"CupNationalTeamID": "3081",
+						"CupNationalTeamName": "U21 Malaysia"
+					},
+					{
+						"CupNationalTeamID": "3091",
+						"CupNationalTeamName": "U21 Magyarország"
+					},
+					{
+						"CupNationalTeamID": "3092",
+						"CupNationalTeamName": "U21 Latvija"
+					},
+					{
+						"CupNationalTeamID": "3093",
+						"CupNationalTeamName": "U21 Indonesia"
+					},
+					{
+						"CupNationalTeamID": "3094",
+						"CupNationalTeamName": "U21 Pilipinas"
+					},
+					{
+						"CupNationalTeamID": "3095",
+						"CupNationalTeamName": "U21 Eesti"
+					},
+					{
+						"CupNationalTeamID": "3096",
+						"CupNationalTeamName": "U21 Srbija"
+					},
+					{
+						"CupNationalTeamID": "3097",
+						"CupNationalTeamName": "U21 Hrvatska"
+					},
+					{
+						"CupNationalTeamID": "3098",
+						"CupNationalTeamName": "U21 Hellas"
+					},
+					{
+						"CupNationalTeamID": "3099",
+						"CupNationalTeamName": "U21 Česko"
+					},
+					{
+						"CupNationalTeamID": "3101",
+						"CupNationalTeamName": "U21 Chinese Taipei"
+					},
+					{
+						"CupNationalTeamID": "3103",
+						"CupNationalTeamName": "U21 Hong Kong"
+					},
+					{
+						"CupNationalTeamID": "3105",
+						"CupNationalTeamName": "U21 Cymru"
+					},
+					{
+						"CupNationalTeamID": "3107",
+						"CupNationalTeamName": "U21 Bulgaria"
+					},
+					{
+						"CupNationalTeamID": "3109",
+						"CupNationalTeamName": "U21 Israel"
+					},
+					{
+						"CupNationalTeamID": "3111",
+						"CupNationalTeamName": "U21 Slovenija"
+					},
+					{
+						"CupNationalTeamID": "3114",
+						"CupNationalTeamName": "U21 Lietuva"
+					},
+					{
+						"CupNationalTeamID": "3115",
+						"CupNationalTeamName": "U21 Bosna i Hercegovina"
+					},
+					{
+						"CupNationalTeamID": "3117",
+						"CupNationalTeamName": "U21 Slovensko"
+					},
+					{
+						"CupNationalTeamID": "3119",
+						"CupNationalTeamName": "U21 Ukraina"
+					},
+					{
+						"CupNationalTeamID": "3121",
+						"CupNationalTeamName": "U21 Việt Nam"
+					},
+					{
+						"CupNationalTeamID": "3123",
+						"CupNationalTeamName": "U21 Pakistan"
+					},
+					{
+						"CupNationalTeamID": "3125",
+						"CupNationalTeamName": "U21 Paraguay"
+					},
+					{
+						"CupNationalTeamID": "3127",
+						"CupNationalTeamName": "U21 Nigeria"
+					},
+					{
+						"CupNationalTeamID": "3129",
+						"CupNationalTeamName": "U21 Ecuador"
+					},
+					{
+						"CupNationalTeamID": "3131",
+						"CupNationalTeamName": "U21 Bolivia"
+					},
+					{
+						"CupNationalTeamID": "3133",
+						"CupNationalTeamName": "U21 Føroyar"
+					},
+					{
+						"CupNationalTeamID": "3135",
+						"CupNationalTeamName": "U21 Al Maghrib"
+					},
+					{
+						"CupNationalTeamID": "3139",
+						"CupNationalTeamName": "U21 Costa Rica"
+					},
+					{
+						"CupNationalTeamID": "3141",
+						"CupNationalTeamName": "U21 Cyprus"
+					},
+					{
+						"CupNationalTeamID": "3143",
+						"CupNationalTeamName": "U21 United Arab Emirates"
+					},
+					{
+						"CupNationalTeamID": "3145",
+						"CupNationalTeamName": "U21 Saudi Arabia"
+					},
+					{
+						"CupNationalTeamID": "3147",
+						"CupNationalTeamName": "U21 Lëtzebuerg"
+					},
+					{
+						"CupNationalTeamID": "3149",
+						"CupNationalTeamName": "U21 Tounes"
+					},
+					{
+						"CupNationalTeamID": "3151",
+						"CupNationalTeamName": "U21 Iran"
+					},
+					{
+						"CupNationalTeamID": "3153",
+						"CupNationalTeamName": "U21 República Dominicana"
+					},
+					{
+						"CupNationalTeamID": "3157",
+						"CupNationalTeamName": "U21 Belarus"
+					},
+					{
+						"CupNationalTeamID": "3159",
+						"CupNationalTeamName": "U21 Severna Makedonija"
+					},
+					{
+						"CupNationalTeamID": "3161",
+						"CupNationalTeamName": "U21 Jamaica"
+					},
+					{
+						"CupNationalTeamID": "3163",
+						"CupNationalTeamName": "U21 Kenya"
+					},
+					{
+						"CupNationalTeamID": "3165",
+						"CupNationalTeamName": "U21 Northern Ireland"
+					},
+					{
+						"CupNationalTeamID": "3167",
+						"CupNationalTeamName": "U21 Panama"
+					},
+					{
+						"CupNationalTeamID": "3169",
+						"CupNationalTeamName": "U21 El Salvador"
+					},
+					{
+						"CupNationalTeamID": "3171",
+						"CupNationalTeamName": "U21 Honduras"
+					},
+					{
+						"CupNationalTeamID": "3173",
+						"CupNationalTeamName": "U21 Kyrgyzstan"
+					},
+					{
+						"CupNationalTeamID": "3175",
+						"CupNationalTeamName": "U21 Malta"
+					},
+					{
+						"CupNationalTeamID": "3177",
+						"CupNationalTeamName": "U21 Moldova"
+					},
+					{
+						"CupNationalTeamID": "3179",
+						"CupNationalTeamName": "U21 Shqiperia"
+					},
+					{
+						"CupNationalTeamID": "3181",
+						"CupNationalTeamName": "U21 Al Urdun"
+					},
+					{
+						"CupNationalTeamID": "3183",
+						"CupNationalTeamName": "U21 Sakartvelo"
+					},
+					{
+						"CupNationalTeamID": "3185",
+						"CupNationalTeamName": "U21 Guatemala"
+					},
+					{
+						"CupNationalTeamID": "3187",
+						"CupNationalTeamName": "U21 Andorra"
+					},
+					{
+						"CupNationalTeamID": "3189",
+						"CupNationalTeamName": "U21 Kazakhstan"
+					},
+					{
+						"CupNationalTeamID": "3191",
+						"CupNationalTeamName": "U21 Nicaragua"
+					},
+					{
+						"CupNationalTeamID": "3193",
+						"CupNationalTeamName": "U21 Suriname"
+					},
+					{
+						"CupNationalTeamID": "3195",
+						"CupNationalTeamName": "U21 Trinidad & Tobago"
+					},
+					{
+						"CupNationalTeamID": "3197",
+						"CupNationalTeamName": "U21 Algérie"
+					},
+					{
+						"CupNationalTeamID": "3199",
+						"CupNationalTeamName": "U21 Senegal"
+					},
+					{
+						"CupNationalTeamID": "3201",
+						"CupNationalTeamName": "U21 Mongol Uls"
+					},
+					{
+						"CupNationalTeamID": "3203",
+						"CupNationalTeamName": "U21 Lubnan"
+					},
+					{
+						"CupNationalTeamID": "3205",
+						"CupNationalTeamName": "U21 Liechtenstein"
+					},
+					{
+						"CupNationalTeamID": "3207",
+						"CupNationalTeamName": "U21 Hayastan"
+					},
+					{
+						"CupNationalTeamID": "3209",
+						"CupNationalTeamName": "U21 Côte d'Ivoire"
+					},
+					{
+						"CupNationalTeamID": "3211",
+						"CupNationalTeamName": "U21 Cabo Verde"
+					},
+					{
+						"CupNationalTeamID": "3213",
+						"CupNationalTeamName": "U21 Barbados"
+					},
+					{
+						"CupNationalTeamID": "3215",
+						"CupNationalTeamName": "U21 Bahrain"
+					},
+					{
+						"CupNationalTeamID": "3217",
+						"CupNationalTeamName": "U21 Al Iraq"
+					},
+					{
+						"CupNationalTeamID": "3219",
+						"CupNationalTeamName": "U21 Azərbaycan"
+					},
+					{
+						"CupNationalTeamID": "3221",
+						"CupNationalTeamName": "U21 Al Kuwayt"
+					},
+					{
+						"CupNationalTeamID": "3223",
+						"CupNationalTeamName": "U21 Angola"
+					},
+					{
+						"CupNationalTeamID": "3225",
+						"CupNationalTeamName": "U21 Bangladesh"
+					},
+					{
+						"CupNationalTeamID": "3227",
+						"CupNationalTeamName": "U21 Crna Gora"
+					},
+					{
+						"CupNationalTeamID": "3229",
+						"CupNationalTeamName": "U21 Al Yaman"
+					},
+					{
+						"CupNationalTeamID": "3231",
+						"CupNationalTeamName": "U21 Oman"
+					},
+					{
+						"CupNationalTeamID": "3233",
+						"CupNationalTeamName": "U21 Moçambique"
+					},
+					{
+						"CupNationalTeamID": "3235",
+						"CupNationalTeamName": "U21 Brunei"
+					},
+					{
+						"CupNationalTeamID": "3237",
+						"CupNationalTeamName": "U21 Ghana"
+					},
+					{
+						"CupNationalTeamID": "3239",
+						"CupNationalTeamName": "U21 Prateh Kampuchea"
+					},
+					{
+						"CupNationalTeamID": "3241",
+						"CupNationalTeamName": "U21 Bénin"
+					},
+					{
+						"CupNationalTeamID": "3243",
+						"CupNationalTeamName": "U21 Suriyah"
+					},
+					{
+						"CupNationalTeamID": "3246",
+						"CupNationalTeamName": "U21 Dawlat Qatar"
+					},
+					{
+						"CupNationalTeamID": "3248",
+						"CupNationalTeamName": "U21 Tanzania"
+					},
+					{
+						"CupNationalTeamID": "3250",
+						"CupNationalTeamName": "U21 Uganda"
+					},
+					{
+						"CupNationalTeamID": "3252",
+						"CupNationalTeamName": "U21 Dhivehi Raajje"
+					},
+					{
+						"CupNationalTeamID": "3255",
+						"CupNationalTeamName": "U21 Cameroon"
+					},
+					{
+						"CupNationalTeamID": "3257",
+						"CupNationalTeamName": "U21 Cuba"
+					},
+					{
+						"CupNationalTeamID": "3259",
+						"CupNationalTeamName": "U21 Palestine"
+					},
+					{
+						"CupNationalTeamID": "3261",
+						"CupNationalTeamName": "U21 O'zbekiston"
+					},
+					{
+						"CupNationalTeamID": "3280",
+						"CupNationalTeamName": "U21 São Tomé e Príncipe"
+					},
+					{
+						"CupNationalTeamID": "3282",
+						"CupNationalTeamName": "U21 Comoros"
+					},
+					{
+						"CupNationalTeamID": "3283",
+						"CupNationalTeamName": "U21 Sri Lanka"
+					},
+					{
+						"CupNationalTeamID": "3284",
+						"CupNationalTeamName": "U21 Curaçao"
+					},
+					{
+						"CupNationalTeamID": "3285",
+						"CupNationalTeamName": "U21 Guam"
+					},
+					{
+						"CupNationalTeamID": "3286",
+						"CupNationalTeamName": "U21 RD Congo"
+					},
+					{
+						"CupNationalTeamID": "3287",
+						"CupNationalTeamName": "U21 Ītyōṗṗyā"
+					},
+					{
+						"CupNationalTeamID": "3288",
+						"CupNationalTeamName": "U21 Saint Vincent and the Grenadines"
+					},
+					{
+						"CupNationalTeamID": "3289",
+						"CupNationalTeamName": "U21 Belize"
+					},
+					{
+						"CupNationalTeamID": "3290",
+						"CupNationalTeamName": "U21 Madagasikara"
+					},
+					{
+						"CupNationalTeamID": "3291",
+						"CupNationalTeamName": "U21 Botswana"
+					},
+					{
+						"CupNationalTeamID": "3292",
+						"CupNationalTeamName": "U21 Myanmar"
+					},
+					{
+						"CupNationalTeamID": "3293",
+						"CupNationalTeamName": "U21 Zambia"
+					},
+					{
+						"CupNationalTeamID": "3294",
+						"CupNationalTeamName": "U21 San Marino"
+					},
+					{
+						"CupNationalTeamID": "3295",
+						"CupNationalTeamName": "U21 Haiti"
+					},
+					{
+						"CupNationalTeamID": "3296",
+						"CupNationalTeamName": "U21 Puerto Rico"
+					},
+					{
+						"CupNationalTeamID": "3314",
+						"CupNationalTeamName": "U21 Grenada"
+					},
+					{
+						"CupNationalTeamID": "3316",
+						"CupNationalTeamName": "U21 Burkina Faso"
+					},
+					{
+						"CupNationalTeamID": "3318",
+						"CupNationalTeamName": "U21 Nepal"
+					},
+					{
+						"CupNationalTeamID": "3320",
+						"CupNationalTeamName": "U21 Guyana"
+					},
+					{
+						"CupNationalTeamID": "3322",
+						"CupNationalTeamName": "U21 Tahiti"
+					},
+					{
+						"CupNationalTeamID": "3324",
+						"CupNationalTeamName": "U21 Guinée"
+					},
+					{
+						"CupNationalTeamID": "3326",
+						"CupNationalTeamName": "U21 Bahamas"
+					},
+					{
+						"CupNationalTeamID": "3328",
+						"CupNationalTeamName": "U21 Rwanda"
+					},
+					{
+						"CupNationalTeamID": "3330",
+						"CupNationalTeamName": "U21 Saint Kitts and Nevis"
+					},
+					{
+						"CupNationalTeamID": "3332",
+						"CupNationalTeamName": "U21 Guinea Ecuatorial"
+					}
+				]
 			},
 			{
 				"CupID": "6260697",
-				"CupTeams": ""
+				"CupTeams": [
+					{
+						"CupNationalTeamID": "3052",
+						"CupNationalTeamName": "U21 Colombia"
+					},
+					{
+						"CupNationalTeamID": "3149",
+						"CupNationalTeamName": "U21 Tounes"
+					},
+					{
+						"CupNationalTeamID": "3318",
+						"CupNationalTeamName": "U21 Nepal"
+					},
+					{
+						"CupNationalTeamID": "3320",
+						"CupNationalTeamName": "U21 Guyana"
+					},
+					{
+						"CupNationalTeamID": "3322",
+						"CupNationalTeamName": "U21 Tahiti"
+					},
+					{
+						"CupNationalTeamID": "3324",
+						"CupNationalTeamName": "U21 Guinée"
+					},
+					{
+						"CupNationalTeamID": "3326",
+						"CupNationalTeamName": "U21 Bahamas"
+					},
+					{
+						"CupNationalTeamID": "3328",
+						"CupNationalTeamName": "U21 Rwanda"
+					},
+					{
+						"CupNationalTeamID": "3330",
+						"CupNationalTeamName": "U21 Saint Kitts and Nevis"
+					},
+					{
+						"CupNationalTeamID": "3332",
+						"CupNationalTeamName": "U21 Guinea Ecuatorial"
+					}
+				]
 			}
 		],
-		"FetchedDate": "2025-05-09 21:26:04",
+		"FetchedDate": "2025-12-14 15:18:02",
 		"FileName": "nationalTeams.xml",
 		"LeagueOfficeTypeID": "2",
 		"NationalTeams": [
@@ -47,1064 +1984,1078 @@
 				"LeagueId": "46",
 				"NationalTeamID": "3038",
 				"NationalTeamName": "Schweiz",
-				"RatingScores": "12276"
+				"RatingScores": "21281"
 			},
 			{
 				"Dress": "N010301",
 				"LeagueId": "39",
 				"NationalTeamID": "3039",
 				"NationalTeamName": "Österreich",
-				"RatingScores": "12334"
+				"RatingScores": "18216"
 			},
 			{
 				"Dress": "G010101",
 				"LeagueId": "32",
 				"NationalTeamID": "3033",
 				"NationalTeamName": "Türkiye",
-				"RatingScores": "18412"
+				"RatingScores": "14085"
 			},
 			{
 				"Dress": "N052004",
 				"LeagueId": "142",
 				"NationalTeamID": "3247",
 				"NationalTeamName": "Tanzania",
-				"RatingScores": "17352"
+				"RatingScores": "10318"
 			},
 			{
 				"Dress": "N211616",
 				"LeagueId": "1",
 				"NationalTeamID": "3000",
 				"NationalTeamName": "Sverige",
-				"RatingScores": "8430"
+				"RatingScores": "11761"
 			},
 			{
 				"Dress": "N160301",
 				"LeagueId": "5",
 				"NationalTeamID": "3004",
 				"NationalTeamName": "France",
-				"RatingScores": "12392"
+				"RatingScores": "11567"
 			},
 			{
 				"Dress": "B030303",
 				"LeagueId": "85",
 				"NationalTeamID": "3150",
 				"NationalTeamName": "Iran",
-				"RatingScores": "15081"
+				"RatingScores": "16765"
 			},
 			{
 				"Dress": "E160316",
 				"LeagueId": "50",
 				"NationalTeamID": "3089",
 				"NationalTeamName": "Hellas",
-				"RatingScores": "7031"
+				"RatingScores": "13227"
 			},
 			{
 				"Dress": "N050305",
 				"LeagueId": "4",
 				"NationalTeamID": "3003",
 				"NationalTeamName": "Italia",
-				"RatingScores": "15651"
+				"RatingScores": "20312"
 			},
 			{
 				"Dress": "N050503",
 				"LeagueId": "67",
 				"NationalTeamID": "3116",
 				"NationalTeamName": "Slovensko",
-				"RatingScores": "21818"
+				"RatingScores": "22652"
 			},
 			{
 				"Dress": "N030403",
 				"LeagueId": "3",
 				"NationalTeamID": "3002",
 				"NationalTeamName": "Deutschland",
-				"RatingScores": "18423"
+				"RatingScores": "15577"
 			},
 			{
 				"Dress": "N030503",
 				"LeagueId": "12",
 				"NationalTeamID": "3023",
 				"NationalTeamName": "Suomi",
-				"RatingScores": "22008"
+				"RatingScores": "22422"
 			},
 			{
 				"Dress": "N020102",
 				"LeagueId": "132",
 				"NationalTeamID": "3224",
 				"NationalTeamName": "Bangladesh",
-				"RatingScores": "6126"
+				"RatingScores": "5861"
 			},
 			{
 				"Dress": "N010101",
 				"LeagueId": "17",
 				"NationalTeamID": "3010",
 				"NationalTeamName": "Canada",
-				"RatingScores": "18998"
+				"RatingScores": "16512"
 			},
 			{
 				"Dress": "N080308",
 				"LeagueId": "14",
 				"NationalTeamID": "3025",
 				"NationalTeamName": "Nederland",
-				"RatingScores": "23200"
+				"RatingScores": "24571"
 			},
 			{
 				"Dress": "N040404",
 				"LeagueId": "103",
 				"NationalTeamID": "3176",
 				"NationalTeamName": "Moldova",
-				"RatingScores": "8455"
+				"RatingScores": "12897"
 			},
 			{
 				"Dress": "N010311",
 				"LeagueId": "96",
 				"NationalTeamID": "3166",
 				"NationalTeamName": "Panama",
-				"RatingScores": "9901"
+				"RatingScores": "8202"
 			},
 			{
 				"Dress": "A070407",
 				"LeagueId": "7",
 				"NationalTeamID": "3006",
 				"NationalTeamName": "Argentina",
-				"RatingScores": "24456"
+				"RatingScores": "19757"
 			},
 			{
 				"Dress": "N010301",
 				"LeagueId": "11",
 				"NationalTeamID": "3022",
 				"NationalTeamName": "Danmark",
-				"RatingScores": "16944"
+				"RatingScores": "27876"
 			},
 			{
 				"Dress": "N030201",
 				"LeagueId": "62",
 				"NationalTeamID": "3106",
 				"NationalTeamName": "Bulgaria",
-				"RatingScores": "20217"
+				"RatingScores": "12565"
 			},
 			{
 				"Dress": "H030202",
 				"LeagueId": "64",
 				"NationalTeamID": "3110",
 				"NationalTeamName": "Slovenija",
-				"RatingScores": "6764"
+				"RatingScores": "8450"
 			},
 			{
 				"Dress": "N010101",
 				"LeagueId": "138",
 				"NationalTeamID": "3238",
 				"NationalTeamName": "Prateh Kampuchea",
-				"RatingScores": "10724"
+				"RatingScores": "12414"
 			},
 			{
 				"Dress": "G191919",
 				"LeagueId": "101",
 				"NationalTeamID": "3174",
 				"NationalTeamName": "Malta",
-				"RatingScores": "12603"
+				"RatingScores": "14299"
 			},
 			{
 				"Dress": "N070303",
 				"LeagueId": "63",
 				"NationalTeamID": "3108",
 				"NationalTeamName": "Israel",
-				"RatingScores": "21870"
+				"RatingScores": "12061"
 			},
 			{
 				"Dress": "N050403",
 				"LeagueId": "56",
 				"NationalTeamID": "3086",
 				"NationalTeamName": "Eesti",
-				"RatingScores": "22832"
+				"RatingScores": "17414"
 			},
 			{
 				"Dress": "A020202",
 				"LeagueId": "75",
 				"NationalTeamID": "3126",
 				"NationalTeamName": "Nigeria",
-				"RatingScores": "21388"
+				"RatingScores": "17892"
 			},
 			{
 				"Dress": "G050305",
 				"LeagueId": "38",
 				"NationalTeamID": "3021",
 				"NationalTeamName": "Ísland",
-				"RatingScores": "15923"
+				"RatingScores": "9372"
 			},
 			{
 				"Dress": "N190503",
 				"LeagueId": "18",
 				"NationalTeamID": "3026",
 				"NationalTeamName": "Chile",
-				"RatingScores": "23444"
+				"RatingScores": "26957"
 			},
 			{
 				"Dress": "N010305",
 				"LeagueId": "52",
 				"NationalTeamID": "3090",
 				"NationalTeamName": "Česko",
-				"RatingScores": "21211"
+				"RatingScores": "24635"
 			},
 			{
 				"Dress": "E030103",
 				"LeagueId": "24",
 				"NationalTeamID": "3029",
 				"NationalTeamName": "Polska",
-				"RatingScores": "16950"
+				"RatingScores": "24334"
 			},
 			{
 				"Dress": "C030206",
 				"LeagueId": "121",
 				"NationalTeamID": "3198",
 				"NationalTeamName": "Senegal",
-				"RatingScores": "8211"
+				"RatingScores": "5747"
 			},
 			{
 				"Dress": "N010101",
 				"LeagueId": "44",
 				"NationalTeamID": "3037",
 				"NationalTeamName": "Belgium",
-				"RatingScores": "25885"
+				"RatingScores": "28819"
 			},
 			{
 				"Dress": "N010201",
 				"LeagueId": "25",
 				"NationalTeamID": "3014",
 				"NationalTeamName": "Portugal",
-				"RatingScores": "17721"
+				"RatingScores": "15206"
 			},
 			{
 				"Dress": "N011111",
 				"LeagueId": "36",
 				"NationalTeamID": "3035",
 				"NationalTeamName": "España",
-				"RatingScores": "29100"
+				"RatingScores": "33852"
 			},
 			{
 				"Dress": "H200420",
 				"LeagueId": "94",
 				"NationalTeamID": "3160",
 				"NationalTeamName": "Jamaica",
-				"RatingScores": "13089"
+				"RatingScores": "15286"
 			},
 			{
 				"Dress": "N190419",
 				"LeagueId": "98",
 				"NationalTeamID": "3178",
 				"NationalTeamName": "Shqiperia",
-				"RatingScores": "10821"
+				"RatingScores": "18060"
 			},
 			{
 				"Dress": "G070705",
 				"LeagueId": "20",
 				"NationalTeamID": "3027",
 				"NationalTeamName": "India",
-				"RatingScores": "10973"
+				"RatingScores": "14737"
 			},
 			{
 				"Dress": "D030103",
 				"LeagueId": "91",
 				"NationalTeamID": "3156",
 				"NationalTeamName": "Belarus",
-				"RatingScores": "16620"
+				"RatingScores": "9745"
 			},
 			{
 				"Dress": "N020302",
 				"LeagueId": "21",
 				"NationalTeamID": "3012",
 				"NationalTeamName": "Ireland",
-				"RatingScores": "19882"
+				"RatingScores": "11578"
 			},
 			{
 				"Dress": "H141414",
 				"LeagueId": "74",
 				"NationalTeamID": "3130",
 				"NationalTeamName": "Bolivia",
-				"RatingScores": "14420"
+				"RatingScores": "20585"
 			},
 			{
 				"Dress": "N010101",
 				"LeagueId": "59",
 				"NationalTeamID": "3102",
 				"NationalTeamName": "Hong Kong",
-				"RatingScores": "9023"
+				"RatingScores": "10083"
 			},
 			{
 				"Dress": "N160316",
 				"LeagueId": "125",
 				"NationalTeamID": "3210",
 				"NationalTeamName": "Cabo Verde",
-				"RatingScores": "5611"
+				"RatingScores": "7921"
 			},
 			{
 				"Dress": "N010101",
 				"LeagueId": "34",
 				"NationalTeamID": "3034",
 				"NationalTeamName": "China",
-				"RatingScores": "14086"
+				"RatingScores": "18646"
 			},
 			{
 				"Dress": "K030303",
 				"LeagueId": "23",
 				"NationalTeamID": "3013",
 				"NationalTeamName": "Perú",
-				"RatingScores": "16591"
+				"RatingScores": "9203"
 			},
 			{
 				"Dress": "N060206",
 				"LeagueId": "66",
 				"NationalTeamID": "3113",
 				"NationalTeamName": "Lietuva",
-				"RatingScores": "19952"
+				"RatingScores": "21390"
 			},
 			{
 				"Dress": "N030503",
 				"LeagueId": "2",
 				"NationalTeamID": "3001",
 				"NationalTeamName": "England",
-				"RatingScores": "16427"
+				"RatingScores": "12290"
 			},
 			{
 				"Dress": "G050503",
 				"LeagueId": "69",
 				"NationalTeamID": "3112",
 				"NationalTeamName": "Bosna i Hercegovina",
-				"RatingScores": "14323"
+				"RatingScores": "13683"
 			},
 			{
 				"Dress": "N010501",
 				"LeagueId": "30",
 				"NationalTeamID": "3032",
 				"NationalTeamName": "Hanguk",
-				"RatingScores": "13448"
+				"RatingScores": "8190"
 			},
 			{
 				"Dress": "B110511",
 				"LeagueId": "99",
 				"NationalTeamID": "3170",
 				"NationalTeamName": "Honduras",
-				"RatingScores": "7486"
+				"RatingScores": "5195"
 			},
 			{
 				"Dress": "N010302",
 				"LeagueId": "51",
 				"NationalTeamID": "3082",
 				"NationalTeamName": "Magyarország",
-				"RatingScores": "6850"
+				"RatingScores": "7331"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "145",
 				"NationalTeamID": "3260",
 				"NationalTeamName": "O'zbekiston",
-				"RatingScores": "8832"
+				"RatingScores": "7729"
 			},
 			{
 				"Dress": "N090303",
 				"LeagueId": "29",
 				"NationalTeamID": "3016",
 				"NationalTeamName": "Venezuela",
-				"RatingScores": "6292"
+				"RatingScores": "4523"
 			},
 			{
 				"Dress": "N010301",
 				"LeagueId": "61",
 				"NationalTeamID": "3104",
 				"NationalTeamName": "Cymru",
-				"RatingScores": "9708"
+				"RatingScores": "6858"
 			},
 			{
 				"Dress": "K020201",
 				"LeagueId": "144",
 				"NationalTeamID": "3251",
 				"NationalTeamName": "Dhivehi Raajje",
-				"RatingScores": "12074"
+				"RatingScores": "7256"
 			},
 			{
 				"Dress": "N010401",
 				"LeagueId": "102",
 				"NationalTeamID": "3172",
 				"NationalTeamName": "Kyrgyzstan",
-				"RatingScores": "8486"
+				"RatingScores": "7038"
 			},
 			{
 				"Dress": "N030301",
 				"LeagueId": "104",
 				"NationalTeamID": "3182",
 				"NationalTeamName": "Sakartvelo",
-				"RatingScores": "9400"
+				"RatingScores": "13228"
 			},
 			{
 				"Dress": "N010301",
 				"LeagueId": "9",
 				"NationalTeamID": "3008",
 				"NationalTeamName": "Norge",
-				"RatingScores": "10530"
+				"RatingScores": "13972"
 			},
 			{
 				"Dress": "F010305",
 				"LeagueId": "58",
 				"NationalTeamID": "3088",
 				"NationalTeamName": "Hrvatska",
-				"RatingScores": "20752"
+				"RatingScores": "15676"
 			},
 			{
 				"Dress": "N210501",
 				"LeagueId": "73",
 				"NationalTeamID": "3128",
 				"NationalTeamName": "Ecuador",
-				"RatingScores": "8491"
+				"RatingScores": "8689"
 			},
 			{
 				"Dress": "N030501",
 				"LeagueId": "81",
 				"NationalTeamID": "3138",
 				"NationalTeamName": "Costa Rica",
-				"RatingScores": "5077"
+				"RatingScores": "9200"
 			},
 			{
 				"Dress": "N200401",
 				"LeagueId": "130",
 				"NationalTeamID": "3222",
 				"NationalTeamName": "Angola",
-				"RatingScores": "22003"
+				"RatingScores": "18213"
 			},
 			{
 				"Dress": "N050305",
 				"LeagueId": "111",
 				"NationalTeamID": "3190",
 				"NationalTeamName": "Nicaragua",
-				"RatingScores": "11259"
+				"RatingScores": "8827"
 			},
 			{
 				"Dress": "N012101",
 				"LeagueId": "70",
 				"NationalTeamID": "3120",
 				"NationalTeamName": "Việt Nam",
-				"RatingScores": "9259"
+				"RatingScores": "6742"
 			},
 			{
 				"Dress": "N061603",
 				"LeagueId": "16",
 				"NationalTeamID": "3024",
 				"NationalTeamName": "Brasil",
-				"RatingScores": "20177"
+				"RatingScores": "20606"
 			},
 			{
 				"Dress": "N010307",
 				"LeagueId": "84",
 				"NationalTeamID": "3146",
 				"NationalTeamName": "Lëtzebuerg",
-				"RatingScores": "8702"
+				"RatingScores": "10381"
 			},
 			{
 				"Dress": "N070404",
 				"LeagueId": "28",
 				"NationalTeamID": "3031",
 				"NationalTeamName": "Uruguay",
-				"RatingScores": "17157"
+				"RatingScores": "16270"
 			},
 			{
 				"Dress": "N030501",
 				"LeagueId": "35",
 				"NationalTeamID": "3019",
 				"NationalTeamName": "Rossiya",
-				"RatingScores": "8552"
+				"RatingScores": "16725"
 			},
 			{
 				"Dress": "K030505",
 				"LeagueId": "72",
 				"NationalTeamID": "3124",
 				"NationalTeamName": "Paraguay",
-				"RatingScores": "7636"
+				"RatingScores": "6499"
 			},
 			{
 				"Dress": "N090309",
 				"LeagueId": "53",
 				"NationalTeamID": "3083",
 				"NationalTeamName": "Latvija",
-				"RatingScores": "20220"
+				"RatingScores": "12724"
 			},
 			{
 				"Dress": "N110311",
 				"LeagueId": "26",
 				"NationalTeamID": "3030",
 				"NationalTeamName": "Scotland",
-				"RatingScores": "10935"
+				"RatingScores": "12440"
 			},
 			{
 				"Dress": "N010101",
 				"LeagueId": "140",
 				"NationalTeamID": "3242",
 				"NationalTeamName": "Suriyah",
-				"RatingScores": "6378"
+				"RatingScores": "5650"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "148",
 				"NationalTeamID": "3258",
 				"NationalTeamName": "Palestine",
-				"RatingScores": "10792"
+				"RatingScores": "10682"
 			},
 			{
 				"Dress": "N040404",
 				"LeagueId": "95",
 				"NationalTeamID": "3162",
 				"NationalTeamName": "Kenya",
-				"RatingScores": "9464"
+				"RatingScores": "12394"
 			},
 			{
 				"Dress": "N010503",
 				"LeagueId": "57",
 				"NationalTeamID": "3087",
 				"NationalTeamName": "Srbija",
-				"RatingScores": "25018"
+				"RatingScores": "23331"
 			},
 			{
 				"Dress": "N030221",
 				"LeagueId": "27",
 				"NationalTeamID": "3015",
 				"NationalTeamName": "South Africa",
-				"RatingScores": "13401"
+				"RatingScores": "12904"
 			},
 			{
 				"Dress": "N140302",
 				"LeagueId": "71",
 				"NationalTeamID": "3122",
 				"NationalTeamName": "Pakistan",
-				"RatingScores": "5399"
+				"RatingScores": "11781"
 			},
 			{
 				"Dress": "N010106",
 				"LeagueId": "97",
 				"NationalTeamID": "3158",
 				"NationalTeamName": "Severna Makedonija",
-				"RatingScores": "6329"
+				"RatingScores": "6633"
 			},
 			{
 				"Dress": "E020104",
 				"LeagueId": "106",
 				"NationalTeamID": "3180",
 				"NationalTeamName": "Al Urdun",
-				"RatingScores": "11325"
+				"RatingScores": "7314"
 			},
 			{
 				"Dress": "N080208",
 				"LeagueId": "126",
 				"NationalTeamID": "3208",
 				"NationalTeamName": "Côte d'Ivoire",
-				"RatingScores": "10006"
+				"RatingScores": "10158"
 			},
 			{
 				"Dress": "N010101",
 				"LeagueId": "123",
 				"NationalTeamID": "3214",
 				"NationalTeamName": "Bahrain",
-				"RatingScores": "7266"
+				"RatingScores": "6819"
 			},
 			{
 				"Dress": "G210421",
 				"LeagueId": "136",
 				"NationalTeamID": "3234",
 				"NationalTeamName": "Brunei",
-				"RatingScores": "5444"
+				"RatingScores": "6307"
 			},
 			{
 				"Dress": "N030201",
 				"LeagueId": "77",
 				"NationalTeamID": "3134",
 				"NationalTeamName": "Al Maghrib",
-				"RatingScores": "12337"
+				"RatingScores": "9711"
 			},
 			{
 				"Dress": "I070706",
 				"LeagueId": "112",
 				"NationalTeamID": "3188",
 				"NationalTeamName": "Kazakhstan",
-				"RatingScores": "8773"
+				"RatingScores": "6179"
 			},
 			{
 				"Dress": "K030514",
 				"LeagueId": "8",
 				"NationalTeamID": "3007",
 				"NationalTeamName": "USA",
-				"RatingScores": "20670"
+				"RatingScores": "18537"
 			},
 			{
 				"Dress": "N060501",
 				"LeagueId": "19",
 				"NationalTeamID": "3011",
 				"NationalTeamName": "Colombia",
-				"RatingScores": "12651"
+				"RatingScores": "16861"
 			},
 			{
 				"Dress": "K040420",
 				"LeagueId": "143",
 				"NationalTeamID": "3249",
 				"NationalTeamName": "Uganda",
-				"RatingScores": "11056"
+				"RatingScores": "15194"
 			},
 			{
 				"Dress": "N060506",
 				"LeagueId": "68",
 				"NationalTeamID": "3118",
 				"NationalTeamName": "Ukraina",
-				"RatingScores": "9159"
+				"RatingScores": "13172"
 			},
 			{
 				"Dress": "D010304",
 				"LeagueId": "33",
 				"NationalTeamID": "3018",
 				"NationalTeamName": "Misr",
-				"RatingScores": "4771"
+				"RatingScores": "5623"
 			},
 			{
 				"Dress": "N040404",
 				"LeagueId": "113",
 				"NationalTeamID": "3192",
 				"NationalTeamName": "Suriname",
-				"RatingScores": "15299"
+				"RatingScores": "17589"
 			},
 			{
 				"Dress": "N090903",
 				"LeagueId": "141",
 				"NationalTeamID": "3245",
 				"NationalTeamName": "Dawlat Qatar",
-				"RatingScores": "6001"
+				"RatingScores": "11170"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "146",
 				"NationalTeamID": "3254",
 				"NationalTeamName": "Cameroon",
-				"RatingScores": "18132"
+				"RatingScores": "11202"
 			},
 			{
 				"Dress": "G020302",
 				"LeagueId": "79",
 				"NationalTeamID": "3144",
 				"NationalTeamName": "Saudi Arabia",
-				"RatingScores": "9674"
+				"RatingScores": "10497"
 			},
 			{
 				"Dress": "N030301",
 				"LeagueId": "80",
 				"NationalTeamID": "3148",
 				"NationalTeamName": "Tounes",
-				"RatingScores": "3372"
+				"RatingScores": "2810"
 			},
 			{
 				"Dress": "N010101",
 				"LeagueId": "134",
 				"NationalTeamID": "3230",
 				"NationalTeamName": "Oman",
-				"RatingScores": "9904"
+				"RatingScores": "11739"
 			},
 			{
 				"Dress": "N010301",
 				"LeagueId": "120",
 				"NationalTeamID": "3202",
 				"NationalTeamName": "Lubnan",
-				"RatingScores": "6921"
+				"RatingScores": "10888"
 			},
 			{
 				"Dress": "N040404",
 				"LeagueId": "124",
 				"NationalTeamID": "3212",
 				"NationalTeamName": "Barbados",
-				"RatingScores": "12044"
+				"RatingScores": "7495"
 			},
 			{
 				"Dress": "N030503",
 				"LeagueId": "76",
 				"NationalTeamID": "3132",
 				"NationalTeamName": "Føroyar",
-				"RatingScores": "13176"
+				"RatingScores": "8113"
 			},
 			{
 				"Dress": "N020302",
 				"LeagueId": "93",
 				"NationalTeamID": "3164",
 				"NationalTeamName": "Northern Ireland",
-				"RatingScores": "6478"
+				"RatingScores": "8103"
 			},
 			{
 				"Dress": "N030303",
 				"LeagueId": "137",
 				"NationalTeamID": "3236",
 				"NationalTeamName": "Ghana",
-				"RatingScores": "12469"
+				"RatingScores": "14367"
 			},
 			{
 				"Dress": "N050505",
 				"LeagueId": "55",
 				"NationalTeamID": "3085",
 				"NationalTeamName": "Pilipinas",
-				"RatingScores": "8961"
+				"RatingScores": "6540"
 			},
 			{
 				"Dress": "N010301",
 				"LeagueId": "54",
 				"NationalTeamID": "3084",
 				"NationalTeamName": "Indonesia",
-				"RatingScores": "8534"
+				"RatingScores": "7834"
 			},
 			{
 				"Dress": "N212101",
 				"LeagueId": "37",
 				"NationalTeamID": "3020",
 				"NationalTeamName": "România",
-				"RatingScores": "19526"
+				"RatingScores": "18065"
 			},
 			{
 				"Dress": "J051911",
 				"LeagueId": "88",
 				"NationalTeamID": "3152",
 				"NationalTeamName": "República Dominicana",
-				"RatingScores": "13115"
+				"RatingScores": "9646"
 			},
 			{
 				"Dress": "G060303",
 				"LeagueId": "89",
 				"NationalTeamID": "3140",
 				"NationalTeamName": "Cyprus",
-				"RatingScores": "10278"
+				"RatingScores": "4612"
 			},
 			{
 				"Dress": "K010301",
 				"LeagueId": "47",
 				"NationalTeamID": "3036",
 				"NationalTeamName": "Singapore",
-				"RatingScores": "7982"
+				"RatingScores": "9790"
 			},
 			{
 				"Dress": "N050321",
 				"LeagueId": "105",
 				"NationalTeamID": "3186",
 				"NationalTeamName": "Andorra",
-				"RatingScores": "19649"
+				"RatingScores": "14094"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "147",
 				"NationalTeamID": "3256",
 				"NationalTeamName": "Cuba",
-				"RatingScores": "14808"
+				"RatingScores": "13366"
 			},
 			{
 				"Dress": "G070707",
 				"LeagueId": "107",
 				"NationalTeamID": "3184",
 				"NationalTeamName": "Guatemala",
-				"RatingScores": "17104"
+				"RatingScores": "11351"
 			},
 			{
 				"Dress": "N020302",
 				"LeagueId": "118",
 				"NationalTeamID": "3196",
 				"NationalTeamName": "Algérie",
-				"RatingScores": "12700"
+				"RatingScores": "8206"
 			},
 			{
 				"Dress": "N010304",
 				"LeagueId": "133",
 				"NationalTeamID": "3228",
 				"NationalTeamName": "Al Yaman",
-				"RatingScores": "11960"
+				"RatingScores": "12358"
 			},
 			{
 				"Dress": "N050505",
 				"LeagueId": "100",
 				"NationalTeamID": "3168",
 				"NationalTeamName": "El Salvador",
-				"RatingScores": "10303"
+				"RatingScores": "14336"
 			},
 			{
 				"Dress": "N050505",
 				"LeagueId": "127",
 				"NationalTeamID": "3220",
 				"NationalTeamName": "Al Kuwayt",
-				"RatingScores": "8693"
+				"RatingScores": "10233"
 			},
 			{
 				"Dress": "N010101",
 				"LeagueId": "110",
 				"NationalTeamID": "3194",
 				"NationalTeamName": "Trinidad & Tobago",
-				"RatingScores": "10599"
+				"RatingScores": "12112"
 			},
 			{
 				"Dress": "H202001",
 				"LeagueId": "139",
 				"NationalTeamID": "3240",
 				"NationalTeamName": "Bénin",
-				"RatingScores": "10308"
+				"RatingScores": "9923"
 			},
 			{
 				"Dress": "N050105",
 				"LeagueId": "117",
 				"NationalTeamID": "3204",
 				"NationalTeamName": "Liechtenstein",
-				"RatingScores": "9100"
+				"RatingScores": "6288"
 			},
 			{
 				"Dress": "F160511",
 				"LeagueId": "15",
 				"NationalTeamID": "3009",
 				"NationalTeamName": "Oceania",
-				"RatingScores": "11550"
+				"RatingScores": "8924"
 			},
 			{
 				"Dress": "N010501",
 				"LeagueId": "119",
 				"NationalTeamID": "3200",
 				"NationalTeamName": "Mongol Uls",
-				"RatingScores": "9402"
+				"RatingScores": "13802"
 			},
 			{
 				"Dress": "N050105",
 				"LeagueId": "60",
 				"NationalTeamID": "3100",
 				"NationalTeamName": "Chinese Taipei",
-				"RatingScores": "12481"
+				"RatingScores": "13415"
 			},
 			{
 				"Dress": "N050305",
 				"LeagueId": "22",
 				"NationalTeamID": "3028",
 				"NationalTeamName": "Nippon",
-				"RatingScores": "8045"
+				"RatingScores": "8414"
 			},
 			{
 				"Dress": "G050102",
 				"LeagueId": "129",
 				"NationalTeamID": "3218",
 				"NationalTeamName": "Azərbaycan",
-				"RatingScores": "14474"
+				"RatingScores": "7701"
 			},
 			{
 				"Dress": "N010101",
 				"LeagueId": "131",
 				"NationalTeamID": "3226",
 				"NationalTeamName": "Crna Gora",
-				"RatingScores": "8924"
+				"RatingScores": "8399"
 			},
 			{
 				"Dress": "N030303",
 				"LeagueId": "128",
 				"NationalTeamID": "3216",
 				"NationalTeamName": "Al Iraq",
-				"RatingScores": "9164"
+				"RatingScores": "6591"
 			},
 			{
 				"Dress": "N010401",
 				"LeagueId": "135",
 				"NationalTeamID": "3232",
 				"NationalTeamName": "Moçambique",
-				"RatingScores": "5045"
+				"RatingScores": "9168"
 			},
 			{
 				"Dress": "G040404",
 				"LeagueId": "83",
 				"NationalTeamID": "3142",
 				"NationalTeamName": "United Arab Emirates",
-				"RatingScores": "11641"
+				"RatingScores": "10320"
 			},
 			{
 				"Dress": "I060406",
 				"LeagueId": "45",
 				"NationalTeamID": "3040",
 				"NationalTeamName": "Malaysia",
-				"RatingScores": "5545"
+				"RatingScores": "7462"
 			},
 			{
 				"Dress": "K080501",
 				"LeagueId": "122",
 				"NationalTeamID": "3206",
 				"NationalTeamName": "Hayastan",
-				"RatingScores": "15902"
+				"RatingScores": "18582"
 			},
 			{
 				"Dress": "N020301",
 				"LeagueId": "6",
 				"NationalTeamID": "3005",
 				"NationalTeamName": "México",
-				"RatingScores": "18092"
+				"RatingScores": "18298"
 			},
 			{
 				"Dress": "N060606",
 				"LeagueId": "31",
 				"NationalTeamID": "3017",
 				"NationalTeamName": "Prathet Thai",
-				"RatingScores": "7767"
+				"RatingScores": "7853"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "149",
 				"NationalTeamID": "3297",
 				"NationalTeamName": "São Tomé e Príncipe",
-				"RatingScores": "9809"
+				"RatingScores": "10090"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "151",
 				"NationalTeamID": "3299",
 				"NationalTeamName": "Comoros",
-				"RatingScores": "8652"
+				"RatingScores": "12614"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "152",
 				"NationalTeamID": "3300",
 				"NationalTeamName": "Sri Lanka",
-				"RatingScores": "11181"
+				"RatingScores": "15854"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "153",
 				"NationalTeamID": "3301",
 				"NationalTeamName": "Curaçao",
-				"RatingScores": "7805"
+				"RatingScores": "11439"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "154",
 				"NationalTeamID": "3302",
 				"NationalTeamName": "Guam",
-				"RatingScores": "10976"
+				"RatingScores": "5558"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "155",
 				"NationalTeamID": "3303",
 				"NationalTeamName": "RD Congo",
-				"RatingScores": "10519"
+				"RatingScores": "9483"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "156",
 				"NationalTeamID": "3298",
 				"NationalTeamName": "Ītyōṗṗyā",
-				"RatingScores": "6328"
+				"RatingScores": "4346"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "157",
 				"NationalTeamID": "3304",
 				"NationalTeamName": "Saint Vincent and the Grenadines",
-				"RatingScores": "11611"
+				"RatingScores": "15789"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "158",
 				"NationalTeamID": "3305",
 				"NationalTeamName": "Belize",
-				"RatingScores": "6746"
+				"RatingScores": "9744"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "159",
 				"NationalTeamID": "3306",
 				"NationalTeamName": "Madagasikara",
-				"RatingScores": "6692"
+				"RatingScores": "14554"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "160",
 				"NationalTeamID": "3307",
 				"NationalTeamName": "Botswana",
-				"RatingScores": "14085"
+				"RatingScores": "12117"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "161",
 				"NationalTeamID": "3308",
 				"NationalTeamName": "Myanmar",
-				"RatingScores": "12180"
+				"RatingScores": "10780"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "162",
 				"NationalTeamID": "3309",
 				"NationalTeamName": "Zambia",
-				"RatingScores": "9026"
+				"RatingScores": "6246"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "163",
 				"NationalTeamID": "3310",
 				"NationalTeamName": "San Marino",
-				"RatingScores": "5143"
+				"RatingScores": "10019"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "164",
 				"NationalTeamID": "3311",
 				"NationalTeamName": "Haiti",
-				"RatingScores": "7448"
+				"RatingScores": "6839"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "165",
 				"NationalTeamID": "3312",
 				"NationalTeamName": "Puerto Rico",
-				"RatingScores": "5641"
+				"RatingScores": "8748"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "166",
 				"NationalTeamID": "3313",
 				"NationalTeamName": "Grenada",
-				"RatingScores": "2378"
+				"RatingScores": "4928"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "167",
 				"NationalTeamID": "3315",
 				"NationalTeamName": "Burkina Faso",
-				"RatingScores": "2894"
+				"RatingScores": "6031"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "168",
 				"NationalTeamID": "3317",
 				"NationalTeamName": "Nepal",
-				"RatingScores": "4295"
+				"RatingScores": "6119"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "169",
 				"NationalTeamID": "3319",
 				"NationalTeamName": "Guyana",
-				"RatingScores": "2563"
+				"RatingScores": "4425"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "170",
 				"NationalTeamID": "3321",
 				"NationalTeamName": "Tahiti",
-				"RatingScores": "1688"
+				"RatingScores": "3309"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "171",
 				"NationalTeamID": "3323",
 				"NationalTeamName": "Guinée",
-				"RatingScores": "2018"
+				"RatingScores": "3342"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "172",
 				"NationalTeamID": "3325",
 				"NationalTeamName": "Bahamas",
-				"RatingScores": "618"
+				"RatingScores": "2828"
 			},
 			{
 				"Dress": "N000000",
 				"LeagueId": "173",
 				"NationalTeamID": "3327",
 				"NationalTeamName": "Rwanda",
-				"RatingScores": "640"
+				"RatingScores": "2579"
+			},
+			{
+				"Dress": "N000000",
+				"LeagueId": "174",
+				"NationalTeamID": "3329",
+				"NationalTeamName": "Saint Kitts and Nevis",
+				"RatingScores": "0"
+			},
+			{
+				"Dress": "N000000",
+				"LeagueId": "175",
+				"NationalTeamID": "3331",
+				"NationalTeamName": "Guinea Ecuatorial",
+				"RatingScores": "0"
 			}
 		],
 		"UserID": "13992846",
