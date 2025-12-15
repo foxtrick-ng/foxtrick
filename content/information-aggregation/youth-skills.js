@@ -684,7 +684,7 @@ Foxtrick.modules['YouthSkills'] = {
 					if (isLegacy) {
 						if (isPlayerDetails) {
 							// skip if specialty known on HT
-							if (specContainer.querySelector('p'))
+							if (specContainer.querySelector('p') || specContainer.querySelector('strong'))
 								continue;
 
 							const info = doc.createElement('p');
