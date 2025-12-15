@@ -9,7 +9,7 @@
 
 Foxtrick.modules.MyMonitor = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.INFORMATION_AGGREGATION,
-	PAGES: ['myHattrick', 'dashboard', 'teamPage', 'youthOverview', 'national'],
+	PAGES: ['dashboard', 'office', 'teamPage', 'youthOverview', 'national'],
 	OPTIONS: ['TeamIcons'],
 	RADIO_OPTIONS: ['ManualSort', 'SortByName', 'SortByID'],
 	CSS: Foxtrick.InternalPath + 'resources/css/my-monitor.css',
@@ -250,12 +250,15 @@ Foxtrick.modules.MyMonitor = {
 			var monitor = Foxtrick.createFeaturedElement(doc, module, 'div');
 			monitor.id = 'ft-monitor-div';
 
-			if (Foxtrick.isPage(doc, 'myHattrick')) {
-				var h1 = doc.querySelector('#mainBody h1');
-				h1.parentNode.insertBefore(monitor, h1);
-			}
-			else if (Foxtrick.isPage(doc, 'dashboard')) {
+			if (Foxtrick.isPage(doc, 'dashboard')) {
 				doc.getElementById('mainBody').appendChild(monitor);
+			}
+			else if (Foxtrick.isPage(doc, 'office')) {
+				let wrapper = doc.createElement('div');
+				Foxtrick.addClass(wrapper, 'box');
+				Foxtrick.addClass(monitor, 'boxBody');
+				wrapper.appendChild(monitor);
+				doc.querySelector('#mainBody .mainRegular').appendChild(wrapper);
 			}
 			else {
 				return;
@@ -728,7 +731,7 @@ Foxtrick.modules.MyMonitor = {
 		};
 
 		// call functions from here
-		if (Foxtrick.isPage(doc, ['myHattrick', 'dashboard']))
+		if (Foxtrick.isPage(doc, ['office', 'dashboard']))
 			display(doc);
 		else if (Foxtrick.isPage(doc, ['teamPage', 'youthOverview', 'national']))
 			showSidebar(doc);

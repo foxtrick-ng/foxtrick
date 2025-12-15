@@ -179,8 +179,10 @@ Foxtrick.modules['YouthSkills'] = {
 				}
 				if (htPot + htCur + maxed === 0 && node.querySelector('a.skill')) {
 					// new design sans skill-bars
-					// retrieve current / potential
-					let [current, potential] = [...node.children];
+
+					// retrieve current / potential — ignore any elements with class 'denominationNumber'
+					let children = [...node.children].filter(c => !c.classList.contains('denominationNumber'));
+					let [current, potential] = children;
 					if (current.nodeName == 'A') {
 						let link = /** @type {HTMLAnchorElement} */ (current);
 						htCur = Foxtrick.util.id.getSkillLevelFromLink(link);
@@ -431,6 +433,13 @@ Foxtrick.modules['YouthSkills'] = {
 				if (!sEntry)
 					return;
 
+				// don't touch skills with 'reveal' link
+				const anchors = sEntry.querySelectorAll('a');
+				for (let anchor of anchors) {
+					if (Foxtrick.getUrlParam(anchor.href, 'actiontype') === 'unlock')
+						return;
+				}
+
 				// need to unhide blank row since we have new info from HY for this skill
 				let row = sEntry.closest('tr');
 				Foxtrick.removeClass(row, 'hidden');
@@ -675,7 +684,7 @@ Foxtrick.modules['YouthSkills'] = {
 					if (isLegacy) {
 						if (isPlayerDetails) {
 							// skip if specialty known on HT
-							if (specContainer.querySelector('p'))
+							if (specContainer.querySelector('p') || specContainer.querySelector('strong'))
 								continue;
 
 							const info = doc.createElement('p');

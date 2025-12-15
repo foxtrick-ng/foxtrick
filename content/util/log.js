@@ -250,6 +250,12 @@ Foxtrick.log.Reporter = {
 	// Maximum number of reported error keys to keep in session storage.
 	_MAX_REPORTED_ERRORS: 100,
 
+	// In-memory cache of error keys we've recorded or observed in this process.
+	_reportedKeysCache: new Set(),
+
+	// Error keys currently being reported (in-flight) by this process.
+	_inFlightKeys: new Set(),
+
 	/**
 	 * Initialize the Sentry client and scope.
 	 * @private
@@ -551,42 +557,46 @@ Foxtrick.log.Reporter = {
 	},
 
 	/**
-	 * Add the normalized error key to the session-backed reported-errors list.
+	 * Record a reported error key.
+	 * Updates the in-memory cache and persists the key to session storage.
 	 *
-	 * It also enforces a maximum list size configured by `_MAX_REPORTED_ERRORS`.
-	 * @param {Error} error The error object to normalize and store.
-	 * @returns {Promise<void>} Resolves when the list has been persisted.
+	 * Enforces max session cache size configured by `_MAX_REPORTED_ERRORS`.
+	 * @private
+	 * @param {string} key Error key.
+	 * @returns {Promise<void>} Resolves when persistence completes.
 	 */
-	_addReportedError: async function(error) {
-		try {
-			const key = this._normalizeErrorKey(error);
-			let list = await this._getReportedErrors();
-			if (!list.includes(key)) {
-				list.push(key);
-				if (list.length > this._MAX_REPORTED_ERRORS)
-					list = list.slice(list.length - this._MAX_REPORTED_ERRORS);
-				await this._setReportedErrors(list);
-			}
-		} catch {
-			// avoid re-triggering bug report
+	_addReportedError: async function(key) {
+		// Update in-memory cache immediately to prevent concurrent reporting
+		this._reportedKeysCache.add(key);
+
+		let list = await this._getReportedErrors();
+		if (!list.includes(key)) {
+			list.push(key);
+			if (list.length > this._MAX_REPORTED_ERRORS)
+				list = list.slice(list.length - this._MAX_REPORTED_ERRORS);
+			await this._setReportedErrors(list);
 		}
 	},
 
+
 	/**
-	 * Check whether the given error has already been
-	 * recorded in the reported-errors session list.
-	 * @param {Error} error The error to check.
-	 * @returns {Promise<boolean>} True if already recorded for this session.
+	 * Check whether a normalized error key has already been reported in this session.
+	 * @private
+	 * @param {string} key Error key.
+	 * @returns {Promise<boolean>}
 	 */
-	_alreadyReported: async function(error) {
-		try {
-			const key = this._normalizeErrorKey(error);
-			const reportedErrors = await this._getReportedErrors();
-			return reportedErrors.includes(key) ? true : false;
-		} catch {
-			// avoid re-triggering bug report
-			return false;
+	_alreadyReported: async function(key) {
+		// Fast path: if we've seen this key in-memory, avoid async session access.
+		if (this._reportedKeysCache.has(key))
+			return true;
+
+		// Otherwise load from session storage and update in-memory cache.
+		const reportedErrors = await this._getReportedErrors();
+		if (reportedErrors.includes(key)) {
+			this._reportedKeysCache.add(key);
+			return true;
 		}
+		return false;
 	},
 
 	/**
@@ -596,6 +606,21 @@ Foxtrick.log.Reporter = {
 	_getReportedErrors: async function() {
 		const list = await Foxtrick.session.get('Reporter.errorList');
 		return Array.isArray(list) ? list : [];
+	},
+
+
+	/**
+	 * Synchronously reserve a key for reporting in this process to avoid duplicate concurrent reports.
+	 * @private
+	 * @param {string} key Error key.
+	 * @returns {boolean} True if reservation succeeded, false if another Reporter owns it.
+	 */
+	_lockReporting: function(key) {
+		if (this._reportedKeysCache.has(key) || this._inFlightKeys.has(key))
+			return false;
+
+		this._inFlightKeys.add(key);
+		return true;
 	},
 
 	/**
@@ -644,28 +669,63 @@ Foxtrick.log.Reporter = {
 		return Foxtrick.session.set('Reporter.errorList', list);
 	},
 
+
+	/**
+	 * Release a previously reserved in-flight reporting key for this process.
+	 * Safe to call even if the key was not reserved.
+	 * @private
+	 * @param {string} key Error key.
+	 */
+	_unlockReporting: function(key) {
+			this._inFlightKeys.delete(key);
+	},
+
 	/**
 	 * Report an exception to Sentry.
+	 *
+	 * Each error is only reported once per session.
 	 * @param {Error} error The error/exception to report.
 	 * @param {ReporterEventOptions} hint Additional Sentry hint data.
 	 */
 	reportException: async function(error, hint) {
-		if (this._getFtBranch() === 'dev')
-			return; // don't report on dev branch;
+		try{
+			if (this._getFtBranch() === 'dev')
+				return; // don't report on dev branch
 
-		// only report any given error once per session
-		if (await this._alreadyReported(error)) {
-			console.log('already reported');
-			return;
+			// Generate a key identifying this error to avoid duplicate reports.
+			const key = this._normalizeErrorKey(error);
+
+			if (!this._lockReporting(key))
+				return; // already being handled by another instance of Reporter
+
+			try {
+				if (await this._alreadyReported(key))
+					return;
+
+				if (!this._init())
+					return;
+
+				const scope = this._scope;
+				this._setReportingData(scope);
+				scope.captureException(error, hint);
+				console.log('Foxtrick error report sent.');
+				await this._addReportedError(key);
+			} finally {
+				this._unlockReporting(key);
+			}
+		} catch (e) {
+			// avoid re-triggering report
+			try {
+				if (typeof console.error !== 'undefined')
+					console.error(e.stack);
+				else if (typeof console.log !== 'undefined')
+					console.log(e.stack);
+				else if (typeof console.trace !== 'undefined')
+					console.trace();
+			} catch {
+				// nothing more we can do
+			}
 		}
-
-		if (!this._init())
-			return;
-
-		const scope = this._scope;
-		this._setReportingData(scope);
-		scope.captureException(error, hint);
-		await this._addReportedError(error);
 	},
 
 	/**
@@ -816,7 +876,6 @@ Foxtrick.reportError = function(err, options) {
 		}
 
 		reporter.reportException(err, reportOptions);
-		console.log('Foxtrick bug report sent.');
 	} catch (e) {
 		try {
 			if (typeof console.error !== 'undefined')
@@ -825,7 +884,7 @@ Foxtrick.reportError = function(err, options) {
 				console.log(e.stack);
 			else if (typeof console.trace !== 'undefined')
 				console.trace();
-		} catch (e) { // eslint-disable-line no-unused-vars
+		} catch {
 			// nothing more we can do
 		}
 	}
