@@ -9,7 +9,7 @@
 
 Foxtrick.modules['NotifyChromeVersion'] = {
     MODULE_CATEGORY: Foxtrick.moduleCategories.ALERT,
-    PAGES: ['dashboard'],
+    PAGES: ['dashboard', 'office'],
 
     /**
      * Firefox update.json url used to find the latest release version number
