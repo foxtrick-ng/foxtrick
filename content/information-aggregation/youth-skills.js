@@ -179,8 +179,10 @@ Foxtrick.modules['YouthSkills'] = {
 				}
 				if (htPot + htCur + maxed === 0 && node.querySelector('a.skill')) {
 					// new design sans skill-bars
-					// retrieve current / potential
-					let [current, potential] = [...node.children];
+
+					// retrieve current / potential — ignore any elements with class 'denominationNumber'
+					let children = [...node.children].filter(c => !c.classList.contains('denominationNumber'));
+					let [current, potential] = children;
 					if (current.nodeName == 'A') {
 						let link = /** @type {HTMLAnchorElement} */ (current);
 						htCur = Foxtrick.util.id.getSkillLevelFromLink(link);
