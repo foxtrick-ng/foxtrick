@@ -20,6 +20,11 @@
 	"internal": "true",
 	"list": [
 		{
+			"duty": "supporter",
+			"id": "14083138",
+			"name": "Aberdeen_18"
+		},
+		{
 			"duty": "translator",
 			"id": "10038631",
 			"name": "Mohammad-SE"
