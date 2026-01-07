@@ -20,11 +20,6 @@
 	"internal": "true",
 	"list": [
 		{
-			"duty": "supporter",
-			"id": "14083138",
-			"name": "Aberdeen_18"
-		},
-		{
 			"duty": "translator",
 			"id": "10038631",
 			"name": "Mohammad-SE"
@@ -793,6 +788,11 @@
 			"duty": "developer",
 			"id": "13992846",
 			"name": "UnnecessaryDave"
+		},
+		{
+			"duty": "supporter",
+			"id": "14083138",
+			"name": "Aberdeen_18"
 		},
 		{
 			"duty": "supporter",
@@ -1947,7 +1947,7 @@
 		{
 			"duty": "translator",
 			"id": "9668661",
-			"name": "dzsoo"
+			"name": "<dzsoo>"
 		},
 		{
 			"duty": "supporter",
