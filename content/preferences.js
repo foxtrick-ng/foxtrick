@@ -399,6 +399,10 @@ var neededPermissions = [
 		modules: ['MatchWeather'],
 		types: { origins: ['http://api.openweathermap.org/*'] },
 	},
+	{
+		modules: ['Reporter.reportBug', 'Reporter.reportError', 'Reporter.sendSession'],
+		types: { origins: ['https://*.sentry.io/*'] }
+	},
 ];
 
 /**

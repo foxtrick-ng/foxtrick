@@ -15,7 +15,7 @@ if (!this.Foxtrick)
 /* eslint-disable max-len */
 /**
  * TODO
- * @typedef {'informationAggregation'|'shortcutsAndTweaks'|'presentation'|'matches'|'forum'|'links'|'alert'|'accessibility'} ModuleCategory
+ * @typedef {'core'|'informationAggregation'|'shortcutsAndTweaks'|'presentation'|'matches'|'forum'|'links'|'alert'|'accessibility'} ModuleCategory
  */
 /* eslint-enable max-len */
 
@@ -24,6 +24,7 @@ if (!this.Foxtrick)
  * @type {Record<string, ModuleCategory>}
  */
 Foxtrick.moduleCategories = {
+	CORE: 'core',
 	INFORMATION_AGGREGATION: 'informationAggregation',
 	SHORTCUTS_AND_TWEAKS: 'shortcutsAndTweaks',
 	PRESENTATION: 'presentation',

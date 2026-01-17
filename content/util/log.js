@@ -235,6 +235,132 @@ Foxtrick.dump = function(content) {
 };
 
 
+if (!Foxtrick.modules) {
+	Foxtrick.modules = {};
+};
+
+Foxtrick.modules.Reporter = {
+	MODULE_CATEGORY: 'core',
+	CORE_MODULE: true,
+	OUTSIDE_MAINBODY: true,
+	NICE: -49, //after Core
+	PAGES: ['all'],
+	OPTIONS: ['reportBug', 'reportError', 'sendSession'],
+
+	/**
+	 * Link to page documenting FT data collection policy
+	 * @type {string}
+	 */
+	BUG_DATA_URL: 'https://foxtrick-ng.github.io/datacollection.html',
+
+	/**
+	 * Link to forum page for bug reports
+	 * @type {string}
+	 */
+	FORUM_URL : '/Forum/Overview.aspx?v=0&f=173635',
+
+	/**
+	 * Adds a link to send Foxtrick log
+	 * @param {document} doc
+	 */
+	addBugReportLink: function(doc) {
+		const NOTE_ID = 'ft-bug-report-confirm';
+		const BUG_DATA_URL = Foxtrick.modules.Reporter.BUG_DATA_URL;
+
+		const bottom = doc.getElementById('bottom');
+		if (!bottom)
+			return;
+
+		const reportBugSpan = doc.createElement('span');
+		reportBugSpan.id = 'ft_report_bug';
+		reportBugSpan.textContent = Foxtrick.L10n.getString('reportBug.title');
+
+		const title = Foxtrick.L10n.getString('reportBug.descNew');
+		reportBugSpan.setAttribute('aria-label', reportBugSpan.title = title);
+
+		const hideNote = function() {
+			doc.getElementById(NOTE_ID).remove();
+		};
+
+		const showReportingDialog = function() {
+			const info = doc.createDocumentFragment();
+
+			const sorry = doc.createElement('p');
+			sorry.textContent = Foxtrick.L10n.getString('reportBug.sorry');
+			info.appendChild(sorry);
+
+			const data = doc.createElement('p');
+			Foxtrick.L10n.appendLink('reportBug.error.data', data, BUG_DATA_URL);
+			info.appendChild(data);
+
+			const report = doc.createElement('button');
+			report.type = 'button';
+			report.textContent = Foxtrick.L10n.getString('reportBug.now');
+			Foxtrick.onClick(report, function() {
+				const doc = this.ownerDocument;
+				hideNote();
+				Foxtrick.modules.Reporter.reportBug(doc);
+			});
+			info.appendChild(report);
+
+			Foxtrick.util.note.add(doc, info, NOTE_ID, { closable: true, focus: true });
+		};
+
+		Foxtrick.onClick(reportBugSpan, showReportingDialog);
+		bottom.insertBefore(reportBugSpan, bottom.firstChild);
+	},
+
+	/**
+	 * Trigger sending of bug report.
+	 * Show note with reference id that has been copied to clipboard.
+	 * @param {document} doc
+	 */
+	reportBug: function(doc) {
+		const reportBug = function(log) {
+			if (log === '')
+				return;
+
+			const showNote = function(refId) {
+				Foxtrick.copy(doc, refId);
+
+				const info = doc.createDocumentFragment();
+
+				const success = doc.createElement('p');
+				success.textContent = Foxtrick.L10n.getString('reportBug.success');
+				info.appendChild(success);
+
+				const result = doc.createElement('p');
+				let ref = Foxtrick.L10n.getString('reportBug.id.copied');
+				ref = ref.replace(/%s/g, String(refId));
+				result.textContent = ref;
+				info.appendChild(result);
+
+				const forum = doc.createElement('p');
+				Foxtrick.L10n.appendLink('reportBug.forumNew', forum, Foxtrick.modules.Reporter.FORUM_URL);
+				info.appendChild(forum);
+
+				const NOTE_ID = 'ft-bug-report-link-note';
+				Foxtrick.util.note.add(doc, info, NOTE_ID, { closable: true, focus: true });
+			};
+
+			const prefs = Foxtrick.Prefs.save({ skipFiles: true });
+			Foxtrick.reportBug(log, prefs, showNote);
+		};
+
+		Foxtrick.SB.ext.sendRequest({ req: 'getDebugLog' }, ({ log }) => {
+			reportBug(log);
+		});
+	},
+
+	/**
+	 * @param {document} doc
+	 */
+	run: function(doc) {
+		if (Foxtrick.Prefs.isModuleOptionEnabled('Reporter', 'reportBug'))
+			this.addBugReportLink(doc);
+	}
+};
+
 /**
  * Sentry reporter object for error and message reporting.
  * @type {object}
@@ -819,6 +945,9 @@ Foxtrick.log.Reporter = {
  * @param {function(string):void} [refIdCb] Optional callback to receive the reference ID.
  */
 Foxtrick.reportBug = function(bug, prefs, refIdCb) {
+	if (!Foxtrick.Prefs.isModuleOptionEnabled('Reporter', 'reportBug'))
+		return;
+
 	const reporter = Foxtrick.log.Reporter;
 	if (!reporter)
 		return;
@@ -864,6 +993,9 @@ Foxtrick.reportBug = function(bug, prefs, refIdCb) {
  */
 Foxtrick.reportError = function(err, options) {
 	try {
+		if (!Foxtrick.Prefs.isModuleOptionEnabled('Reporter', 'reportError'))
+			return;
+
 		const reporter = Foxtrick.log.Reporter;
 		if (!reporter)
 			return;
@@ -889,6 +1021,11 @@ Foxtrick.reportError = function(err, options) {
 		}
 	}
 };
+
+Foxtrick.sendSession = function() {
+	if (Foxtrick.Prefs.isModuleOptionEnabled('Reporter', 'sendSession'))
+		Foxtrick.log.Reporter.sendSession();
+}
 
 /**
  * @typedef {object} ReporterTagDescriptor
