@@ -18,6 +18,10 @@ Foxtrick.modules['ExtraShortcuts'] = {
 		'Supporterstats', 'Transfers', 'Prefs', 'ManageCHPP',
 		'No9', 'Latehome',
 	],
+	PERMISSIONS: {
+		No9: { origins: ['http://no9-online.de/*'] },
+		Latehome: { origins: ['http://www.latehome.de/*'] },
+	},
 	LINKS: {
 		Stage: {
 			link: '',
@@ -37,7 +41,6 @@ Foxtrick.modules['ExtraShortcuts'] = {
 	RADIOS: ['No9', 'Latehome'],
 
 	// following also need to be entered in manifest.json->optional_permissions
-	// and perferences.js->neededPermissions
 	RADIO_URLS: [
 		'http://radio-no9.de/_no9/no9status.php',
 		'http://www.latehome.de/foxtrick/status.php',

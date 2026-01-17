@@ -73,6 +73,7 @@ Foxtrick.modules.Core = {
 		CORE.showVersion(doc);
 		CORE.showChangeLog(doc);
 		CORE.featureHighlight(doc);
+		CORE.checkNeededPermissions(doc);
 	},
 
 	/**
@@ -249,6 +250,39 @@ Foxtrick.modules.Core = {
 			Foxtrick.Prefs.setBool('featureHighlight', true);
 		}
 		Foxtrick.modules.UI.update(doc);
+	},
+
+	/**
+	 * If additional browser preferences are needed, display a note
+	 * that explains this and a button that opens the prefs page.
+	 * @param {document} doc
+	 */
+	checkNeededPermissions: function(doc) {
+
+		const openPreferences = function() {
+			Foxtrick.Prefs.show('#tab=main');
+		};
+
+		Foxtrick.Prefs.getNeededPermissions().then(function(needed) {
+			if (!needed)
+				return;
+
+			const container = doc.createElement('div');
+			let msg = Foxtrick.L10n.getString('prefs.needPermissionsContent');
+			msg = msg.replace(/%1/g, Foxtrick.L10n.getString('button.ok'));
+			msg = msg.replace(/%2/g, Foxtrick.L10n.getString('button.save'));
+			container.append(msg);
+			const noteOptions = {
+				closable: false,
+				buttons: [
+					{
+						type: Foxtrick.util.note.BUTTONS.OK,
+						listener: openPreferences,
+					}
+				],
+			};
+			Foxtrick.util.note.add(doc, container, 'ft-permissions-note', noteOptions);
+		});
 	},
 
 	/**

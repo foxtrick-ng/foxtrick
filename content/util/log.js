@@ -246,6 +246,11 @@ Foxtrick.modules.Reporter = {
 	NICE: -49, //after Core
 	PAGES: ['all'],
 	OPTIONS: ['reportBug', 'reportError', 'sendSession'],
+	PERMISSIONS: {
+		reportBug: { origins: ['https://*.sentry.io/*'] },
+		reportError: { origins: ['https://*.sentry.io/*'] },
+		sendSession: { origins: ['https://*.sentry.io/*'] },
+	},
 
 	/**
 	 * Link to page documenting FT data collection policy

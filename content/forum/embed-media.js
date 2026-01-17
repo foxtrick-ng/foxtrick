@@ -16,6 +16,19 @@ Foxtrick.modules['EmbedMedia'] = {
 		['EmbedModeOEmebed', 'ReplaceLinksByTitles', 'EmbedFlickrImages', 'EmbedDeviantArtImages',
 			'EmbedSoundCloud']
 	],
+	PERMISSIONS: {
+		EmbedModeOEmebed: {
+			origins: [
+				'https://vimeo.com/api/*',
+				'https://www.youtube.com/*',
+				'https://www.dailymotion.com/services/*',
+			],
+		},
+		EmbedFlickrImages: { origins: ['https://secure.flickr.com/services/oembed/*'] },
+		EmbedDeviantArtImages: { origins: ['http://backend.deviantart.com/*'] },
+		EmbedSoundCloud: { origins: ['https://soundcloud.com/*'] },
+		EmbedImageshack: { origins: ['https://imageshack.us/*'] },
+	},
 	CSS: Foxtrick.InternalPath + 'resources/css/embed-media.css',
 
 	run: function(doc) {

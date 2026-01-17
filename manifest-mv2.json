@@ -276,8 +276,7 @@
 		"clipboardWrite",
 		"*://chpp.hattrick.org/*",
 		"*://*.foxtrick.org/*",
-		"https://www.fantamondi.it/*",
-		"https://*.sentry.io/*"
+		"https://www.fantamondi.it/*"
 	],
 	"optional_permissions": [
 		"https://*.hattrick-youthclub.org/*",
@@ -290,7 +289,8 @@
 		"http://backend.deviantart.com/*",
 		"https://soundcloud.com/*",
 		"https://imageshack.us/*",
-		"http://api.openweathermap.org/*"
+		"http://api.openweathermap.org/*",
+		"https://*.sentry.io/*"
 	],
 	"page_action": {
 		"default_icon": "skin/icon-24.png",

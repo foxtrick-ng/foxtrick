@@ -124,6 +124,41 @@ Foxtrick.util.modules.getActive = function(doc) {
 };
 
 /**
+ * Build the list of module permissions from PERMISSIONS definitions.
+ * PERMISSIONS is a map of option -> { permissions, origins }.
+ * Use key "module" for module-level permissions.
+ *
+ * @returns {Array<{modules: string[], types: {permissions?: string[], origins?: string[]}}>} needed
+ */
+Foxtrick.util.modules.getModulePermissions = function() {
+	const permissions = [];
+
+	if (!Foxtrick.modules)
+		return permissions;
+
+	for (const moduleName in Foxtrick.modules) {
+		const module = Foxtrick.modules[moduleName];
+		if (!module || !module.PERMISSIONS || typeof module.PERMISSIONS !== 'object')
+			continue;
+
+		for (const key in module.PERMISSIONS) {
+			if (!Object.prototype.hasOwnProperty.call(module.PERMISSIONS, key))
+				continue;
+
+			const types = module.PERMISSIONS[key];
+			if (!types)
+				continue;
+
+			const target = key === 'module' ? moduleName : moduleName + '.' + key;
+			permissions.push({ modules: [target], types: types });
+		}
+	}
+
+	return permissions;
+};
+
+
+/**
  * @typedef FTBackgroundModuleMixin
  * @prop {string} [MODULE_NAME] set automatically
  * @prop {(reInit?: boolean)=>void} [init]

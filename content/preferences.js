@@ -3,7 +3,7 @@
 /**
  * Foxtrick preferences
  *
- * @author ryanli, convincedd, LA-MJ, CatzHoek
+ * @author ryanli, convincedd, LA-MJ, CatzHoek, UnnecessaryDave
  */
 
 
@@ -335,75 +335,20 @@ function searchEvent(ev) {
 }
 
 // Permissions Management
-
-// TODO: extract and improve
-
+//
 // Check if permissions are granted in init and ask for permission if needed on saving
 // that's unsave since we don't check permissions right before asking for them
 // but since permission request must be in the click handler and not in a callback.
 // This seems to be the only way.
 
-// Should move/get that to the resp. modules
-var neededPermissions = [
-	{
-		modules: ['ExtraShortcuts.No9'],
-		types: { origins: ['http://no9-online.de/*'] },
-	},
-	{
-		modules: ['ExtraShortcuts.Latehome'],
-		types: { origins: ['http://www.latehome.de/*'] },
-	},
-	{
-		modules: ['EmbedMedia.EmbedModeOEmebed'],
-		types: {
-			origins: [
-				'https://vimeo.com/api/*',
-				'https://www.youtube.com/*',
-				'https://www.dailymotion.com/services/*',
-			],
-		},
-	},
-	{
-		modules: ['EmbedMedia.EmbedFlickrImages'],
-		types: { origins: ['https://secure.flickr.com/services/oembed/*'] },
-	},
-	{
-		modules: ['EmbedMedia.EmbedDeviantArtImages'],
-		types: { origins: ['http://backend.deviantart.com/*'] },
-	},
-	{
-		modules: ['EmbedMedia.EmbedSoundCloud'],
-		types: { origins: ['https://soundcloud.com/*'] },
-	},
-	{
-		modules: ['EmbedMedia.EmbedImageshack'],
-		types: { origins: ['https://imageshack.us/*'] },
-	},
-	{
-		modules: ['CopyYouth.AutoSendTrainingReportToHY'],
-		types: { origins: ['https://*.hattrick-youthclub.org/*'] },
-	},
-	{
-		modules: ['CopyYouth.AutoSendRejectedToHY'],
-		types: { origins: ['https://*.hattrick-youthclub.org/*'] },
-	},
-	{
-		modules: ['CopyYouth.AutoSendTrainingChangesToHY'],
-		types: { origins: ['https://*.hattrick-youthclub.org/*'] },
-	},
-	{
-		modules: ['YouthSkills'],
-		types: { origins: ['https://*.hattrick-youthclub.org/*'] },
-	},
-	{
-		modules: ['MatchWeather'],
-		types: { origins: ['http://api.openweathermap.org/*'] },
-	},
-	{
-		modules: ['Reporter.reportBug', 'Reporter.reportError', 'Reporter.sendSession'],
-		types: { origins: ['https://*.sentry.io/*'] }
-	},
-];
+var neededPermissions = [];
+
+/**
+ * Populate neededPermissions
+ */
+function buildNeededPermissions() {
+	neededPermissions = Foxtrick.util.modules.getModulePermissions();
+}
 
 /**
  * Convert module/option into element ID
@@ -540,40 +485,75 @@ function testPermissions() {
 	if (Foxtrick.platform !== 'Chrome' || !('permissions' in chrome))
 		return;
 
-	var modules = [];
+	let modules = [];
 
-	var updateAlertDisplay = function() {
-		var alertEl = document.getElementById('alert');
-		var alertText = document.getElementById('alert-text');
-		var breadcrumbs = document.getElementById('breadcrumbs');
+	//TODO: properly support non-boolean options - e.g. radio buttons
+	const updateAlertDisplay = function() {
+		const alertEl = document.getElementById('alert');
+		const alertText = document.getElementById('alert-text');
+		const breadcrumbs = document.getElementById('breadcrumbs');
+
+		const formatPermissionTypes = function(types) {
+			if (!types)
+				return '';
+
+			const parts = [];
+			if (Array.isArray(types.permissions) && types.permissions.length) {
+				parts.push('permissions: ' + types.permissions.join(', '));
+			}
+			if (Array.isArray(types.origins) && types.origins.length) {
+				parts.push('origins: ' + types.origins.join(', '));
+			}
+			return parts.join('; ');
+		};
 
 		if (modules.length > 0) {
-			var strong = document.createElement('strong');
+			const strong = document.createElement('strong');
 			strong.textContent = Foxtrick.L10n.getString('prefs.needPermissions');
 
-			var ul = document.createElement('ul');
+			const table = document.createElement('table');
 			modules.forEach(function(mod) {
-				var li = document.createElement('li');
-				li.textContent = mod;
-				ul.appendChild(li);
+				const row = document.createElement('tr');
+
+				// eneable/disable checkbox for module/option
+				const checkboxCell = document.createElement('td');
+				const checkbox = document.createElement('input');
+				checkbox.type = 'checkbox';
+				checkbox.dataset.module = mod;
+				const targetSelector = getElementIdFromOption(mod);
+				const targetEl = document.querySelector(targetSelector);
+				if (targetEl?.type === 'checkbox') {
+					checkbox.checked = targetEl.checked;
+				}
+				checkboxCell.appendChild(checkbox);
+				row.appendChild(checkboxCell);
+
+				// module/option description
+				const descCell = document.createElement('td');
+				descCell.textContent = Foxtrick.L10n.getString(`module.${mod}.desc`);
+				row.appendChild(descCell);
+
+				// permission
+				const typesCell = document.createElement('td');
+				const permission = neededPermissions.find(function(item) {
+					return item.modules.indexOf(mod) !== -1;
+				});
+				if (permission?.types) {
+					typesCell.textContent = formatPermissionTypes(permission.types);
+				}
+				row.appendChild(typesCell);
+
+				table.appendChild(row);
 			});
 
-			if (alertText) {
-				alertText.textContent = '';
-				alertText.appendChild(strong);
-				alertText.appendChild(ul);
-			}
+			alertText?.replaceChildren(strong, table);
 
-			if (alertEl)
-				alertEl.classList.remove('hidden');
-			if (breadcrumbs)
-				breadcrumbs.classList.add('hidden');
+			alertEl?.classList.remove('hidden');
+			breadcrumbs?.classList.add('hidden');
 		}
 		else {
-			if (alertText)
-				alertText.textContent = '';
-			if (alertEl)
-				alertEl.classList.add('hidden');
+			alertText?.replaceChildren();
+			alertEl?.classList.add('hidden');
 		}
 	};
 
@@ -622,6 +602,28 @@ function testPermissions() {
 	for (var permission of neededPermissions) {
 		testModulePermission(permission);
 	}
+}
+
+/**
+ * Sync permissions alert table checkboxes to their corresponding module options.
+ */
+function syncPermissionAlertSelections() {
+	var alertText = document.getElementById('alert-text');
+	if (!alertText)
+		return;
+
+	var checkboxes = alertText.querySelectorAll('input[type="checkbox"][data-module]');
+	checkboxes.forEach(function(checkbox) {
+		var mod = checkbox.dataset.module;
+		if (!mod)
+			return;
+
+		var targetSelector = getElementIdFromOption(mod);
+		var targetEl = document.querySelector(targetSelector);
+		if (targetEl && targetEl.type === 'checkbox' && targetEl.checked !== checkbox.checked) {
+			targetEl.click();
+		}
+	});
 }
 
 /**
@@ -883,6 +885,7 @@ function initListeners() {
 	var saveBtn = document.getElementById('save');
 	if (saveBtn) {
 		saveBtn.addEventListener('click', function() {
+			syncPermissionAlertSelections();
 			save();
 			var alertEl = document.getElementById('alert');
 			var breadcrumbs = document.getElementById('breadcrumbs');
@@ -1991,6 +1994,7 @@ async function init() {
 	try {
 		await initCoreModules(false);
 		getPageIds();
+		buildNeededPermissions();
 
 		await initTabs();
 
