@@ -41,7 +41,7 @@ Foxtrick._log = function(args, options = {}) {
 			try {
 				item = JSON.stringify(content);
 			}
-			catch (e) { // eslint-disable-line no-unused-vars
+			catch {
 				item = String(content);
 				for (let [k, v] of Object.entries(content))
 					item += `${k}:${v}\n`;
@@ -74,17 +74,7 @@ Foxtrick._log = function(args, options = {}) {
 	for (let content of args) {
 		if (content instanceof Error) {
 			Foxtrick.reportError(content, options);
-
-			try {
-				if (typeof console.error !== 'undefined')
-					console.error(content.stack);
-				else if (typeof console.log !== 'undefined')
-					console.log(content.stack);
-				else if (typeof console.trace !== 'undefined')
-					console.trace();
-			} catch (e) { // eslint-disable-line no-unused-vars
-				// nothing more we can do
-			}
+			Foxtrick.log._logErrorToConsole(content);
 		}
 	}
 };
@@ -232,6 +222,25 @@ Foxtrick.addToDebugLogStorage = function(text) {
  */
 Foxtrick.dump = function(content) {
 	Foxtrick.log(String(content).trim());
+};
+
+/**
+ * Safely log exception stacks.
+ * @param {*} err The error or value to log.
+ */
+Foxtrick.log._logErrorToConsole = function(err) {
+	try {
+		if (typeof console.error !== 'undefined') {
+			console.log(err?.message);
+			console.error(err?.stack ? err.stack : err);
+		} else if (typeof console.log !== 'undefined') {
+			console.log(err?.message);
+			console.log(err?.stack ? err.stack : err);
+		} else if (typeof console.trace !== 'undefined')
+			console.trace();
+	} catch {
+		// nothing more we can do
+	}
 };
 
 
@@ -416,7 +425,7 @@ Foxtrick.log.Reporter = {
 				console.error('ERROR: Sentry init - ' + e.message);
 				console.error(e.stack);
 				return false;
-			} catch (e) { // eslint-disable-line
+			} catch {
 				return false;
 			}
 		}
@@ -541,7 +550,7 @@ Foxtrick.log.Reporter = {
 		const makeRequest = function(request) {
 			return new Promise((resolve, reject) => {
 				if (!request)
-					return reject(new Error('no request'));
+					return reject(new Error('Reporter: no request'));
 
 				try {
 					// use values from the transport request, fall back to outer options
@@ -557,7 +566,7 @@ Foxtrick.log.Reporter = {
 						fetchOptions,
 					}, function(response) {
 						if (!response)
-							return reject(new Error('no response from background'));
+							return reject(new Error('Reporter: no response from background'));
 
 						if (response.error)
 							return reject(new Error(response.error));
@@ -609,7 +618,7 @@ Foxtrick.log.Reporter = {
 					username: userName,
 				});
 			}
-		} catch (e) { // eslint-disable-line no-unused-vars
+		} catch {
 			// We can still report without a user set.
 		}
 
@@ -677,7 +686,7 @@ Foxtrick.log.Reporter = {
 			let value;
 			try {
 				value = desc.getValue();
-			} catch (e) { // eslint-disable-line no-unused-vars
+			} catch {
 				value = null;
 			}
 			const key = desc.prefix ? `${desc.prefix}.${desc.name}` : desc.name;
@@ -819,7 +828,7 @@ Foxtrick.log.Reporter = {
 	 * @param {ReporterEventOptions} hint Additional Sentry hint data.
 	 */
 	reportException: async function(error, hint) {
-		try{
+		try {
 			if (this._getFtBranch() === 'dev')
 				return; // don't report on dev branch
 
@@ -839,23 +848,13 @@ Foxtrick.log.Reporter = {
 				const scope = this._scope;
 				this._setReportingData(scope);
 				scope.captureException(error, hint);
-				console.log('Foxtrick error report sent.');
 				await this._addReportedError(key);
+				console.log('Foxtrick error report sent.');
 			} finally {
 				this._unlockReporting(key);
 			}
 		} catch (e) {
-			// avoid re-triggering report
-			try {
-				if (typeof console.error !== 'undefined')
-					console.error(e.stack);
-				else if (typeof console.log !== 'undefined')
-					console.log(e.stack);
-				else if (typeof console.trace !== 'undefined')
-					console.trace();
-			} catch {
-				// nothing more we can do
-			}
+			Foxtrick.log._logErrorToConsole(e);
 		}
 	},
 
@@ -915,7 +914,7 @@ Foxtrick.log.Reporter = {
 							bodyToSend = uint8;
 						}
 					}
-				} catch (e) { // eslint-disable-line no-unused-vars
+				} catch {
 					// if reconstruction fails, fall back to original msg.body
 					bodyToSend = msg.body;
 				}
@@ -1014,16 +1013,7 @@ Foxtrick.reportError = function(err, options) {
 
 		reporter.reportException(err, reportOptions);
 	} catch (e) {
-		try {
-			if (typeof console.error !== 'undefined')
-				console.error(e.stack);
-			else if (typeof console.log !== 'undefined')
-				console.log(e.stack);
-			else if (typeof console.trace !== 'undefined')
-				console.trace();
-		} catch {
-			// nothing more we can do
-		}
+		Foxtrick.log._logErrorToConsole(e);
 	}
 };
 
