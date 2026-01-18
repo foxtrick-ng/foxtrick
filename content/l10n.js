@@ -53,9 +53,24 @@ Foxtrick.L10n = (() => ({
 	 */
 	getString(str, num) { return ''; },
 
+	/**
+	 * Get string localization for a specific locale.
+	 *
+	 * Optionally returns the correct plural form (or last if matching fails).
+	 * @throws if string is n/a
+	 *
+	 * @param  {string} str locale key
+	 * @param  {string} locale locale code (e.g. en-GB)
+	 * @param  {number} [num] number to substitute in plural (optional integer)
+	 * @return {Promise<string>}
+	 */
+	async getStringInLocale(str, locale, num) { return ''; },
+
 	/* eslint-enable no-unused-vars */
 
 }))();
+
+Foxtrick.L10n.L10N_PATH = Foxtrick.InternalPath + 'locale/';
 
 /* eslint-disable no-multi-spaces */
 /**
@@ -863,59 +878,65 @@ Foxtrick.L10n.getCountryNameLocal = function(leagueId, lang) {
 			// string collection of localizations and screen-shot links
 			propertiesDefault: null,
 			properties: null,
+			propertiesByLocale: null,
 			screenshotsDefault: null,
 			screenshots: null,
+			plFormByLocale: null,
 
 			init: async function() {
-				var L10N_BUNDLE_PATH = Foxtrick.InternalPath + 'foxtrick.properties';
+				const L10N_BUNDLE_PATH = Foxtrick.InternalPath + 'foxtrick.properties';
 
 				// var SS_BUNDLE_PATH = Foxtrick.InternalPath + 'foxtrick.screenshots';
-				var L10N_PATH = Foxtrick.InternalPath + 'locale/';
+				const L10N_PATH = Foxtrick.L10n.L10N_PATH;
 
 				// get htlang.json for each locale
 				if (!/\/preferences\.html$/.test(window.location.pathname)) {
 					// don't run in prefs
 					// unnecessary and hurts performance
 					for (let locale of Foxtrick.L10n.locales) {
-						let url = L10N_PATH + locale + '/htlang.json';
-						let text = await Foxtrick.util.load.internal(url);
+						const url = L10N_PATH + locale + '/htlang.json';
+						const text = await Foxtrick.util.load.internal(url);
 						this.htLanguagesJSON[locale] = JSON.parse(text);
 					}
 				}
 
-				var propsDefault = await Foxtrick.util.load.internal(L10N_BUNDLE_PATH);
+				const propsDefault = await Foxtrick.util.load.internal(L10N_BUNDLE_PATH);
 				this.propertiesDefault = this.__parse(propsDefault);
 
 				// this.screenshotsDefault = Foxtrick.util.load.sync(SS_BUNDLE_PATH);
 				try {
-					let rule = this._getString(this.propertiesDefault, 'pluralFormRuleID');
+					const rule = this._getString(this.propertiesDefault, 'pluralFormRuleID');
 					this.plFormDefault = parseInt(rule.match(/\d+/), 10);
-				}
-				catch (e) {}
+				} catch { /* ignore */ }
 
-				var localeCode = Foxtrick.Prefs.getString('htLanguage');
+				const localeCode = Foxtrick.Prefs.getString('htLanguage');
 
-				var l10nBundlePath = L10N_PATH + localeCode + '/foxtrick.properties';
+				const l10nBundlePath = L10N_PATH + localeCode + '/foxtrick.properties';
 				try {
-					let props = await Foxtrick.util.load.internal(l10nBundlePath);
+					const props = await Foxtrick.util.load.internal(l10nBundlePath);
 					if (props === null) {
 						Foxtrick.log('Use default properties for locale', localeCode);
 						this.properties = this.propertiesDefault;
-					}
-					else {
+					} else {
 						this.properties = this.__parse(props);
 					}
 				}
-				catch (e) {
+				catch {
 					Foxtrick.log('Use default properties for locale', localeCode);
 					this.properties = this.propertiesDefault;
 				}
 
 				try {
-					let localRule = this._getString(this.properties, 'pluralFormRuleID');
+					const localRule = this._getString(this.properties, 'pluralFormRuleID');
 					this.plForm = parseInt(localRule.match(/\d+/), 10);
+				} catch { /* ignore */ }
+
+				this.propertiesByLocale = {};
+				this.plFormByLocale = {};
+				if (localeCode) {
+					this.propertiesByLocale[localeCode] = this.properties;
+					this.plFormByLocale[localeCode] = this.plForm;
 				}
-				catch (e) {}
 
 				// var ssBundlePath = L10N_PATH + localeCode + '/foxtrick.screenshots';
 				// try {
@@ -949,6 +970,28 @@ Foxtrick.L10n.getCountryNameLocal = function(leagueId, lang) {
 				return null;
 			},
 
+			_formatLocalizedValue: function(value, num, plForm) {
+				// replace escaped characters just like Gecko does
+				value = value.replace(/^\\ /, ' ')
+					.replace(/\\n/g, '\n')
+					.replace(/\\:/g, ':')
+					.replace(/\\=/g, '=')
+					.replace(/\\#/g, '#')
+					.replace(/\\!/g, '!');
+
+				// get plurals
+				if (typeof num === 'undefined')
+					return value;
+
+				// @ts-ignore
+				var [get] = PluralForm.makeGetter(plForm);
+				try {
+					return get(num, value);
+				} catch {
+					return value.replace(/.+;/g, '');
+				}
+			},
+
 			getString: function(str, num) {
 				try {
 					if (Foxtrick.Prefs.getBool('translationKeys'))
@@ -965,29 +1008,84 @@ Foxtrick.L10n.getCountryNameLocal = function(leagueId, lang) {
 					if (value === null)
 						throw new Error('no such l10n ID');
 
-					// replace escaped characters just like Gecko does
-					value = value.replace(/^\\ /, ' ')
-						.replace(/\\n/g, '\n')
-						.replace(/\\:/g, ':')
-						.replace(/\\=/g, '=')
-						.replace(/\\#/g, '#')
-						.replace(/\\!/g, '!');
+					return this._formatLocalizedValue(value, num, plForm);
+				} catch (e) {
+					Foxtrick.log(new Error(`Error getString('${str}', ${num}) - ${e.message}`));
+					return str.slice(str.lastIndexOf('.') + 1);
+				}
+			},
 
-					// get plurals
-					if (typeof num === 'undefined')
-						return value;
+			getStringInLocale: async function(str, locale, num) {
+				try {
+					if (Foxtrick.Prefs.getBool('translationKeys'))
+						return str;
 
-					// @ts-ignore
-					var [get] = PluralForm.makeGetter(plForm);
-					try {
-						return get(num, value);
+					const localeCode = String(locale || '').trim();
+					if (!localeCode)
+						throw new Error('missing locale');
+
+					if (!this.propertiesByLocale)
+						this.propertiesByLocale = {};
+					if (!this.plFormByLocale)
+						this.plFormByLocale = {};
+
+					if (!this.propertiesByLocale[localeCode]) {
+						const currentLocale = Foxtrick.Prefs.getString('htLanguage');
+						if (this.properties && localeCode === currentLocale) {
+							this.propertiesByLocale[localeCode] = this.properties;
+							this.plFormByLocale[localeCode] = this.plForm;
+						} else if (Foxtrick.context === 'content') {
+							const localeResponse = await new Promise((resolve, reject) => {
+								Foxtrick.SB.ext.sendRequest(
+									{ req: 'getLocaleProperties', locale: localeCode },
+									(response) => {
+										if (!response)
+											return reject(new Error('Empty response'));
+										if ('error' in response)
+											return reject(new Error(response.error));
+
+										resolve(response);
+									}
+								);
+							});
+							this.propertiesByLocale[localeCode] = localeResponse.properties;
+							this.plFormByLocale[localeCode] = localeResponse.plForm;
+						} else {
+							const l10nBundlePath = Foxtrick.L10n.L10N_PATH + localeCode + '/foxtrick.properties';
+							const props = await Foxtrick.util.load.internal(l10nBundlePath);
+							let properties = this.propertiesDefault;
+							let plForm = this.plFormDefault;
+
+							if (props !== null) {
+								properties = this.__parse(props);
+								try {
+									let localRule = this._getString(properties, 'pluralFormRuleID');
+									if (localRule)
+										plForm = parseInt(localRule.match(/\d+/), 10);
+								} catch { /* ignore */ }
+							}
+
+							this.propertiesByLocale[localeCode] = properties;
+							this.plFormByLocale[localeCode] = plForm;
+						}
 					}
-					catch (e) {
-						return value.replace(/.+;/g, '');
+
+					let properties = this.propertiesByLocale[localeCode] || this.propertiesDefault;
+					let plForm = this.plFormByLocale[localeCode] || this.plFormDefault;
+
+					var value = this._getString(properties, str);
+					if (value === null) {
+						value = this._getString(this.propertiesDefault, str);
+						plForm = this.plFormDefault;
 					}
+
+					if (value === null)
+						throw new Error('no such l10n ID');
+
+					return this._formatLocalizedValue(value, num, plForm);
 				}
 				catch (e) {
-					Foxtrick.log(new Error(`Error getString('${str}')`));
+					Foxtrick.log(new Error(`Error getStringInLocale('${str}', '${locale}, ${num}') - ${e.message}`));
 					return str.slice(str.lastIndexOf('.') + 1);
 				}
 			},

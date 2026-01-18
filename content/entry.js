@@ -99,6 +99,14 @@ Foxtrick.entry.contentScriptInit = function(data) {
 		Foxtrick.L10n.screenshots = data.screenshots;
 		Foxtrick.L10n.plFormDefault = data.plFormDefault;
 		Foxtrick.L10n.plForm = data.plForm;
+
+		let localeCode = Foxtrick.Prefs.getString('htLanguage');
+		Foxtrick.L10n.propertiesByLocale = {};
+		Foxtrick.L10n.plFormByLocale = {};
+		if (localeCode) {
+			Foxtrick.L10n.propertiesByLocale[localeCode] = Foxtrick.L10n.properties;
+			Foxtrick.L10n.plFormByLocale[localeCode] = Foxtrick.L10n.plForm;
+		}
 	}
 
 	for (let lang in data.htLangJSON)
