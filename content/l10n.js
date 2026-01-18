@@ -869,6 +869,88 @@ Foxtrick.L10n.getCountryNameLocal = function(leagueId, lang) {
 	return ret;
 };
 
+/**
+ * Load worldlanguages.json
+ *
+ * @returns {Promise<object|null>}
+ */
+Foxtrick.L10n._loadWorldLanguages = async function() {
+	try {
+		const url = Foxtrick.InternalPath + 'data/worldlanguages.json';
+		const jsonText = await Foxtrick.util.load.internal(url);
+		if (!jsonText)
+			throw new Error('missing worldlanguages.json');
+
+		Foxtrick.XMLData.worldLanguagesJSON = JSON.parse(jsonText);
+		return Foxtrick.XMLData.worldLanguagesJSON;
+	} catch (e) {
+		Foxtrick.log(new Error(`Error loading worldlanguages.json - ${e.message}`));
+		return null;
+	}
+};
+
+/**
+ * Get LanguageID -> locale mapping.
+ *
+ * @this {Foxtrick.L10n}
+ * @returns {Promise<object>}
+ */
+Foxtrick.L10n.getLanguageIdToLocale = async function() {
+	if (this._languageIdToLocale)
+		return this._languageIdToLocale;
+
+	this._languageIdToLocale = {};
+	try {
+		if (!Foxtrick.XMLData.worldLanguagesJSON)
+			await this._loadWorldLanguages();
+
+		const list = Foxtrick.XMLData.worldLanguagesJSON?.HattrickData?.LanguageList;
+		if (!Array.isArray(list))
+			throw new Error('invalid worldlanguages.json');
+
+		for (let lang of list) {
+			let languageId = String((lang && lang.LanguageID) || '').trim();
+			let locale = String((lang && lang.Locale) || '').trim();
+			if (languageId && locale)
+				this._languageIdToLocale[languageId] = locale;
+		}
+	} catch (e) {
+		Foxtrick.log(new Error(`Error getLanguageIdToLocale() - ${e.message}`));
+	}
+
+	return this._languageIdToLocale;
+};
+
+/**
+ * Get locale for a given league id.
+ *
+ * @param  {number} leagueId
+ * @returns {Promise<string|null>}
+ */
+Foxtrick.L10n.getLocaleByLeagueId = async function(leagueId) {
+	try {
+		let id = parseInt(String(leagueId), 10);
+		if (!id)
+			throw new Error('missing leagueId');
+
+		const languageIdToLocale = await this.getLanguageIdToLocale();
+
+		let league = Foxtrick.XMLData.League?.[id];
+		if (!league?.LanguageId)
+			throw new Error(`missing League or LanguageId in XMLData for leagueId ${leagueId}`);
+
+		let languageId = String(league.LanguageId).trim();
+		let locale = languageIdToLocale?.[languageId];
+		if (!locale)
+			throw new Error(`missing locale for languageId ${languageId}`);
+
+		return locale;
+	} catch (e) {
+		Foxtrick.log(new Error(`Error getLocaleByLeagueId('${leagueId}') - ${e.message}`));
+		return null;
+	}
+};
+
 (function() {
 
 	// -------------------- Sandboxed-specific getters/setters ----------------------
