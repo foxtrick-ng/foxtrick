@@ -20,14 +20,14 @@ Foxtrick.startObserver = function(doc) {
 		return;
 
 	/** @param {Node[]} changes */
-	let waitForChanges = function(changes) {
+	let waitForChanges = async function(changes) {
 		if (!changes || !changes.length)
 			return;
 
 		let [first] = changes;
 		let doc = first.ownerDocument;
 		Foxtrick.stopObserver(doc);
-		Foxtrick.entry.change(doc, changes);
+		await Foxtrick.entry.change(doc, changes);
 		Foxtrick.startObserver(doc);
 	};
 
