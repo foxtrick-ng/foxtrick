@@ -25,16 +25,16 @@ Foxtrick.modules['TransferDeadline'] = {
 			this.runTransferResult(doc);
 	},
 
-	change: function(doc) {
+	change: async function(doc) {
 		if (Foxtrick.isPage(doc, 'playerDetails'))
-			this.runPlayerDetail(doc);
+			await this.runPlayerDetail(doc);
 		else if (Foxtrick.isPage(doc, 'bookmarks'))
-			this.runTransferResult(doc);
+			await this.runTransferResult(doc);
 		else if (Foxtrick.isPage(doc, 'transfer'))
-			this.runPlayerList(doc);
+			await this.runPlayerList(doc);
 	},
 
-	processNode: function(node, userTime) {
+	processNode: async function(node, userTime) {
 		const MSECS = Foxtrick.util.time.MSECS_IN_SEC;
 
 		var dateNode;
@@ -74,7 +74,7 @@ Foxtrick.modules['TransferDeadline'] = {
 			if (!isNaN(countdown) && countdown >= 0) {
 				let countdownNode = doc.createElement('span');
 				countdownNode.className = 'smallText ft-deadline nowrap';
-				let span = Foxtrick.util.time.timeDiffToSpan(doc, countdown);
+				let span = await Foxtrick.util.time.timeDiffToSpan(doc, countdown);
 				countdownNode.textContent = '(' + span.textContent + ')';
 				Foxtrick.makeFeaturedElement(countdownNode, this);
 				node.appendChild(countdownNode);
@@ -82,7 +82,7 @@ Foxtrick.modules['TransferDeadline'] = {
 		}
 	},
 
-	runTransferResult: function(doc) {
+	runTransferResult: async function(doc) {
 		var userDate = Foxtrick.util.time.getDate(doc);
 		if (!userDate) {
 			Foxtrick.log('User time missing');
@@ -91,10 +91,10 @@ Foxtrick.modules['TransferDeadline'] = {
 		var userTime = userDate.getTime();
 		var dates = doc.querySelectorAll('.date, [id*="lblDeadline"]');
 		for (let date of dates)
-			this.processNode(date, userTime);
+			await this.processNode(date, userTime);
 	},
 
-	runPlayerList: function(doc) {
+	runPlayerList: async function(doc) {
 		// FIXME
 		var userDate = Foxtrick.util.time.getDate(doc);
 		if (!userDate) {
@@ -108,10 +108,10 @@ Foxtrick.modules['TransferDeadline'] = {
 		var idPrefix = MAIN + 'lstBids_ctrl';
 		var element;
 		while ((element = doc.getElementById(idPrefix + i++ + '_jsonDeadLine')))
-			this.processNode(element, userTime);
+			await this.processNode(element, userTime);
 	},
 
-	runPlayerDetail: function(doc) {
+	runPlayerDetail: async function(doc) {
 		if (Foxtrick.Pages.Player.wasFired(doc))
 			return;
 
@@ -140,6 +140,6 @@ Foxtrick.modules['TransferDeadline'] = {
 		for (var i = 0; i < oldDeadline.length; ++i)
 			oldDeadline[i].parentNode.removeChild(oldDeadline[i]);
 
-		this.processNode(sellTimeEl, userTime);
+		await this.processNode(sellTimeEl, userTime);
 	},
 };
