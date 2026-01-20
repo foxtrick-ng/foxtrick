@@ -43,7 +43,7 @@ Foxtrick.modules['ExtendedPlayerDetails'] = {
 	},
 
 	// Player in team since...
-	playerJoined: function(doc) {
+	playerJoined: async function(doc) {
 		var module = this;
 		var HTDateFormat = Foxtrick.modules.HTDateFormat;
 		let processed = doc.querySelectorAll('.ft-since');
@@ -73,7 +73,7 @@ Foxtrick.modules['ExtendedPlayerDetails'] = {
 
 		let diff = htDate.getTime() - dateObj.getTime();
 		let sec = Math.floor(diff / Foxtrick.util.time.MSECS_IN_SEC);
-		let joinedSpan = Foxtrick.util.time.timeDiffToSpan(doc, sec, { useDHM: false });
+		let joinedSpan = await Foxtrick.util.time.timeDiffToSpan(doc, sec, { useDHM: false });
 
 		Foxtrick.addClass(joinedEl, 'smallText ft-since');
 		joinedEl.textContent = joinedEl.textContent.replace(')', '');

@@ -106,7 +106,9 @@ Foxtrick.api.hy.getYouthSkills = function(teamId) {
  * @prop {number} [cap_minimal]
  * @prop {number} [cap_maximal]
  */
-
+/**
+ * @typedef {number} HYExp
+ */
 /**
  * @typedef {keyof Foxtrick.api.hy.skillMap} HYSkillIdx
  * @typedef {Record<HYSkillIdx, HYSkill>} HYSkills
@@ -114,6 +116,6 @@ Foxtrick.api.hy.getYouthSkills = function(teamId) {
 /**
  * @typedef HYPlayer
  * @prop {number} speciality HY Typo
- * @prop {HYSkills} skills
+ * @prop {HYSkills|HYExp} skills
  */
 /** @typedef {Record<number, HYPlayer>} HYPlayers */
