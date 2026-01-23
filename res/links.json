@@ -426,17 +426,17 @@
 		"title": "Hattid",
 		"img": "https://foxtrick-ng.github.io/foxtrick/linkicons/hattid.png"
 	},
-	"ratemyacademy": {
+	"scoutrick": {
 		"youthlink": {
-			"url": "https://www.rate-my.academy/"
+			"url": "https://www.scoutrick.org/"
 		},
 		"youthplayerlistlink": {
-			"url": "https://www.rate-my.academy/"
+			"url": "https://www.scoutrick.org/"
 		},
 		"youthplayerdetaillink": {
-			"url": "https://www.rate-my.academy/"
+			"url": "https://www.scoutrick.org/"
 		},
-		"title": "Rate My Academy",
+		"title": "Scoutrick",
 		"img": "https://foxtrick-ng.github.io/foxtrick/linkicons/ratemyacademy.ico"
 	},
 	"hattrickorganizer": {
