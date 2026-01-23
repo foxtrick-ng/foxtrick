@@ -29,7 +29,7 @@ Foxtrick.L10n = (() => ({
 	 * Test if a string is localized
 	 *
 	 * @param  {string}  str locale key
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	isStringAvailableLocal(str) { return false; },
 
@@ -37,7 +37,7 @@ Foxtrick.L10n = (() => ({
 	 * Test if a string exists
 	 *
 	 * @param  {string}  str locale key
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	isStringAvailable(str) { return false; },
 
@@ -46,10 +46,9 @@ Foxtrick.L10n = (() => ({
 	 *
 	 * Optionally returns the correct plural form (or last if matching fails).
 	 * @throws if string is n/a
-	 *
 	 * @param  {string} str locale key
 	 * @param  {number} [num] number to substitute in plural (optional integer)
-	 * @return {string}
+	 * @returns {string}
 	 */
 	getString(str, num) { return ''; },
 
@@ -58,11 +57,10 @@ Foxtrick.L10n = (() => ({
 	 *
 	 * Optionally returns the correct plural form (or last if matching fails).
 	 * @throws if string is n/a
-	 *
 	 * @param  {string} str locale key
 	 * @param  {string} locale locale code (e.g. en-GB)
 	 * @param  {number} [num] number to substitute in plural (optional integer)
-	 * @return {Promise<string>}
+	 * @returns {Promise<string>}
 	 */
 	async getStringInLocale(str, locale, num) { return ''; },
 
@@ -72,7 +70,7 @@ Foxtrick.L10n = (() => ({
 
 Foxtrick.L10n.L10N_PATH = Foxtrick.InternalPath + 'locale/';
 
-/* eslint-disable no-multi-spaces */
+
 /**
  * List of FT locale IDs/folders.
  *
@@ -141,7 +139,6 @@ Foxtrick.L10n.locales = [
 	'zh-CN',  // 15  中文（简体）, Chinese (Simplified)
 ];
 
-/* eslint-disable quote-props, key-spacing */
 /**
  * Map HT Content-Language to FT locale ID/folder.
  *
@@ -149,7 +146,7 @@ Foxtrick.L10n.locales = [
  * Names and numeric IDs are also available in worldlanguages.xml
  *
  * {string: string}
- * @type {Object} {string: string}
+ * @type {object} {string: string}
  */
 Foxtrick.L10n.htMapping = {
 	'ar':    'ar',     // 22  العربية, arabic
@@ -209,13 +206,11 @@ Foxtrick.L10n.htMapping = {
 	'zh':    'zh-CN',  // 15  中文（简体）, Chinese (Simplified)
 };
 
-/* eslint-enable no-multi-spaces, quote-props, key-spacing */
-
 /**
  * Language definitions from htlang.json files
  *
  * langCode->object map
- * @type {Object} {string: object}
+ * @type {object} {string: object}
  */
 Foxtrick.L10n.htLanguagesJSON = {};
 
@@ -223,14 +218,14 @@ Foxtrick.L10n.htLanguagesJSON = {};
  * Plural form of the selected language
  *
  * @see https://developer.mozilla.org/en/Localization_and_Plurals
- * @type {Number} {Integer}
+ * @type {number} {Integer}
  */
 Foxtrick.L10n.plForm = 0;
 
 /**
  * Plural form of the default language
  *
- * @type {Number} {Integer}
+ * @type {number} {Integer}
  */
 Foxtrick.L10n.plFormDefault = 0;
 
@@ -241,7 +236,7 @@ Foxtrick.L10n.plFormDefault = 0;
  * @param  {string}            str    locale key
  * @param  {Element}           parent
  * @param  {string}            url
- * @return {HTMLAnchorElement}
+ * @returns {HTMLAnchorElement}
  */
 Foxtrick.L10n.appendLink = function(str, parent, url) {
 	var doc = parent.ownerDocument;
@@ -269,10 +264,10 @@ Foxtrick.L10n.appendLink = function(str, parent, url) {
 
 /**
  * @typedef HTLangPropQuery
- * @prop {string} category
- * @prop {string} filter
- * @prop {string|number} value
- * @prop {string} property
+ * @property {string} category
+ * @property {string} filter
+ * @property {string|number} value
+ * @property {string} property
  */
 
 /**
@@ -288,7 +283,7 @@ Foxtrick.L10n.appendLink = function(str, parent, url) {
  *
  * @param  {HTLangPropQuery} query  {category, filter, value, property: string}
  * @param  {string}          [lang] language code
- * @return {string}                 property value
+ * @returns {string}                 property value
  */
 Foxtrick.L10n.getHTLangProperty = function(query, lang) {
 	var prop = null;
@@ -328,7 +323,7 @@ Foxtrick.L10n.getHTLangProperty = function(query, lang) {
  *
  * @param  {HTLangPropQuery} query  {category, filter, value, property: string}
  * @param  {string}          [lang] language code
- * @return {string}                 property value
+ * @returns {string}                 property value
  */
 Foxtrick.L10n.getLocalOrEnglish = function(query, lang) {
 	let l = lang || Foxtrick.Prefs.getString('htLanguage');
@@ -358,7 +353,7 @@ Foxtrick.L10n.getLocalOrEnglish = function(query, lang) {
  * Skill level may also include sub-skill.
  *
  * @param  {string} text
- * @return {number}
+ * @returns {number}
  */
 Foxtrick.L10n.getLevelFromText = function(text) {
 	var txt = text.trim();
@@ -399,7 +394,7 @@ Foxtrick.L10n.getLevelFromText = function(text) {
  * Takes an integer, e.g. 7->solid.
  *
  * @param  {number} value {Integer}
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getTextByLevel = function(value) {
 	var query = {
@@ -421,12 +416,11 @@ Foxtrick.L10n.getTextByLevel = function(value) {
  *
  * @param  {string} type {levels|agreeability|honesty|aggressiveness}
  * @param  {number} val  {Integer}
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getLevelByTypeAndValue = function(type, val) {
 	var numVal = parseInt(String(val), 10) || 0;
 
-	// eslint-disable-next-line no-magic-numbers
 	var cappedVal = Math.min(numVal, 20); // cap divine
 	var query = {
 		category: type,
@@ -450,7 +444,7 @@ Foxtrick.L10n.getLevelByTypeAndValue = function(type, val) {
  * NOTE: returned string is trimmed and parenthesized
  *
  * @param  {string} val
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getSublevelByValue = function(val) {
 	var query = {
@@ -475,7 +469,7 @@ Foxtrick.L10n.getSublevelByValue = function(val) {
  * Skill level may also include sub-skill.
  *
  * @param  {number} val
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getFullLevelByValue = function(val) {
 	const thresholds = ['0', '0.25', '0.5', '0.75'];
@@ -501,11 +495,10 @@ Foxtrick.L10n.getFullLevelByValue = function(val) {
  * Get a (trimmed) string representation of a tactic
  *
  * @param  {number} id {Integer}
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getTacticById = function(id) {
 	var tactics = [
-		/* eslint-disable no-multi-spaces */
 		'normal',     // 0
 		'pressing',   // 1
 		'ca',         // 2
@@ -515,7 +508,6 @@ Foxtrick.L10n.getTacticById = function(id) {
 		'',           // 6 (N/A)
 		'creatively', // 7
 		'longshots',  // 8
-		/* eslint-enable no-multi-spaces */
 	];
 
 	var query = {
@@ -533,7 +525,7 @@ Foxtrick.L10n.getTacticById = function(id) {
  * Both strings localized.
  *
  * @param  {string} pos
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getShortPosition = function(pos) {
 	var defaultAbbr = function(pos) {
@@ -567,7 +559,7 @@ Foxtrick.L10n.getShortPosition = function(pos) {
  * Get l10n spec abbreviation from English spec
  *
  * @param  {string} spec
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getShortSpecialtyFromEnglish = function(spec) {
 	return Foxtrick.L10n.getString('specialty.' + spec + '.abbr');
@@ -577,7 +569,7 @@ Foxtrick.L10n.getShortSpecialtyFromEnglish = function(spec) {
  * Translate spec
  *
  * @param  {string} spec
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getEnglishSpecialty = function(spec) {
 	if (!spec)
@@ -602,7 +594,7 @@ Foxtrick.L10n.getEnglishSpecialty = function(spec) {
  * Map spec code to English spec
  *
  * @param  {number} number {Integer}
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getEnglishSpecialtyFromNumber = function(number) {
 	var specs = [
@@ -625,7 +617,7 @@ Foxtrick.L10n.getEnglishSpecialtyFromNumber = function(number) {
  * Map spec code to l10n spec (trimmed)
  *
  * @param  {number} number {Integer}
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getSpecialtyFromNumber = function(number) {
 	var spec = this.getEnglishSpecialtyFromNumber(number);
@@ -643,7 +635,7 @@ Foxtrick.L10n.getSpecialtyFromNumber = function(number) {
  * Map l10n spec to spec code
  *
  * @param  {string} specialty
- * @return {number}            {Integer}
+ * @returns {number}            {Integer}
  */
 Foxtrick.L10n.getNumberFromSpecialty = function(specialty) {
 	var engSpec = this.getEnglishSpecialty(specialty);
@@ -670,7 +662,7 @@ Foxtrick.L10n.getNumberFromSpecialty = function(specialty) {
  * Map English category abbr to category id
  *
  * @param  {string} cat
- * @return {number}     {Integer}
+ * @returns {number}     {Integer}
  */
 Foxtrick.L10n.getCategoryId = function(cat) {
 	// TODO: extract to util
@@ -687,7 +679,7 @@ Foxtrick.L10n.getCategoryId = function(cat) {
  * Map category id to English category abbr
  *
  * @param  {number} id {Integer}
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getCategoryById = function(id) {
 	// TODO: extract to util
@@ -699,7 +691,7 @@ Foxtrick.L10n.getCategoryById = function(id) {
  * Map position id to position type
  *
  * @param  {number} id {Integer}
- * @return {PositionType}
+ * @returns {PositionType}
  */
 Foxtrick.L10n.getPositionTypeById = function(id) {
 	var type = null;
@@ -740,7 +732,7 @@ Foxtrick.L10n.getPositionTypeById = function(id) {
  * Map position type to l10n position
  *
  * @param  {string} val
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getPositionByType = function(val) {
 	var query = {
@@ -760,7 +752,7 @@ Foxtrick.L10n.getPositionByType = function(val) {
  * Map l10n position to position type
  *
  * @param  {string} pos
- * @return {PositionType}
+ * @returns {PositionType}
  */
 Foxtrick.L10n.getPositionType = function(pos) {
 	var query = {
@@ -780,12 +772,12 @@ Foxtrick.L10n.getPositionType = function(pos) {
  * Returns 'New Moon' if the method fails.
  *
  * @param  {number} leagueId
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getCountryName = function(leagueId) {
 	/**
 	 * @param  {number} n
-	 * @return {string}
+	 * @returns {string}
 	 */
 	var method = n => this.getCountryNameLocal(n);
 
@@ -805,7 +797,7 @@ Foxtrick.L10n.getCountryName = function(leagueId) {
  * Returns 'New Moon' if the method fails.
  *
  * @param  {number} leagueId
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getCountryNameEnglish = function(leagueId) {
 	var ret = 'New Moon';
@@ -824,7 +816,7 @@ Foxtrick.L10n.getCountryNameEnglish = function(leagueId) {
  * Returns 'New Moon' if the method fails.
  *
  * @param  {number} leagueId
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getCountryNameNative = function(leagueId) {
 	var ret = 'New Moon';
@@ -847,7 +839,7 @@ Foxtrick.L10n.getCountryNameNative = function(leagueId) {
  *
  * @param  {number} leagueId
  * @param  {string} [lang]   language (optional)
- * @return {string}
+ * @returns {string}
  */
 Foxtrick.L10n.getCountryNameLocal = function(leagueId, lang) {
 	var ret = 'New Moon';
@@ -1191,7 +1183,7 @@ Foxtrick.L10n.getLocaleByLeagueId = async function(leagueId) {
 
 					return '';
 				}
-				catch (e) {
+				catch {
 					Foxtrick.log(new Error(`Error getScreenshot('${str}')`));
 					return '';
 				}
