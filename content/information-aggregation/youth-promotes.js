@@ -6,6 +6,15 @@
 
 'use strict';
 
+/**
+ * @param {Date} date
+ */
+const calculateWeekAndSeason = (date) => {
+		const weekOffsetText = parseInt(Foxtrick.Prefs.getString(`module.HTDateFormat.FirstDayOfWeekOffset_text`));
+		const useLocal = Foxtrick.Prefs.isModuleOptionEnabled('HTDateFormat', 'LocalSeason');
+		return Foxtrick.util.time.gregorianToHT(date, weekOffsetText, useLocal);
+}
+
 Foxtrick.modules.YouthPromotes = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.INFORMATION_AGGREGATION,
 	PAGES: ['youthPlayerDetails'],
@@ -38,8 +47,12 @@ Foxtrick.modules.YouthPromotes = {
 		if (promoDate > now) { // you have to wait to promote
 			let date = Foxtrick.util.time.buildDate(promoDate);
 			let daysToPromote = Math.ceil((promoDate.getTime() - now.getTime()) / MSECS_IN_DAY);
+			const { week, season } = calculateWeekAndSeason(promoDate);
 			let message = Foxtrick.L10n.getString('YouthPromotes.future', daysToPromote);
-			message = message.replace(/%1/, daysToPromote.toString()).replace(/%2/, date);
+			message = message
+				.replace(/%1/, daysToPromote.toString())
+				.replace(/%2/, date)
+				.replace(/%3/,`${week}/${season}`);
 			promotionCounter.textContent = message;
 
 			let age = Foxtrick.Pages.Player.getAge(doc);
