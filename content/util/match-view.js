@@ -137,24 +137,32 @@ Foxtrick.util.matchView.fillMatches = function(container, xml, errorText) {
 		var matchCell = doc.createElement('td');
 		var matchLink = doc.createElement('a');
 		matchLink.dataset.matchType = match.type;
-		
+
 		let sourceSystem = 'Hattrick';
 		if (isNt)
 			sourceSystem = 'HTOIntegrated';
 		else if (isYouth)
 			sourceSystem = 'Youth';
-		
+
 		matchLink.href = '/Club/Matches/Match.aspx?matchID=' + match.id + '&SourceSystem=' + sourceSystem;
 
-		// limit team name length to fit in one line
-		var cutLength = 12;
+		// limit team name lengths to fit in one line
+		const minLenth = 12;
+		const maxLength = 16;
+		let homeTeam = match.home;
+		let awayTeam = match.away;
+		if (homeTeam.length + awayTeam.length > maxLength * 2) {
+			const underMax = l => l < maxLength ? maxLength - Math.min(l, minLenth) : 0;
+			homeTeam = homeTeam.slice(0, maxLength + underMax(awayTeam.length));
+			awayTeam = awayTeam.slice(0, maxLength + underMax(homeTeam.length));
+		}
+
 		var spanHome = doc.createElement('span');
 		spanHome.className = 'nowrap';
-		spanHome.textContent = match.home.slice(0, cutLength);
-
+		spanHome.textContent = homeTeam;
 		var spanAway = doc.createElement('span');
 		spanAway.className = 'nowrap';
-		spanAway.textContent = match.away.slice(0, cutLength);
+		spanAway.textContent = awayTeam;
 
 		if (!IS_RTL) {
 			matchLink.title = match.home + ' - ' + match.away;

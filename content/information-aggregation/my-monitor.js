@@ -235,10 +235,12 @@ Foxtrick.modules.MyMonitor = {
 
 			div.appendChild(tbl);
 
-			// separator at the bottom
-			var separator = doc.createElement('div');
-			separator.className = 'separator';
-			div.appendChild(separator);
+			// separator at the bottom (old dashboard only)
+			if (Foxtrick.isPage(doc, 'dashboard')) {
+				var separator = doc.createElement('div');
+				separator.className = 'separator';
+				div.appendChild(separator);
+			}
 		};
 
 		/**
@@ -247,31 +249,54 @@ Foxtrick.modules.MyMonitor = {
 		 * @param {document} doc
 		 */
 		var display = function(doc) {
-			var monitor = Foxtrick.createFeaturedElement(doc, module, 'div');
-			monitor.id = 'ft-monitor-div';
+			const isDashboard = Foxtrick.isPage(doc, 'dashboard');
+			const isOffice = Foxtrick.isPage(doc, 'office');
+			/** @type {HTMLDivElement} */
+			let monitor;
 
-			if (Foxtrick.isPage(doc, 'dashboard')) {
+			if (isDashboard) {
+				monitor = Foxtrick.createFeaturedElement(doc, module, 'div');
 				doc.getElementById('mainBody').appendChild(monitor);
+				const header = doc.createElement('h2');
+
+				// header.id = 'ft-monitor-header';
+				header.textContent = Foxtrick.L10n.getString('MyMonitor.header');
+				monitor.appendChild(header);
+			} else if (isOffice) {
+				const officeItem = Foxtrick.createFeaturedElement(doc, module, 'div');
+				Foxtrick.addClass(officeItem, 'office-item');
+
+				const box = doc.createElement('div');
+				Foxtrick.addClass(box, 'box');
+				const boxHead = doc.createElement('div');
+				Foxtrick.addClass(boxHead, 'boxHead');
+				const iconSpan = doc.createElement('span');
+				Foxtrick.addClass(iconSpan, 'header-icon ft-header-icon');
+				const title = doc.createElement('h2')
+				Foxtrick.addClass(title, 'ellipsis');
+				title.textContent = Foxtrick.L10n.getString('MyMonitor.header')
+
+				const boxBody = doc.createElement('div');
+				Foxtrick.addClass(boxBody, 'boxBody');
+				monitor = doc.createElement('div');
+
+				officeItem.appendChild(box);
+				box.appendChild(boxHead);
+				boxHead.appendChild(iconSpan)
+				boxHead.appendChild(title);
+				box.appendChild(boxBody);
+				boxBody.appendChild(monitor);
+
+				const insertPoint = doc.querySelector('#mainBody');
+				insertPoint && insertPoint.appendChild(officeItem);
 			}
-			else if (Foxtrick.isPage(doc, 'office')) {
-				let wrapper = doc.createElement('div');
-				Foxtrick.addClass(wrapper, 'box');
-				Foxtrick.addClass(monitor, 'boxBody');
-				wrapper.appendChild(monitor);
-				doc.querySelector('#mainBody .mainRegular').appendChild(wrapper);
-			}
-			else {
-				return;
-			}
+
+			if (monitor)
+				monitor.id = 'ft-monitor-div';
+			else
+				return
 
 			var gTeams = getSavedTeams();
-
-			// header - 'My Monitor'
-			var header = doc.createElement('h2');
-
-			// header.id = 'ft-monitor-header';
-			header.textContent = Foxtrick.L10n.getString('MyMonitor.header');
-			monitor.appendChild(header);
 
 			// automatic sorters
 			var sortDiv = Foxtrick.createFeaturedElement(doc, module, 'div');
@@ -578,7 +603,7 @@ Foxtrick.modules.MyMonitor = {
 				// @ts-ignore
 				.catch(Foxtrick.catch(module));
 
-			addBulkLiveSelect(monitor);
+			addBulkLiveSelect(isDashboard ? monitor : monitor.parentElement);
 		};
 
 		/**
