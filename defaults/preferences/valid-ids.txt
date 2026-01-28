@@ -122,7 +122,6 @@ module.FixcssProblems.MatchReportRatingsFontFix.enabled
 module.FixcssProblems.RTL_Fixes.enabled
 module.FixcssProblems.RemoveForumSneakPeak.enabled
 module.FixcssProblems.enabled
-module.FlagCollectionToMap.enabled
 module.FormatPostingText.NestedQuotesAsSpoilers.enabled
 module.FormatPostingText.NestedQuotesAsSpoilers_text
 module.FormatPostingText.enabled
