@@ -77,7 +77,6 @@ module.CurrencyConverter.enabled
 module.CurrencyConverter.to
 module.CurrentTransfers.enabled
 module.CustomMedals.enabled
-module.DashboardCalendar.enabled
 module.DirectPageLinks.enabled
 module.ElectionTable.enabled
 module.EmbedMedia.EmbedDailymotionVideos.enabled
@@ -122,7 +121,6 @@ module.FixcssProblems.MatchReportRatingsFontFix.enabled
 module.FixcssProblems.RTL_Fixes.enabled
 module.FixcssProblems.RemoveForumSneakPeak.enabled
 module.FixcssProblems.enabled
-module.FlagCollectionToMap.enabled
 module.FormatPostingText.NestedQuotesAsSpoilers.enabled
 module.FormatPostingText.NestedQuotesAsSpoilers_text
 module.FormatPostingText.enabled
@@ -208,8 +206,6 @@ module.HighlightOwnerless.enabled
 module.HistoryStats.enabled
 module.LargeFlags.enabled
 module.LastLogin.enabled
-module.LeagueNewsFilter.enabled
-module.LeagueNewsFilter.value
 module.LineupShortcut.enabled
 module.Links.ReuseTab.enabled
 module.Links.feedsList
@@ -365,8 +361,6 @@ module.LiveAlert.opponent_text
 module.LiveAlert.own.enabled
 module.LiveAlert.own_text
 module.LiveMatchReportFormat.enabled
-module.LocalTime.enabled
-module.LocalTime.local
 module.LoyaltyDisplay.enabled
 module.ManagerButtons.GuestBook.enabled
 module.ManagerButtons.enabled
