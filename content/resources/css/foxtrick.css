@@ -452,3 +452,8 @@ background-color: #eed;
 html[data-theme="simple"] tr.darkereven {
 	background-color: #dde1dd;
 }
+
+/* ft box header icons */
+.ft-header-icon::before {
+	content: url('chrome://foxtrick/content/resources/img/header-icon.png') / 'Foxtrick';
+}
