@@ -67,10 +67,39 @@ Foxtrick.modules.Links = {
 
 	/** @return {Promise<LinkCollection>} */
 	getCollection: async function() {
+		//FIXME: this is madness
+		// we should have a default feed url set somewhere (prefs?)
+		// and an 'include default feed' option that users can disable
+
 		// load links from external feeds
 		let feedSpec = Foxtrick.Prefs.getString('module.Links.feedsList') || '';
 		let feeds = feedSpec.split(/(\n|\r|\\n|\\r)+/);
-		feeds = Foxtrick.filter(n => n.trim() !== '', feeds);
+
+		const oldCdn = 'https://cdn.rawgit.com/minj/foxtrick/res/%d/res/links.json';
+		let oldCdnPresent = false;
+		const newCdn = 'https://foxtrick-ng.github.io/foxtrick/links.json';
+		let newCdnPresent = false;
+
+		feeds = Foxtrick.filter(n => {
+			const feed = n.trim();
+			// ignore old cdn url and flag for replacement in prefs
+			if (feed === oldCdn) {
+				oldCdnPresent = true;
+				return false;
+			} else if (feed === newCdn) {
+				newCdnPresent = true;
+				return true;
+			}
+			return feed !== '';
+		}, feeds);
+
+		if (oldCdnPresent) {
+			if (!newCdnPresent)
+				feeds.push(newCdn);
+
+			const newFeeds = feeds.join('\n');
+			Foxtrick.Prefs.setString('module.Links.feedsList', newFeeds);
+		}
 
 		// use the default feed if no feeds set or using dev/android
 		if (feeds.length === 0 ||
