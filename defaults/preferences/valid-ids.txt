@@ -206,8 +206,6 @@ module.HighlightOwnerless.enabled
 module.HistoryStats.enabled
 module.LargeFlags.enabled
 module.LastLogin.enabled
-module.LeagueNewsFilter.enabled
-module.LeagueNewsFilter.value
 module.LineupShortcut.enabled
 module.Links.ReuseTab.enabled
 module.Links.feedsList
