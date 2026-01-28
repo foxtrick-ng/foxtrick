@@ -1,0 +1,246 @@
+{
+  "HattrickData": {
+    "LanguageList": [
+      {
+        "LanguageID": "1",
+        "LanguageName": "Svenska",
+        "Locale": "sv-SE"
+      },
+      {
+        "LanguageID": "2",
+        "LanguageName": "English (UK)",
+        "Locale": "en-GB"
+      },
+      {
+        "LanguageID": "3",
+        "LanguageName": "Deutsch",
+        "Locale": "de"
+      },
+      {
+        "LanguageID": "4",
+        "LanguageName": "Italiano",
+        "Locale": "it"
+      },
+      {
+        "LanguageID": "5",
+        "LanguageName": "Français",
+        "Locale": "fr"
+      },
+      {
+        "LanguageID": "6",
+        "LanguageName": "Español, España",
+        "Locale": "es-ES"
+      },
+      {
+        "LanguageID": "7",
+        "LanguageName": "Norsk, bokmål",
+        "Locale": "no"
+      },
+      {
+        "LanguageID": "8",
+        "LanguageName": "Dansk",
+        "Locale": "da"
+      },
+      {
+        "LanguageID": "9",
+        "LanguageName": "Suomi",
+        "Locale": "fi"
+      },
+      {
+        "LanguageID": "10",
+        "LanguageName": "Nederlands",
+        "Locale": "nl"
+      },
+      {
+        "LanguageID": "11",
+        "LanguageName": "Português",
+        "Locale": "pt-PT"
+      },
+      {
+        "LanguageID": "12",
+        "LanguageName": "Japanese",
+        "Locale": "ja"
+      },
+      {
+        "LanguageID": "13",
+        "LanguageName": "Polski",
+        "Locale": "pl"
+      },
+      {
+        "LanguageID": "14",
+        "LanguageName": "Russian",
+        "Locale": "ru"
+      },
+      {
+        "LanguageID": "15",
+        "LanguageName": "Chinese",
+        "Locale": "zh-CN"
+      },
+      {
+        "LanguageID": "17",
+        "LanguageName": "Korean",
+        "Locale": "ko"
+      },
+      {
+        "LanguageID": "19",
+        "LanguageName": "Türkçe",
+        "Locale": "tr"
+      },
+      {
+        "LanguageID": "22",
+        "LanguageName": "Arabic",
+        "Locale": "ar"
+      },
+      {
+        "LanguageID": "23",
+        "LanguageName": "Romanian",
+        "Locale": "ro"
+      },
+      {
+        "LanguageID": "25",
+        "LanguageName": "Íslenska",
+        "Locale": "is"
+      },
+      {
+        "LanguageID": "32",
+        "LanguageName": "Srpski",
+        "Locale": "sr"
+      },
+      {
+        "LanguageID": "33",
+        "LanguageName": "Magyar",
+        "Locale": "hu"
+      },
+      {
+        "LanguageID": "34",
+        "LanguageName": "Ellinika",
+        "Locale": "el"
+      },
+      {
+        "LanguageID": "35",
+        "LanguageName": "Česky",
+        "Locale": "cs"
+      },
+      {
+        "LanguageID": "36",
+        "LanguageName": "Estonian",
+        "Locale": "et"
+      },
+      {
+        "LanguageID": "37",
+        "LanguageName": "Latviešu",
+        "Locale": "lv"
+      },
+      {
+        "LanguageID": "39",
+        "LanguageName": "Hrvatski",
+        "Locale": "hr"
+      },
+      {
+        "LanguageID": "40",
+        "LanguageName": "Hebrew",
+        "Locale": "he"
+      },
+      {
+        "LanguageID": "43",
+        "LanguageName": "Bulgarian",
+        "Locale": "bg"
+      },
+      {
+        "LanguageID": "45",
+        "LanguageName": "Slovenščina",
+        "Locale": "sl"
+      },
+      {
+        "LanguageID": "50",
+        "LanguageName": "Português, Brasil",
+        "Locale": "pt-BR"
+      },
+      {
+        "LanguageID": "51",
+        "LanguageName": "Español, Rioplatense",
+        "Locale": "es-AR"
+      },
+      {
+        "LanguageID": "53",
+        "LanguageName": "Slovensky",
+        "Locale": "sk"
+      },
+      {
+        "LanguageID": "55",
+        "LanguageName": "Tiếng Việt",
+        "Locale": "vi"
+      },
+      {
+        "LanguageID": "56",
+        "LanguageName": "Lietuvių",
+        "Locale": "lt"
+      },
+      {
+        "LanguageID": "57",
+        "LanguageName": "Ukrainian",
+        "Locale": "uk"
+      },
+      {
+        "LanguageID": "58",
+        "LanguageName": "Bosnian",
+        "Locale": "bs"
+      },
+      {
+        "LanguageID": "65",
+        "LanguageName": "Vlaams",
+        "Locale": "vls-BE"
+      },
+      {
+        "LanguageID": "66",
+        "LanguageName": "Català",
+        "Locale": "ca"
+      },
+      {
+        "LanguageID": "75",
+        "LanguageName": "Persian",
+        "Locale": "fa"
+      },
+      {
+        "LanguageID": "83",
+        "LanguageName": "Macedonian",
+        "Locale": "mk"
+      },
+      {
+        "LanguageID": "84",
+        "LanguageName": "Belarusian",
+        "Locale": "be"
+      },
+      {
+        "LanguageID": "85",
+        "LanguageName": "Albanian",
+        "Locale": "sq"
+      },
+      {
+        "LanguageID": "90",
+        "LanguageName": "Georgian",
+        "Locale": "ka"
+      },
+      {
+        "LanguageID": "100",
+        "LanguageName": "Azərbaycanca",
+        "Locale": "az"
+      },
+      {
+        "LanguageID": "103",
+        "LanguageName": "Español, Latinoamericano",
+        "Locale": "es-CR"
+      },
+      {
+        "LanguageID": "111",
+        "LanguageName": "Lëtzebuergesch",
+        "Locale": "lb"
+      },
+      {
+        "LanguageID": "151",
+        "LanguageName": "English (US)",
+        "Locale": "en-US"
+      }
+    ]
+  }
+}

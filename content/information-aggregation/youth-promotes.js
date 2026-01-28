@@ -10,23 +10,58 @@ Foxtrick.modules.YouthPromotes = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.INFORMATION_AGGREGATION,
 	PAGES: ['youthPlayerDetails'],
 
+	/**
+	 * @param {document} doc
+	 * @returns {?YouthPromotionInfo}
+	 */
+	getPromotionInfo: function(doc) {
+		const DAYS_IN_SEASON = Foxtrick.util.time.DAYS_IN_SEASON;
+		const MSECS_IN_DAY = Foxtrick.util.time.MSECS_IN_DAY;
+
+		const promoDate = Foxtrick.Pages.YouthPlayer.getPromotionDate(doc);
+		if (!promoDate)
+			return null;
+
+		const htNow = Foxtrick.util.time.getHTDate(doc);
+		const promoHT = Foxtrick.util.time.toHT(doc, promoDate);
+		if (!htNow || !promoHT)
+			return null;
+
+		Foxtrick.util.time.setMidnight(htNow);
+		Foxtrick.util.time.setMidnight(promoHT);
+
+		if (htNow >= promoHT)
+			return {status: 'today'};
+
+		const promotionDate = Foxtrick.util.time.buildDate(promoDate);
+		const daysToPromote = Math.ceil((promoHT.getTime() - htNow.getTime()) / MSECS_IN_DAY);
+		const ageDaysToPromote = Math.round((promoHT.getTime() - htNow.getTime()) / MSECS_IN_DAY);
+
+		const age = Foxtrick.Pages.Player.getAge(doc);
+		if (!age)
+			return null;
+
+		let totalDays = age.years * DAYS_IN_SEASON + age.days + ageDaysToPromote;
+		let years = Foxtrick.Math.div(totalDays, DAYS_IN_SEASON);
+		totalDays %= DAYS_IN_SEASON;
+		let days = totalDays;
+
+		return {
+			status: 'future',
+			daysToPromote: daysToPromote,
+			promotionDate: promotionDate,
+			promotionAge: {years: years, days: days},
+		};
+	},
+
 	/** @param {document} doc */
 	run: function(doc) {
 		const module = this;
 		if (Foxtrick.Pages.YouthPlayer.wasFired(doc))
 			return;
 
-		const DAYS_IN_SEASON = Foxtrick.util.time.DAYS_IN_SEASON;
-		const MSECS_IN_DAY = Foxtrick.util.time.MSECS_IN_DAY;
-
-		const now = Foxtrick.util.time.getDate(doc);
-		if (!now) {
-			Foxtrick.log('User time missing');
-			return;
-		}
-
-		const promoDate = Foxtrick.Pages.YouthPlayer.getPromotionDate(doc);
-		if (!promoDate)
+		const promotionInfo = module.getPromotionInfo(doc);
+		if (!promotionInfo)
 			return;
 
 		let birthdayCell = doc.querySelector('#mainBody div.byline');
@@ -35,24 +70,17 @@ Foxtrick.modules.YouthPromotes = {
 		let promotionCounter = Foxtrick.createFeaturedElement(doc, module, 'p');
 		promotion.appendChild(promotionCounter);
 
-		if (promoDate > now) { // you have to wait to promote
-			let date = Foxtrick.util.time.buildDate(promoDate);
-			let daysToPromote = Math.ceil((promoDate.getTime() - now.getTime()) / MSECS_IN_DAY);
-			let message = Foxtrick.L10n.getString('YouthPromotes.future', daysToPromote);
-			message = message.replace(/%1/, daysToPromote.toString()).replace(/%2/, date);
+		if (promotionInfo.status === 'future') { // you have to wait to promote
+			let message = Foxtrick.L10n.getString('YouthPromotes.future', promotionInfo.daysToPromote);
+			message = message.replace(/%1/, promotionInfo.daysToPromote.toString())
+				.replace(/%2/, promotionInfo.promotionDate);
 			promotionCounter.textContent = message;
 
-			let age = Foxtrick.Pages.Player.getAge(doc);
-			if (!age)
-				return;
-
-			let days = age.years * DAYS_IN_SEASON + age.days + daysToPromote;
-
-			let years = Foxtrick.Math.div(days, DAYS_IN_SEASON);
+			let years = promotionInfo.promotionAge.years;
 			let yearsL10n = Foxtrick.L10n.getString('datetimestrings.years', years);
 			let yearsString = `${years} ${yearsL10n}`;
 
-			days %= DAYS_IN_SEASON;
+			let days = promotionInfo.promotionAge.days;
 			let daysL10n = Foxtrick.L10n.getString('datetimestrings.days', days);
 			let daysString = `${days} ${daysL10n}`;
 
@@ -73,3 +101,11 @@ Foxtrick.modules.YouthPromotes = {
 
 	},
 };
+
+/**
+ * @typedef YouthPromotionInfo
+ * @property {'today'|'future'} status
+ * @property {number} [daysToPromote]
+ * @property {string} [promotionDate]
+ * @property {{years:number, days:number}} [promotionAge]
+ */

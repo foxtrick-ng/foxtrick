@@ -5,3 +5,18 @@ html[data-theme="standard"] .copyicon.ft-copy-player-ad {
 html[data-theme="simple"] .copyicon.ft-copy-player-ad {
 	background-image: url("chrome://foxtrick/content/resources/img/copy/copyPlayerAd_s.png");
 }
+
+/* apply FT branding to modified HT copy meny */
+.copyWrapper ul li.ft-copy-player-ad {
+	background-color: #efefff;
+	background-image: url('chrome://foxtrick/content/resources/img/shortcuts/foxtrick.png');
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-size: 1em;
+	padding: 3px 10px 3px 15px;
+}
+
+/* highlight maxed skills in forum posts */
+#mainWrapper table.htMlTable td:has(em:empty), #mainWrapper table.htMlTable td:has(i:empty) {
+	background-color: #fd3;
+}

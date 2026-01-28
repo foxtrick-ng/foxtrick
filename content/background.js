@@ -67,6 +67,12 @@ Foxtrick.loader.background.browserLoad = async function() {
 		/** @type {Record<string, string>} */
 		var htLanguagesJSONText;
 
+		/** @type {Record<string, Record<string, string>>} */
+		var propertiesByLocale = {};
+
+		/** @type {Record<string, number>} */
+		var plFormByLocale = {};
+
 		let updateResources = async function(reInit) {
 			// init resources
 			await Foxtrick.entry.init(reInit);
@@ -82,6 +88,12 @@ Foxtrick.loader.background.browserLoad = async function() {
 				htLanguagesJSONText[lang] = JSON.stringify(obj);
 
 			cssTextCollection = await Foxtrick.util.css.getCssTextCollection();
+
+			let localeCode = Foxtrick.Prefs.getString('htLanguage');
+			if (localeCode) {
+				propertiesByLocale[localeCode] = Foxtrick.L10n.properties;
+				plFormByLocale[localeCode] = Foxtrick.L10n.plForm;
+			}
 
 			Foxtrick.Prefs.deleteValue('preferences.updated');
 		};
@@ -177,6 +189,63 @@ Foxtrick.loader.background.browserLoad = async function() {
 
 		// safari options page
 		this.requests.optionsPageLoad = this.requests.pageLoad;
+
+		// Load locale properties on-demand for content scripts
+		this.requests.getLocaleProperties = function({ locale }, sender, sendResponse) {
+			try {
+				let localeCode = String(locale || '').trim();
+				if (!localeCode) {
+					sendResponse(Foxtrick.jsonError(new Error('Missing locale')));
+					return false;
+				}
+
+				if (localeCode in propertiesByLocale && propertiesByLocale[localeCode] === null) {
+					sendResponse(Foxtrick.jsonError(new Error(`Missing locale properties for ${localeCode}`)));
+					return false;
+				}
+
+				if (propertiesByLocale[localeCode]) {
+					sendResponse({
+						locale: localeCode,
+						properties: propertiesByLocale[localeCode],
+						plForm: plFormByLocale[localeCode],
+					});
+					return false;
+				}
+
+				var l10nBundlePath = Foxtrick.L10n.L10N_PATH + localeCode + '/foxtrick.properties';
+
+				Foxtrick.util.load.internal(l10nBundlePath)
+					.then(props => {
+						let properties = Foxtrick.L10n.propertiesDefault;
+						let plForm = Foxtrick.L10n.plFormDefault;
+
+						if (props === null) {
+							propertiesByLocale[localeCode] = null;
+							plFormByLocale[localeCode] = null;
+							sendResponse(Foxtrick.jsonError(new Error(`Missing locale properties for ${localeCode}`)));
+							return;
+						} else {
+							properties = Foxtrick.L10n.__parse(props);
+							try {
+								let localRule = Foxtrick.L10n._getString(properties, 'pluralFormRuleID');
+								if (localRule)
+									plForm = parseInt(localRule.match(/\d+/), 10);
+							} catch { /* ignore */ }
+						}
+
+						propertiesByLocale[localeCode] = properties;
+						plFormByLocale[localeCode] = plForm;
+						sendResponse({ locale: localeCode, properties, plForm });
+					})
+					.catch(err => sendResponse(Foxtrick.jsonError(err)));
+
+				return true;
+			} catch (e) {
+				sendResponse(Foxtrick.jsonError(e));
+				return false;
+			}
+		};
 
 		// ----- end of init part. ------
 

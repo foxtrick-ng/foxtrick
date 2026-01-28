@@ -845,16 +845,18 @@ Foxtrick.util.time.toBareISOString = function(date) {
  * @prop {boolean} forceDHM useDHM even if everything is 0
  * @prop {boolean} useSWD display time in whole seasons, weeks and days (mod)
  * @prop {boolean} forceSWD useSWD even if everything is 0
+ * @prop {string} locale optional locale to use in formatting
  */
 
 /**
  * Build a season/week/day/hour/minute span from time difference in seconds.
  *
- * options is {useDHM, useSWD, forceSWD, forceDHM: boolean}:
+ * options is {useDHM, useSWD, forceSWD, forceDHM: boolean, locale: string}:
  * * where useDHM means display time in whole days (may be >6), hours and minutes,
  *   defaults to true, (false implies useSWD=true);
  * * where useSWD means display time in whole seasons, weeks and days (mod),
- *   defaults to false.
+ *   defaults to false;
+ * * where locale is an optional locale to use in formatting.
  *
  * Forcing options display respective parts even if they are equal to 0.
  *
@@ -862,11 +864,11 @@ Foxtrick.util.time.toBareISOString = function(date) {
  * or it's the last number when false (default).
  * @param  {document}               doc
  * @param  {number}                 secDiff   {Integer}
- * @param  {Partial<DateDeltaOpts>} [options] {{useDHM, useSWD, forceDHM, forceSWD: boolean}}
+ * @param  {Partial<DateDeltaOpts>} [options] {{useDHM, useSWD, forceDHM, forceSWD: boolean locale: string}}
  * @return {HTMLSpanElement}
  */
 // eslint-disable-next-line complexity
-Foxtrick.util.time.timeDiffToSpan = function(doc, secDiff, options) {
+Foxtrick.util.time.timeDiffToSpan = async function(doc, secDiff, options) {
 	// Returns the time difference as non-zero days/hours and minutes
 	// if !useDHM or useSWD shows non-zero seasons/weeks and days
 	// if forceDHM shows days/hours/minutes always
@@ -884,6 +886,7 @@ Foxtrick.util.time.timeDiffToSpan = function(doc, secDiff, options) {
 		useSWD: false,
 		forceDHM: false,
 		forceSWD: false,
+		locale: undefined,
 	};
 	Foxtrick.mergeValid(opts, options);
 	let useDHM = opts.useDHM || opts.forceDHM;
@@ -964,15 +967,20 @@ Foxtrick.util.time.timeDiffToSpan = function(doc, secDiff, options) {
 
 		/** @type {Node[]} */
 		let children = [];
-		Foxtrick.forEach(([value, key]) => {
+		for (let [value, key] of swd) {
 			let b = doc.createElement('b');
 			b.textContent = String(value);
 			children.push(b);
 
-			let str = Foxtrick.L10n.getString('datetimestrings.' + key, value);
+			let str;
+			if (opts.locale)
+				str = await Foxtrick.L10n.getStringInLocale('datetimestrings.' + key, opts.locale, value);
+			else
+				str = Foxtrick.L10n.getString('datetimestrings.' + key, value);
+
 			children.push(doc.createTextNode(str));
 			children.push(doc.createTextNode(' '));
-		}, swd);
+		}
 
 		if (!useDHM) {
 			// remove last space
@@ -1014,10 +1022,17 @@ Foxtrick.util.time.timeDiffToSpan = function(doc, secDiff, options) {
 			}, dhm);
 		}
 
-		let result = Foxtrick.map(([value, key]) => {
-			let str = Foxtrick.L10n.getString('datetimestrings.' + key, value);
-			return value + str;
-		}, dhm).join(' ');
+		let parts = [];
+		for (let [value, key] of dhm) {
+			let str;
+			if (opts.locale)
+				str = await Foxtrick.L10n.getStringInLocale('datetimestrings.' + key, opts.locale, value);
+			else
+				str = Foxtrick.L10n.getString('datetimestrings.' + key, value);
+
+			parts.push(value + str);
+		}
+		let result = parts.join(' ');
 
 		dateSpan.appendChild(doc.createTextNode(result));
 	}

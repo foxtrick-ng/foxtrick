@@ -99,6 +99,14 @@ Foxtrick.entry.contentScriptInit = function(data) {
 		Foxtrick.L10n.screenshots = data.screenshots;
 		Foxtrick.L10n.plFormDefault = data.plFormDefault;
 		Foxtrick.L10n.plForm = data.plForm;
+
+		let localeCode = Foxtrick.Prefs.getString('htLanguage');
+		Foxtrick.L10n.propertiesByLocale = {};
+		Foxtrick.L10n.plFormByLocale = {};
+		if (localeCode) {
+			Foxtrick.L10n.propertiesByLocale[localeCode] = Foxtrick.L10n.properties;
+			Foxtrick.L10n.plFormByLocale[localeCode] = Foxtrick.L10n.plForm;
+		}
 	}
 
 	for (let lang in data.htLangJSON)
@@ -235,7 +243,7 @@ Foxtrick.entry.run = function(doc) {
  * @param  {document} doc
  * @param  {Node[]}   changes
  */
-Foxtrick.entry.change = function(doc, changes) {
+Foxtrick.entry.change = async function(doc, changes) {
 	try {
 		// don't act to changes on the excluded pages
 		let mutationExcludes = [
@@ -285,9 +293,9 @@ Foxtrick.entry.change = function(doc, changes) {
 		let modules = Foxtrick.util.modules.getActive(doc);
 
 		// invoke niceRun to run modules
-		Foxtrick.entry.niceRun(modules, (m) => {
+		await Foxtrick.entry.niceRunAsync(modules, (m) => {
 			if (typeof m.change === 'function')
-				return () => m.change(doc);
+				return async () => m.change(doc);
 
 			return null;
 		});
@@ -296,6 +304,38 @@ Foxtrick.entry.change = function(doc, changes) {
 	}
 	catch (e) {
 		Foxtrick.log(e);
+	}
+};
+
+/**
+ * Make and run an async function for each module in the array in order of NICEness.
+ *
+ * makeFn(module) should return function(void) or null.
+ *
+ * @template {FTModule} M
+ * @param {M[]}                  modules {Array.<object>}
+ * @param {function(any):Function} makeFn  {function(object)->?function}
+ */
+Foxtrick.entry.niceRunAsync = async function(modules, makeFn) {
+	let mdls = Foxtrick.unique(modules);
+	mdls.sort(function(a, b) {
+		let aNice = a.NICE || 0;
+		let bNice = b.NICE || 0;
+		return aNice - bNice;
+	});
+
+	for (let m of mdls) {
+		try {
+			let fn = makeFn(m);
+			if (typeof fn === 'function')
+				await fn();
+		}
+		catch (e) {
+			if (m.MODULE_NAME)
+				Foxtrick.log('Error in', m.MODULE_NAME, ':', e);
+			else
+				Foxtrick.log(e);
+		}
 	}
 };
 
