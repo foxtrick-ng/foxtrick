@@ -138,7 +138,6 @@
 			"content/forum/staff-marker.js",
 			"content/information-aggregation/cross-table.js",
 			"content/information-aggregation/current-transfers.js",
-			"content/information-aggregation/dashboard-calendar.js",
 			"content/information-aggregation/election-table.js",
 			"content/information-aggregation/extended-player-details.js",
 			"content/information-aggregation/extra-player-info.js",

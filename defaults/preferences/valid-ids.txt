@@ -77,7 +77,6 @@ module.CurrencyConverter.enabled
 module.CurrencyConverter.to
 module.CurrentTransfers.enabled
 module.CustomMedals.enabled
-module.DashboardCalendar.enabled
 module.DirectPageLinks.enabled
 module.ElectionTable.enabled
 module.EmbedMedia.EmbedDailymotionVideos.enabled
