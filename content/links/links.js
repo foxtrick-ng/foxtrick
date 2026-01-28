@@ -241,7 +241,7 @@ Foxtrick.modules.Links = {
 		var makeAnchorElement = function(link, url, key) {
 			let { title, shorttitle, img, openinthesamewindow } = link;
 			let linkNode = doc.createElement('a');
-			if (isTracker) {
+			if (isTracker && !link.forceimg) {
 				let idStr = args.nationality || args.leagueid;
 				let id = typeof idStr == 'string' ? parseInt(idStr, 10) : idStr;
 				if (id)
@@ -530,6 +530,7 @@ Foxtrick.modules.Links = {
  * @typedef LinkDefinitionProps
  * @prop {string} title
  * @prop {string} [img]
+ * @prop {boolean} [forceimg]
  * @prop {string} [shorttitle]
  * @prop {true} [openinthesamewindow]
  * @prop {Record<string, string[]>} [SUM]
