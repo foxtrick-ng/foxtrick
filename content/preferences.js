@@ -366,10 +366,6 @@ var neededPermissions = [
 		modules: ['YouthSkills'],
 		types: { origins: ['https://*.hattrick-youthclub.org/*'] },
 	},
-	{
-		modules: ['MatchWeather'],
-		types: { origins: ['http://api.openweathermap.org/*'] },
-	},
 ];
 
 /**

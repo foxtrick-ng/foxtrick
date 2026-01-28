@@ -412,8 +412,6 @@ module.MatchSimulator.StaminaPrediction.enabled
 module.MatchSimulator.UseRatingsModule.enabled
 module.MatchSimulator.enabled
 module.MatchSimulator.value
-module.MatchWeather.Irl.enabled
-module.MatchWeather.enabled
 module.MercattrickStats.enabled
 module.MercattrickStats.enableTLPage.enabled
 module.MobileEnhancements.ViewPort.enabled

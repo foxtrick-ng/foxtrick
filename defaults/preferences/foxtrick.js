@@ -281,8 +281,6 @@ pref("extensions.foxtrick.prefs.module.MatchRatingsTweaks.RealProbabilities.enab
 pref("extensions.foxtrick.prefs.module.MatchReportFormat.enabled", true);
 pref("extensions.foxtrick.prefs.module.MatchReportFormat.ShowEventIcons.enabled", true);
 pref("extensions.foxtrick.prefs.module.LiveMatchReportFormat.enabled", true);
-pref("extensions.foxtrick.prefs.module.MatchWeather.enabled", true);
-pref("extensions.foxtrick.prefs.module.MatchWeather.Irl.enabled", true);
 pref("extensions.foxtrick.prefs.module.MercattrickStats.enabled", true);
 pref("extensions.foxtrick.prefs.module.MercattrickStats.enableTLPage.enabled", true);
 pref("extensions.foxtrick.prefs.module.MoveLinks.enabled", false);

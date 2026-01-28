@@ -136,7 +136,6 @@
 			"content/information-aggregation/history-stats.js",
 			"content/information-aggregation/htms-points.js",
 			"content/information-aggregation/last-login.js",
-			"content/information-aggregation/match-weather.js",
 			"content/information-aggregation/mercattrick-stats.js",
 			"content/information-aggregation/my-monitor.js",
 			"content/information-aggregation/nt-peek.js",
@@ -286,8 +285,7 @@
 		"https://secure.flickr.com/services/oembed/*",
 		"http://backend.deviantart.com/*",
 		"https://soundcloud.com/*",
-		"https://imageshack.us/*",
-		"http://api.openweathermap.org/*"
+		"https://imageshack.us/*"
 	],
 	"page_action": {
 		"default_icon": "skin/icon-24.png",

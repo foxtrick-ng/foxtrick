@@ -144,7 +144,6 @@
 			"content/information-aggregation/history-stats.js",
 			"content/information-aggregation/htms-points.js",
 			"content/information-aggregation/last-login.js",
-			"content/information-aggregation/match-weather.js",
 			"content/information-aggregation/mercattrick-stats.js",
 			"content/information-aggregation/my-monitor.js",
 			"content/information-aggregation/nt-peek.js",
@@ -297,7 +296,6 @@
 		"http://backend.deviantart.com/*",
 		"https://soundcloud.com/*",
 		"https://imageshack.us/*",
-		"http://api.openweathermap.org/*",
 		"https://*.sentry.io/*"
 	],
 	"action": {
