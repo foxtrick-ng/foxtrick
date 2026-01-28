@@ -57,7 +57,7 @@ Foxtrick.modules['Redirections'] = {
 			userName = userNode.textContent.trim(); // lgtm[js/useless-assignment-to-local]
 
 			switch (redirect) {
-				case 'analysis': url = '/Club/TacticsRoom/?TeamID=' + teamId; break;
+				case 'analysis': url = '/Club/TacticsRoom/?analyzeTeamId=' + teamId; break;
 				case 'challenge': url = '/Club/?teamId=' + teamId + '&make_challenge'; break;
 				case 'flags': url = '/Club/Flags/?teamId=' + teamId; break;
 				case 'guestbook': url = '/Club/Manager/Guestbook.aspx?teamId=' + teamId; break;
