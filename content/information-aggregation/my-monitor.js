@@ -342,7 +342,8 @@ Foxtrick.modules.MyMonitor = {
 
 			Foxtrick.onClick(addLink, function() {
 				var msg = Foxtrick.L10n.getString('MyMonitor.addHelp');
-				Foxtrick.util.note.add(doc, msg, 'ft-monitor-add-note', { to: monitor });
+				const note = Foxtrick.util.note.add(doc, msg, 'ft-monitor-add-note', { to: monitor });
+				note.scrollIntoView();
 			});
 
 			// slash separating add and remove
@@ -407,7 +408,8 @@ Foxtrick.modules.MyMonitor = {
 				});
 
 				// add note
-				Foxtrick.util.note.add(doc, removeBox, 'ft-monitor-remove-note', { to: monitor });
+				const note =Foxtrick.util.note.add(doc, removeBox, 'ft-monitor-remove-note', { to: monitor });
+				note.scrollIntoView();
 			});
 
 			// container for the teams
