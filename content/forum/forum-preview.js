@@ -24,7 +24,40 @@ Foxtrick.modules.ForumPreview = {
 
 		/** @param {HTMLElement} previewDiv */
 		var preview = function(previewDiv) {
-			/** @type {[RegExp, string][]} */
+			const replaceFns = {
+				/**
+				 * Replacer function for [money] tag.
+				 * Will fall back to current-team league currency if currency
+				 * not set in prefs.
+				 * @param {...any} matches - args passed by string.replace
+				 * @returns {string} formatted and localised money value, e.g "1 234 $"
+				 */
+				money: (...matches) =>{
+					const curMod = Foxtrick.util.currency;
+
+					let krVal = matches[1];
+					if(!krVal || typeof krVal !== 'string')
+						return `${matches[0]}`;
+
+					krVal = matches[1].replace(' ', '');
+					krVal = parseFloat(krVal);
+					if (isNaN(krVal) || typeof krVal !== 'number')
+						return `${matches[0]}`;
+
+					const userRate = curMod.getRate() || curMod.findRate();
+					let userVal = krVal * curMod.getRateByCode('SEK') / userRate;
+					userVal = Math.round(userVal * 100) / 100;
+
+					const userSymbol = Foxtrick.util.currency.getSymbol() || curMod.findSymbol();
+
+					if (userVal < 0)
+						return `<span class="red">${Foxtrick.formatNumber(userVal, '\u00a0')} ${userSymbol}</span>`;
+					else
+						return `${Foxtrick.formatNumber(userVal, '\u00a0')} ${userSymbol}`;
+				}
+			};
+
+			/** @type {[RegExp, string|Function][]} */
 			var singleReplace = [
 				[/\[kitid=(\d+)\]/gi,
 					"<a href='/Community/KitSearch/?KitID=$1' target='_blank'>($1)</a>"],
@@ -70,6 +103,7 @@ Foxtrick.modules.ForumPreview = {
 					"<a href='$1' target='_blank' rel='noopener'>($1)</a>"],
 				[/\[articleid=(.*?)\]/gi,
 					"<a href='/Community/Press?ArticleID=$1' target='_blank'>($1)</a>"],
+				[/\[money\](.*?)\[\/money\]/gi, replaceFns['money']],
 				[/\[br\]/gi, '<br>'],
 				[/\[hr\]/gi, '<hr>'],
 			];

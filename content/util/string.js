@@ -179,8 +179,8 @@ Foxtrick.formatNumber = function(num, sep) {
 	var digits = String(num).match(/\..+/);  // seperate digits
 	if (digits == null) digits = '';
 	var num = Number(num);
-	num = Math.floor(num, 0);
 	var negative = (num < 0);
+	num = negative ? Math.ceil(num) : Math.floor(num);
 	num = String(Math.abs(num));
 	var output = num;
 	if (typeof sep === 'undefined') {
