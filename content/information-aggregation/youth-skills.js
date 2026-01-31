@@ -554,6 +554,9 @@ Foxtrick.modules['YouthSkills'] = {
 				return playerId;
 			}
 
+			if (isPlayerDetails && Foxtrick.Pages.Player.wasFired(doc))
+				return;
+
 			/** @type {HTMLElement[]} */
 			let skillContainers;
 			if (isPlayerDetails && isLegacy)
