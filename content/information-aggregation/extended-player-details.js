@@ -137,7 +137,10 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 			let wageSpan;
 			if ((wageSpan = wageCell.querySelector('span[title]'))) {
 				let amount = wageCell.firstChild.textContent;
-				wageString = wageSpan.title.replace(/[\d\s]+/, amount);
+				if (wageSpan.title.match(/\[.+\]/)) // ht localisation bug?
+					wageString = wageSpan.title.replace(/\[.+\]/, currencyStr);
+				else
+					wageString = wageSpan.title.replace(/[\d\s]+/, amount);
 			}
 
 			var [wagePre, wageFull] = wageString.split(currencyRe);
