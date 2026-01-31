@@ -137,7 +137,7 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 			let wageSpan;
 			if ((wageSpan = wageCell.querySelector('span[title]'))) {
 				let amount = wageCell.firstChild.textContent;
-				wageString = amount + wageSpan.title.replace(/^[\d\s]+/, '');
+				wageString = wageSpan.title.replace(/[\d\s]+/, amount);
 			}
 
 			var [wagePre, wageFull] = wageString.split(currencyRe);
@@ -147,7 +147,7 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 
 			let hasBonus = !!bonus;
 			if (hasBonus && wageWOBonus) {
-				wageCell.textContent = wagePre + currencyStr + ' ';
+				wageCell.textContent = `${wagePre}${NBSP}${currencyStr} `;
 
 				let wageBaseStr = Foxtrick.formatNumber(base, NBSP);
 				let baseSpan = doc.createElement('span');
