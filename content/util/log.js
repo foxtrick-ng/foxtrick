@@ -542,7 +542,9 @@ Foxtrick.log.Reporter = {
 
 		const tags = {};
 		for (const desc of tagDescriptors) {
-			if (desc.needsDoc && !document) continue;
+			if (desc.needsDoc && 
+				(!document || document.URL?.match('extension://.+background.html'))) continue;
+
 			let value;
 			try {
 				value = desc.getValue();
