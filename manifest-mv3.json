@@ -39,6 +39,7 @@
 			"content/lib/psico.js",
 			"content/lib/gauge.js",
 			"content/lib/sentry.js",
+			"content/lib/extraerrordata.js",
 			// <!-- end ext-lib -->
 
 			"content/lib/integration.js",
