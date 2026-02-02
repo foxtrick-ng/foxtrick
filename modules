@@ -27,15 +27,12 @@ forum/show-forum-pref-button.js
 forum/staff-marker.js
 information-aggregation/cross-table.js
 information-aggregation/current-transfers.js
-information-aggregation/dashboard-calendar.js
 information-aggregation/election-table.js
 information-aggregation/extended-player-details.js
 information-aggregation/extra-player-info.js
-information-aggregation/flag-collection-to-map.js
 information-aggregation/history-stats.js
 information-aggregation/htms-points.js
 information-aggregation/last-login.js
-information-aggregation/match-weather.js
 information-aggregation/mercattrick-stats.js
 information-aggregation/my-monitor.js
 information-aggregation/nt-peek.js
@@ -108,7 +105,6 @@ presentation/highlight-cup-wins.js
 presentation/highlight-ownerless.js
 presentation/ht-date-format.js
 presentation/large-flags.js
-presentation/local-time.js
 presentation/loyalty-display.js
 presentation/mobile-enhancements.js
 presentation/move-manager-online.js
