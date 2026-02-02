@@ -62,7 +62,7 @@ Foxtrick.entry.docLoad = function(doc) {
 	}
 
 	// Send a browser session update to remote logging server.
-	Foxtrick.log.Reporter.sendSession();
+	Foxtrick.sendSession();
 };
 
 /**

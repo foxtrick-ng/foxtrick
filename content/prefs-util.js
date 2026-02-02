@@ -524,6 +524,58 @@ Foxtrick.Prefs.getModuleElementDescription = function(module, option) {
 };
 
 /**
+ * Get an object representing enabled modules or module options that require
+ * additional browser permissions.
+ *
+ * @returns {Promise<Array<{modules: string[], types: {permissions?: string[], origins?: string[]}}>|null>}
+ */
+Foxtrick.Prefs.getNeededPermissions = function() {
+	const list = Foxtrick.util.modules.getModulePermissions();
+	if (!Array.isArray(list) || list.length === 0)
+		return Promise.resolve(null);
+
+	const checks = list.map(function(item) {
+		return new Promise(function(resolve) {
+			if (!item || !Array.isArray(item.modules) || !item.types) {
+				resolve(null);
+				return;
+			}
+
+			Foxtrick.containsPermission(item.types, function(granted) {
+				if (granted) {
+					resolve(null);
+					return;
+				}
+
+				const enabledModules = item.modules.filter(function(target) {
+					const dotIndex = target.indexOf('.');
+					if (dotIndex === -1) {
+						return Foxtrick.Prefs.isModuleEnabled(target);
+					}
+
+					const moduleName = target.slice(0, dotIndex);
+					const optionName = target.slice(dotIndex + 1);
+					if (!moduleName || !optionName)
+						return false;
+
+					return Foxtrick.Prefs.isModuleOptionEnabled(moduleName, optionName);
+				});
+
+				if (enabledModules.length > 0)
+					resolve({ modules: enabledModules, types: item.types });
+				else
+					resolve(null);
+			});
+		});
+	});
+
+	return Promise.all(checks).then(function(results) {
+		const filtered = results.filter(Boolean);
+		return filtered.length > 0 ? filtered : null;
+	});
+};
+
+/**
  * Test whether a pref key is an actual option,
  * but not a personal pref or oAuth token
  *

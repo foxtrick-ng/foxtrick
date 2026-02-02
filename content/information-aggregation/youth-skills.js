@@ -7,6 +7,9 @@ Foxtrick.modules['YouthSkills'] = {
 	PAGES: ['youthPlayers', 'youthPlayerDetails'],
 	CSS: Foxtrick.InternalPath + 'resources/css/youth-skills.css',
 	NICE: -10,
+	PERMISSIONS: {
+		module: { origins: ['https://*.hattrick-youthclub.org/*'] },
+	},
 
 	/**
 	 * @param {document} doc

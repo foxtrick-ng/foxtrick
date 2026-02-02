@@ -14,6 +14,11 @@ Foxtrick.modules.CopyYouth = {
 		'TrainingReport', 'AutoSendTrainingReportToHY', 'ScoutComment',
 		'AutoSendRejectedToHY', 'AutoSendTrainingChangesToHY', 'FixturesSource',
 	],
+	PERMISSIONS: {
+		AutoSendTrainingReportToHY: { origins: ['https://*.hattrick-youthclub.org/*'] },
+		AutoSendRejectedToHY: { origins: ['https://*.hattrick-youthclub.org/*'] },
+		AutoSendTrainingChangesToHY: { origins: ['https://*.hattrick-youthclub.org/*'] },
+	},
 
 	CSS: Foxtrick.InternalPath + 'resources/css/copy-youth.css',
 

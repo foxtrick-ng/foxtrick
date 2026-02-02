@@ -30,7 +30,6 @@
         "content/lib/gauge.js",
         "content/lib/idbstore.js",
         "content/lib/indexedDB.polyfill.js",
-        "content/lib/jquery.js",
         "content/lib/oauth.js",
         "content/lib/PluralForm.js",
         "content/lib/sha1.js",
