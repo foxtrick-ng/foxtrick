@@ -150,6 +150,19 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 
 			let hasBonus = !!bonus;
 			if (hasBonus && wageWOBonus) {
+				//TODO: this exact code is repeated in HtmsPoints - unify
+				const locale = Foxtrick.Prefs.getString('htLanguage');
+				const ignoreLocales = ['az'];
+				if (!ignoreLocales.includes(locale)) {
+					//add nowrap to skills rows
+					const skillSelector = `tr[id^=${Foxtrick.getMainIDPrefix()}ucPlayerSkills_]`;
+					const skillRows = doc.querySelectorAll(skillSelector);
+					skillRows.forEach( node => {
+						if (node.firstElementChild?.nodeName?.toLowerCase() === 'td')
+							Foxtrick.addClass(node.firstElementChild, 'nowrap')
+					});
+				}
+
 				wageCell.textContent = `${wagePre}${NBSP}${currencyStr} `;
 
 				let wageBaseStr = Foxtrick.formatNumber(base, NBSP);
@@ -170,7 +183,7 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 
 				let spanSeason = doc.createElement('span');
 				spanSeason.id = 'ft_seasonwage';
-				spanSeason.textContent = wageSeasonStr + NBSP + symbol + perseason;
+				spanSeason.textContent = wageSeasonStr + ' ' + symbol + perseason;
 				Foxtrick.makeFeaturedElement(spanSeason, module);
 
 				wageCell.appendChild(doc.createElement('br'));

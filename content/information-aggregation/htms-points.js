@@ -76,6 +76,19 @@ Foxtrick.modules.HTMSPoints = {
 			if (!totSkills)
 				return;
 
+			//TODO: this exact code is repeated in ExtendedPlayerDetailsWage - unify
+			const locale = Foxtrick.Prefs.getString('htLanguage');
+			const ignoreLocales = ['az'];
+			if (!ignoreLocales.includes(locale)) {
+				//add nowrap to skills rows
+				const skillSelector = `tr[id^=${Foxtrick.getMainIDPrefix()}ucPlayerSkills_]`;
+				const skillRows = doc.querySelectorAll(skillSelector);
+				skillRows.forEach( node => {
+					if (node.firstElementChild?.nodeName?.toLowerCase() === 'td')
+						Foxtrick.addClass(node.firstElementChild, 'nowrap')
+				});
+			}
+
 			// creating the new element
 			let { table } = Foxtrick.Pages.Player.getInfoTable(doc);
 			let row = Foxtrick.insertFeaturedRow(table, module, table.rows.length);
