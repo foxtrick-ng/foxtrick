@@ -450,6 +450,8 @@ html[dir="rtl"] #note
 	clear: both;
 	padding: 1em;
 	display: block;
+	max-height: 60vh;
+	overflow: auto;
 }
 
 #navigation {

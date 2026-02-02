@@ -753,14 +753,14 @@ Foxtrick.modules.SkillTable = {
 				 * @param {HTMLTableCellElement} cell
 				 * @param {Date} deadline
 				 */
-				dateDiff: function(cell, deadline) {
+				dateDiff: async function(cell, deadline) {
 					const MSEC = Foxtrick.util.time.MSECS_IN_SEC;
 					let htDate = Foxtrick.util.time.getHTDate(doc);
 					if (!htDate)
 						return;
 
 					let diff = Math.floor((htDate.getTime() - deadline.getTime()) / MSEC);
-					let span = Foxtrick.util.time.timeDiffToSpan(doc, diff, { useDHM: false });
+					let span = await Foxtrick.util.time.timeDiffToSpan(doc, diff, { useDHM: false });
 					cell.appendChild(span);
 
 					let user = Foxtrick.util.time.toUser(doc, deadline);
@@ -1218,7 +1218,7 @@ Foxtrick.modules.SkillTable = {
 						var row;
 
 						/** @param {SkillTableColumn} column */
-						var addCell = function(column) {
+						var addCell = async function(column) {
 							let { enabled, method, property, title, listener, properties } = column;
 							if (!enabled)
 								return;
@@ -1242,7 +1242,7 @@ Foxtrick.modules.SkillTable = {
 
 							if (properties) {
 								if (method) {
-									RENDERERS[method](cell, player, properties);
+									await RENDERERS[method](cell, player, properties);
 								}
 								else {
 									let texts = properties.map(prop => player[prop]);
@@ -1251,7 +1251,7 @@ Foxtrick.modules.SkillTable = {
 							}
 							else if (property && typeof value !== 'undefined') {
 								if (method)
-									RENDERERS[method](cell, value, property);
+									await RENDERERS[method](cell, value, property);
 								else
 									cell.textContent = String(value);
 							}

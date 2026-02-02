@@ -41,7 +41,7 @@ Foxtrick._log = function(args, options = {}) {
 			try {
 				item = JSON.stringify(content);
 			}
-			catch (e) { // eslint-disable-line no-unused-vars
+			catch {
 				item = String(content);
 				for (let [k, v] of Object.entries(content))
 					item += `${k}:${v}\n`;
@@ -74,17 +74,7 @@ Foxtrick._log = function(args, options = {}) {
 	for (let content of args) {
 		if (content instanceof Error) {
 			Foxtrick.reportError(content, options);
-
-			try {
-				if (typeof console.error !== 'undefined')
-					console.error(content.stack);
-				else if (typeof console.log !== 'undefined')
-					console.log(content.stack);
-				else if (typeof console.trace !== 'undefined')
-					console.trace();
-			} catch (e) { // eslint-disable-line no-unused-vars
-				// nothing more we can do
-			}
+			Foxtrick.log._logErrorToConsole(content);
 		}
 	}
 };
@@ -234,6 +224,156 @@ Foxtrick.dump = function(content) {
 	Foxtrick.log(String(content).trim());
 };
 
+/**
+ * Safely log exception stacks.
+ * @param {*} err The error or value to log.
+ */
+Foxtrick.log._logErrorToConsole = function(err) {
+	try {
+		if (typeof console.error !== 'undefined') {
+			console.log(err?.message);
+			console.error(err?.stack ? err.stack : err);
+		} else if (typeof console.log !== 'undefined') {
+			console.log(err?.message);
+			console.log(err?.stack ? err.stack : err);
+		} else if (typeof console.trace !== 'undefined')
+			console.trace();
+	} catch {
+		// nothing more we can do
+	}
+};
+
+
+if (!Foxtrick.modules) {
+	Foxtrick.modules = {};
+};
+
+Foxtrick.modules.Reporter = {
+	MODULE_CATEGORY: 'core',
+	CORE_MODULE: true,
+	OUTSIDE_MAINBODY: true,
+	NICE: -49, //after Core
+	PAGES: ['all'],
+	OPTIONS: ['reportBug', 'reportError', 'sendSession'],
+	PERMISSIONS: {
+		reportBug: { origins: ['https://*.sentry.io/*'] },
+		reportError: { origins: ['https://*.sentry.io/*'] },
+		sendSession: { origins: ['https://*.sentry.io/*'] },
+	},
+
+	/**
+	 * Link to page documenting FT data collection policy
+	 * @type {string}
+	 */
+	BUG_DATA_URL: 'https://foxtrick-ng.github.io/datacollection.html',
+
+	/**
+	 * Link to forum page for bug reports
+	 * @type {string}
+	 */
+	FORUM_URL : '/Forum/Overview.aspx?v=0&f=173635',
+
+	/**
+	 * Adds a link to send Foxtrick log
+	 * @param {document} doc
+	 */
+	addBugReportLink: function(doc) {
+		const NOTE_ID = 'ft-bug-report-confirm';
+		const BUG_DATA_URL = Foxtrick.modules.Reporter.BUG_DATA_URL;
+
+		const bottom = doc.getElementById('bottom');
+		if (!bottom)
+			return;
+
+		const reportBugSpan = doc.createElement('span');
+		reportBugSpan.id = 'ft_report_bug';
+		reportBugSpan.textContent = Foxtrick.L10n.getString('reportBug.title');
+
+		const title = Foxtrick.L10n.getString('reportBug.descNew');
+		reportBugSpan.setAttribute('aria-label', reportBugSpan.title = title);
+
+		const hideNote = function() {
+			doc.getElementById(NOTE_ID).remove();
+		};
+
+		const showReportingDialog = function() {
+			const info = doc.createDocumentFragment();
+
+			const sorry = doc.createElement('p');
+			sorry.textContent = Foxtrick.L10n.getString('reportBug.sorry');
+			info.appendChild(sorry);
+
+			const data = doc.createElement('p');
+			Foxtrick.L10n.appendLink('reportBug.error.data', data, BUG_DATA_URL);
+			info.appendChild(data);
+
+			const report = doc.createElement('button');
+			report.type = 'button';
+			report.textContent = Foxtrick.L10n.getString('reportBug.now');
+			Foxtrick.onClick(report, function() {
+				const doc = this.ownerDocument;
+				hideNote();
+				Foxtrick.modules.Reporter.reportBug(doc);
+			});
+			info.appendChild(report);
+
+			Foxtrick.util.note.add(doc, info, NOTE_ID, { closable: true, focus: true });
+		};
+
+		Foxtrick.onClick(reportBugSpan, showReportingDialog);
+		bottom.insertBefore(reportBugSpan, bottom.firstChild);
+	},
+
+	/**
+	 * Trigger sending of bug report.
+	 * Show note with reference id that has been copied to clipboard.
+	 * @param {document} doc
+	 */
+	reportBug: function(doc) {
+		const reportBug = function(log) {
+			if (log === '')
+				return;
+
+			const showNote = function(refId) {
+				Foxtrick.copy(doc, refId);
+
+				const info = doc.createDocumentFragment();
+
+				const success = doc.createElement('p');
+				success.textContent = Foxtrick.L10n.getString('reportBug.success');
+				info.appendChild(success);
+
+				const result = doc.createElement('p');
+				let ref = Foxtrick.L10n.getString('reportBug.id.copied');
+				ref = ref.replace(/%s/g, String(refId));
+				result.textContent = ref;
+				info.appendChild(result);
+
+				const forum = doc.createElement('p');
+				Foxtrick.L10n.appendLink('reportBug.forumNew', forum, Foxtrick.modules.Reporter.FORUM_URL);
+				info.appendChild(forum);
+
+				const NOTE_ID = 'ft-bug-report-link-note';
+				Foxtrick.util.note.add(doc, info, NOTE_ID, { closable: true, focus: true });
+			};
+
+			const prefs = Foxtrick.Prefs.save({ skipFiles: true });
+			Foxtrick.reportBug(log, prefs, showNote);
+		};
+
+		Foxtrick.SB.ext.sendRequest({ req: 'getDebugLog' }, ({ log }) => {
+			reportBug(log);
+		});
+	},
+
+	/**
+	 * @param {document} doc
+	 */
+	run: function(doc) {
+		if (Foxtrick.Prefs.isModuleOptionEnabled('Reporter', 'reportBug'))
+			this.addBugReportLink(doc);
+	}
+};
 
 /**
  * Sentry reporter object for error and message reporting.
@@ -285,7 +425,7 @@ Foxtrick.log.Reporter = {
 				console.error('ERROR: Sentry init - ' + e.message);
 				console.error(e.stack);
 				return false;
-			} catch (e) { // eslint-disable-line
+			} catch {
 				return false;
 			}
 		}
@@ -410,7 +550,7 @@ Foxtrick.log.Reporter = {
 		const makeRequest = function(request) {
 			return new Promise((resolve, reject) => {
 				if (!request)
-					return reject(new Error('no request'));
+					return reject(new Error('Reporter: no request'));
 
 				try {
 					// use values from the transport request, fall back to outer options
@@ -426,7 +566,7 @@ Foxtrick.log.Reporter = {
 						fetchOptions,
 					}, function(response) {
 						if (!response)
-							return reject(new Error('no response from background'));
+							return reject(new Error('Reporter: no response from background'));
 
 						if (response.error)
 							return reject(new Error(response.error));
@@ -478,7 +618,7 @@ Foxtrick.log.Reporter = {
 					username: userName,
 				});
 			}
-		} catch (e) { // eslint-disable-line no-unused-vars
+		} catch {
 			// We can still report without a user set.
 		}
 
@@ -546,7 +686,7 @@ Foxtrick.log.Reporter = {
 			let value;
 			try {
 				value = desc.getValue();
-			} catch (e) { // eslint-disable-line no-unused-vars
+			} catch {
 				value = null;
 			}
 			const key = desc.prefix ? `${desc.prefix}.${desc.name}` : desc.name;
@@ -688,7 +828,7 @@ Foxtrick.log.Reporter = {
 	 * @param {ReporterEventOptions} hint Additional Sentry hint data.
 	 */
 	reportException: async function(error, hint) {
-		try{
+		try {
 			if (this._getFtBranch() === 'dev')
 				return; // don't report on dev branch
 
@@ -708,23 +848,13 @@ Foxtrick.log.Reporter = {
 				const scope = this._scope;
 				this._setReportingData(scope);
 				scope.captureException(error, hint);
-				console.log('Foxtrick error report sent.');
 				await this._addReportedError(key);
+				console.log('Foxtrick error report sent.');
 			} finally {
 				this._unlockReporting(key);
 			}
 		} catch (e) {
-			// avoid re-triggering report
-			try {
-				if (typeof console.error !== 'undefined')
-					console.error(e.stack);
-				else if (typeof console.log !== 'undefined')
-					console.log(e.stack);
-				else if (typeof console.trace !== 'undefined')
-					console.trace();
-			} catch {
-				// nothing more we can do
-			}
+			Foxtrick.log._logErrorToConsole(e);
 		}
 	},
 
@@ -784,7 +914,7 @@ Foxtrick.log.Reporter = {
 							bodyToSend = uint8;
 						}
 					}
-				} catch (e) { // eslint-disable-line no-unused-vars
+				} catch {
 					// if reconstruction fails, fall back to original msg.body
 					bodyToSend = msg.body;
 				}
@@ -819,6 +949,9 @@ Foxtrick.log.Reporter = {
  * @param {function(string):void} [refIdCb] Optional callback to receive the reference ID.
  */
 Foxtrick.reportBug = function(bug, prefs, refIdCb) {
+	if (!Foxtrick.Prefs.isModuleOptionEnabled('Reporter', 'reportBug'))
+		return;
+
 	const reporter = Foxtrick.log.Reporter;
 	if (!reporter)
 		return;
@@ -864,6 +997,9 @@ Foxtrick.reportBug = function(bug, prefs, refIdCb) {
  */
 Foxtrick.reportError = function(err, options) {
 	try {
+		if (!Foxtrick.Prefs.isModuleOptionEnabled('Reporter', 'reportError'))
+			return;
+
 		const reporter = Foxtrick.log.Reporter;
 		if (!reporter)
 			return;
@@ -877,18 +1013,14 @@ Foxtrick.reportError = function(err, options) {
 
 		reporter.reportException(err, reportOptions);
 	} catch (e) {
-		try {
-			if (typeof console.error !== 'undefined')
-				console.error(e.stack);
-			else if (typeof console.log !== 'undefined')
-				console.log(e.stack);
-			else if (typeof console.trace !== 'undefined')
-				console.trace();
-		} catch {
-			// nothing more we can do
-		}
+		Foxtrick.log._logErrorToConsole(e);
 	}
 };
+
+Foxtrick.sendSession = function() {
+	if (Foxtrick.Prefs.isModuleOptionEnabled('Reporter', 'sendSession'))
+		Foxtrick.log.Reporter.sendSession();
+}
 
 /**
  * @typedef {object} ReporterTagDescriptor

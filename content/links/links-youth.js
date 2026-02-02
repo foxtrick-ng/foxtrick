@@ -55,7 +55,7 @@ Foxtrick.modules['LinksYouthOverview'] = {
 Foxtrick.modules['LinksYouthPlayerDetail'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.LINKS,
 	PAGES: ['youthPlayerDetails'],
-	LINK_TYPES: 'youthplayerdetaillink',
+	LINK_TYPES: ['youthplayerdetaillink', 'ownyouthplayerdetaillink', 'otheryouthplayerdetaillink'],
 	/**
 	 * return HTML for FT prefs
 	 * @param  {document}         doc
@@ -106,6 +106,12 @@ Foxtrick.modules['LinksYouthPlayerDetail'] = {
 			};
 			types.push(tracker);
 		}
+
+		if (youthTeamId === Foxtrick.modules.Core.TEAM.youthTeamId)
+			types.push('ownyouthplayerdetaillink');
+		else
+			types.push('otheryouthplayerdetaillink');
+
 		return { types: types, info: info };
 	}
 };
@@ -154,7 +160,7 @@ Foxtrick.modules['LinksYouthTraining'] = {
 Foxtrick.modules['LinksYouthPlayerList'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.LINKS,
 	PAGES: ['youthPlayers'],
-	LINK_TYPES: 'youthplayerlistlink',
+	LINK_TYPES: ['youthplayerlistlink', 'ownyouthplayerlistlink', 'otheryouthplayerlistlink'],
 	/**
 	 * return HTML for FT prefs
 	 * @param  {document}         doc
@@ -204,6 +210,12 @@ Foxtrick.modules['LinksYouthPlayerList'] = {
 			};
 			types.push(tracker);
 		}
+
+		if (youthTeamId === Foxtrick.modules.Core.TEAM.youthTeamId)
+			types.push('ownyouthplayerlistlink');
+		else
+			types.push('otheryouthplayerlistlink');
+
 		return { types: types, info: info };
 	},
 

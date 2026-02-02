@@ -2,14 +2,36 @@
 	margin-bottom: 20px ;
 	margin-top: 20px ;
 }
+.office-item #ft-monitor-div {
+	padding: 7px 7px 0px 7px;
+	margin-bottom: 0px ;
+	margin-top: 0px ;
+}
 
+.office-item .boxBody {
+	padding: 0px;
+}
+
+#ft-monitor-sort {
+	margin-bottom: 5px;
+}
+
+/* two columns on dashboard */
 #ft-monitor-container {
 	clear: both;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 10px;
+}
+/* three columns in new office */
+.office-item #ft-monitor-container {
+	grid-template-columns: 1fr 1fr 1fr;
 }
 
 #ft-monitor-live-links {
-	background-color: #EDF1ED;
-	border-bottom: solid 2px #DCE0DC;
+	background-color: #f7f7f7;
+	border-top: solid 1px #ececec;
+	margin-top: 10px;
 }
 #ft-monitor-live-links td {
 	vertical-align: middle;
@@ -20,19 +42,16 @@
 }
 
 .ft-monitor-frame {
-	width: 48%;
-	margin: 0 1%;
-	float: left;
-}
-
-.ft-monitor-frame:nth-child(odd) {
-	clear: left; /* two in a row */
+	border: 1px solid #ececec;
+	border-radius: 7px;
 }
 
 .ft-monitor-frame > h3 {
 	color: #222;
-	background-color: #EDF1ED;
-	border-bottom: solid 2px #DCE0DC;
+	background-color: #f7f7f7;
+	border-bottom: solid 2px #ececec;
+	margin: 0px;
+	padding: 0px 3px 0px 3px;
 }
 
 .ft-monitor-team-name {
@@ -73,7 +92,7 @@ html[dir="rtl"] .teamIcon {
 	padding: 0 0 0 5px;
 }
 
-.ft-monitor-frame > h3 > a.flag + img {
+.ft-monitor-frame > h3 > a.flag > img {
 	margin-top:-2px;
 }
 

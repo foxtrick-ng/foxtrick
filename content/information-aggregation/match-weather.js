@@ -11,6 +11,9 @@ Foxtrick.modules['MatchWeather'] = {
 	PAGES: ['match'],
 	OPTIONS: ['Irl'],
 	CSS: Foxtrick.InternalPath + 'resources/css/match-weather.css',
+	PERMISSIONS: {
+		module: { origins: ['http://api.openweathermap.org/*'] },
+	},
 
 	run: function(doc) {
 		var module = this;

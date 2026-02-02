@@ -70,17 +70,30 @@ Foxtrick.modules.U21LastMatch = {
 	/**
 	 * @param  {document} doc
 	 * @param  {{years: number, days: number}} age
-	 * @return {U21LastMatch}
+	 * @return {Promise<U21LastMatch>}
 	 */
-	calculate: function(doc, age) {
+	calculate: async function(doc, age, locale) {
 		const module = this;
 
-		const CONTINENTAL_STR = Foxtrick.L10n.getString('U21LastMatch.continental');
-		const CONTINENTALPO_STR = Foxtrick.L10n.getString('U21LastMatch.continentalpo');
-		const ROUND_STR = Foxtrick.L10n.getString('U21LastMatch.round');
-		const QUARTER_STR = Foxtrick.L10n.getString('U21LastMatch.quarter');
-		const SEMI_STR = Foxtrick.L10n.getString('U21LastMatch.semi');
-		const FINAL_STR = Foxtrick.L10n.getString('U21LastMatch.final');
+		const getL10n = async function(key, locale) {
+			return locale
+				? await Foxtrick.L10n.getStringInLocale(key, locale)
+				: Foxtrick.L10n.getString(key);
+		};
+
+		let [CONTINENTAL_STR , CONTINENTAL_KEY] = ['', 'U21LastMatch.continental'];
+		let [CONTINENTALPO_STR, CONTINENTALPO_KEY] = ['', 'U21LastMatch.continentalpo'];
+		let [ROUND_STR, ROUND_KEY] = ['', 'U21LastMatch.round'];
+		let [QUARTER_STR, QUARTER_KEY] = ['', 'U21LastMatch.quarter'];
+		let [SEMI_STR, SEMI_KEY] = ['', 'U21LastMatch.semi'];
+		let [FINAL_STR, FINAL_KEY] = ['', 'U21LastMatch.final'];
+
+		CONTINENTAL_STR = await getL10n(CONTINENTAL_KEY, locale);
+		CONTINENTALPO_STR = await getL10n(CONTINENTALPO_KEY, locale);
+		ROUND_STR = await getL10n(ROUND_KEY, locale);
+		QUARTER_STR = await getL10n(QUARTER_KEY, locale);
+		SEMI_STR = await getL10n(SEMI_KEY, locale);
+		FINAL_STR = await getL10n(FINAL_KEY, locale);
 
 		const DAYS_IN_SEASON = Foxtrick.util.time.DAYS_IN_SEASON;
 		const MSECS_IN_DAY = Foxtrick.util.time.MSECS_IN_DAY;
@@ -181,7 +194,7 @@ Foxtrick.modules.U21LastMatch = {
 	},
 
 	/** @param {document} doc */
-	runPlayer: function(doc) {
+	runPlayer: async function(doc) {
 		const module = this;
 
 		const TITLE_STR = Foxtrick.L10n.getString('U21LastMatch.eligibilityTitle');
@@ -196,7 +209,7 @@ Foxtrick.modules.U21LastMatch = {
 		if (!age || age.years > 21)
 			return;
 
-		let { worldCupNumber, lastMatch } = module.calculate(doc, age);
+		let { worldCupNumber, lastMatch } = await module.calculate(doc, age);
 		let wcNum = Foxtrick.decToRoman(worldCupNumber);
 
 		let text = TMPL_STR;
@@ -219,7 +232,7 @@ Foxtrick.modules.U21LastMatch = {
 	},
 
 	/** @param {document} doc */
-	runPlayerList: function(doc) {
+	runPlayerList: async function(doc) {
 		const module = this;
 		const TITLE_STR = Foxtrick.L10n.getString('U21LastMatch.title');
 		const WC_STR = Foxtrick.L10n.getString('U21LastMatch.worldcup');
@@ -234,7 +247,7 @@ Foxtrick.modules.U21LastMatch = {
 				continue;
 
 			let { worldCupNumber, lastMatch, matchNumber, dateWhen22 } =
-				module.calculate(doc, player.age);
+				await module.calculate(doc, player.age);
 
 			let wcNum = Foxtrick.decToRoman(worldCupNumber);
 
@@ -259,7 +272,7 @@ Foxtrick.modules.U21LastMatch = {
 	},
 
 	/** @param {document} doc */
-	runTransferList: function(doc) {
+	runTransferList: async function(doc) {
 		const module = this;
 		const TITLE_STR = Foxtrick.L10n.getString('U21LastMatch.title');
 		const WC_STR = Foxtrick.L10n.getString('U21LastMatch.worldcup');
@@ -271,7 +284,7 @@ Foxtrick.modules.U21LastMatch = {
 				continue;
 
 			let { worldCupNumber, lastMatch, matchNumber, dateWhen22 } =
-				module.calculate(doc, player.age);
+				await module.calculate(doc, player.age);
 
 			let wcNum = Foxtrick.decToRoman(worldCupNumber);
 

@@ -426,17 +426,23 @@
 		"title": "Hattid",
 		"img": "https://foxtrick-ng.github.io/foxtrick/linkicons/hattid.png"
 	},
-	"scoutrick ": {
+	"scoutrick": {
 		"youthlink": {
 			"url": "https://www.scoutrick.org/"
 		},
-		"youthplayerlistlink": {
+		"ownyouthplayerlistlink": {
 			"url": "https://www.scoutrick.org/"
 		},
-		"youthplayerdetaillink": {
+		"otheryouthplayerlistlink": {
+			"url": "https://www.scoutrick.org/browse?team=[youthteamid]"
+		},
+		"ownyouthplayerdetaillink": {
 			"url": "https://www.scoutrick.org/"
 		},
-		"title": "Scoutrick ",
+		"otheryouthplayerdetaillink": {
+			"url": "https://www.scoutrick.org/browse?player=[playerid]"
+		},
+		"title": "Scoutrick",
 		"img": "https://foxtrick-ng.github.io/foxtrick/linkicons/scoutrick.ico"
 	},
 	"hattrickorganizer": {

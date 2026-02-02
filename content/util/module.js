@@ -15,7 +15,7 @@ if (!this.Foxtrick)
 /* eslint-disable max-len */
 /**
  * TODO
- * @typedef {'informationAggregation'|'shortcutsAndTweaks'|'presentation'|'matches'|'forum'|'links'|'alert'|'accessibility'} ModuleCategory
+ * @typedef {'core'|'informationAggregation'|'shortcutsAndTweaks'|'presentation'|'matches'|'forum'|'links'|'alert'|'accessibility'} ModuleCategory
  */
 /* eslint-enable max-len */
 
@@ -24,6 +24,7 @@ if (!this.Foxtrick)
  * @type {Record<string, ModuleCategory>}
  */
 Foxtrick.moduleCategories = {
+	CORE: 'core',
 	INFORMATION_AGGREGATION: 'informationAggregation',
 	SHORTCUTS_AND_TWEAKS: 'shortcutsAndTweaks',
 	PRESENTATION: 'presentation',
@@ -121,6 +122,41 @@ Foxtrick.util.modules.getActive = function(doc) {
 
 	return modules;
 };
+
+/**
+ * Build the list of module permissions from PERMISSIONS definitions.
+ * PERMISSIONS is a map of option -> { permissions, origins }.
+ * Use key "module" for module-level permissions.
+ *
+ * @returns {Array<{modules: string[], types: {permissions?: string[], origins?: string[]}}>} needed
+ */
+Foxtrick.util.modules.getModulePermissions = function() {
+	const permissions = [];
+
+	if (!Foxtrick.modules)
+		return permissions;
+
+	for (const moduleName in Foxtrick.modules) {
+		const module = Foxtrick.modules[moduleName];
+		if (!module || !module.PERMISSIONS || typeof module.PERMISSIONS !== 'object')
+			continue;
+
+		for (const key in module.PERMISSIONS) {
+			if (!Object.prototype.hasOwnProperty.call(module.PERMISSIONS, key))
+				continue;
+
+			const types = module.PERMISSIONS[key];
+			if (!types)
+				continue;
+
+			const target = key === 'module' ? moduleName : moduleName + '.' + key;
+			permissions.push({ modules: [target], types: types });
+		}
+	}
+
+	return permissions;
+};
+
 
 /**
  * @typedef FTBackgroundModuleMixin

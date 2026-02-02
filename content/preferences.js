@@ -1,16 +1,11 @@
-/* eslint-disable consistent-this */
-/* eslint-disable func-style */
-/* eslint-disable no-implicit-globals */
-
 'use strict';
 
 /**
  * Foxtrick preferences
  *
- * @author ryanli, convincedd, LA-MJ, CatzHoek
+ * @author ryanli, convincedd, LA-MJ, CatzHoek, UnnecessaryDave
  */
 
-// jscs:disable disallowFunctionDeclarations
 
 // page IDs of last page are stored in array PAGEIDS
 var PAGEIDS = [];
@@ -18,7 +13,6 @@ var PAGEIDS = [];
 // get page IDs in Foxtrick.htPages that last page matches and store them in PAGEIDS
 function getPageIds() {
 	var lastUrl = new URL(Foxtrick.getLastPage());
-	// eslint-disable-next-line no-restricted-properties
 	var lastPage = lastUrl.pathname + lastUrl.search;
 	for (var p in Foxtrick.htPages) {
 		// ignore PAGE all, it's shown in universal tab
@@ -40,8 +34,15 @@ var MODULES = {};
  * @param {string} msg
  */
 function notice(msg) {
-	$('#note-content').text(msg);
-	$('#note').show('slow');
+	var noteContent = document.getElementById('note-content');
+	var note = document.getElementById('note');
+	if (noteContent)
+		noteContent.textContent = msg;
+	if (note) {
+		note.style.display = 'block';
+		note.style.transition = 'opacity 0.3s ease';
+		note.style.opacity = '1';
+	}
 }
 
 function baseURI() {
@@ -83,38 +84,38 @@ function initSearch() {
 			MODULES[searchStr] = item;
 	};
 
-	$('.module').each(function() {
+	var modules = document.querySelectorAll('.module');
+	modules.forEach(function(module) {
 		try {
-
-			var $this = $(this);
-			var $header;
-
-			var name = $this.attr('id');
+			var header;
+			var name = module.id;
 			var saveName;
 
 			var prefRe = /^pref-/;
 			if (name && prefRe.test(name)) {
 				saveName = name.replace(/^pref-/, '');
-				searchAdd(saveName, this);
+				searchAdd(saveName, module);
 			}
 			else if (name) {
-				$header = $this.children('h3:first, h2:first');
-				saveName = $header.text().replace('¶', '').trim();
-				searchAdd(saveName, this);
+				header = module.querySelector('h3, h2');
+				saveName = header.textContent.replace('¶', '').trim();
+				searchAdd(saveName, module);
 
-				var faqLink = $header.children('a')[0];
-				saveName = faqLink.href;
-				searchAdd(saveName, this);
+				var faqLink = header.querySelector('a');
+				if (faqLink) {
+					saveName = faqLink.href;
+					searchAdd(saveName, module);
+				}
 			}
 			else {
-				$header = $this.children('h3:first, h2:first');
-				if ($header.attr('data-text')) {
-					name = Foxtrick.L10n.getString($header.attr('data-text'));
-					searchAdd(name, this);
-					searchAdd($header.attr('data-text'), this);
+				header = module.querySelector('h3, h2');
+				if (header && header.dataset.text) {
+					name = Foxtrick.L10n.getString(header.dataset.text);
+					searchAdd(name, module);
+					searchAdd(header.dataset.text, module);
 				}
 				else {
-					Foxtrick.log('no search support, missing header and/or data-text:', this);
+					Foxtrick.log('no search support, missing header and/or data-text:', module);
 				}
 			}
 		}
@@ -134,8 +135,7 @@ function initSearch() {
  */
 function search(needle, isModule) {
 
-	// iterate pre-cached modules,
-	// jQuery is slow as hell here, directly using DOM methods
+	// iterate pre-cached modules
 	var showModules = function(visibilityPredicate) {
 		var shown = new Set();
 		for (var m in MODULES) {
@@ -166,13 +166,20 @@ function search(needle, isModule) {
 		}
 	};
 
-	if (needle.length > 0) {
-		$('#breadcrumb-2').show();
-		$('#breadcrumb-2').text(needle);
-		$('#breadcrumb-sep-1').show();
+	var breadcrumb2 = document.getElementById('breadcrumb-2');
+	var breadcrumb3 = document.getElementById('breadcrumb-3');
+	var breadcrumbSep1 = document.getElementById('breadcrumb-sep-1');
+	var breadcrumbSep2 = document.getElementById('breadcrumb-sep-2');
 
-		var opt = isModule ? { module: needle } : { search: needle };
-		$('#breadcrumb-2').attr('href', generateURI(opt));
+	if (needle.length > 0) {
+		if (breadcrumb2) {
+			breadcrumb2.style.display = '';
+			breadcrumb2.textContent = needle;
+			var opt = isModule ? { module: needle } : { search: needle };
+			breadcrumb2.href = generateURI(opt);
+		}
+		if (breadcrumbSep1)
+			breadcrumbSep1.style.display = '';
 
 		// README: needle not escaped => supports RegExp
 		// consider escaping
@@ -182,10 +189,14 @@ function search(needle, isModule) {
 		showModules(function(name) { return regex.test(name); });
 	}
 	else {
-		$('#breadcrumb-2').hide();
-		$('#breadcrumb-3').hide();
-		$('#breadcrumb-sep-1').hide();
-		$('#breadcrumb-sep-2').hide();
+		if (breadcrumb2)
+			breadcrumb2.style.display = 'none';
+		if (breadcrumb3)
+			breadcrumb3.style.display = 'none';
+		if (breadcrumbSep1)
+			breadcrumbSep1.style.display = 'none';
+		if (breadcrumbSep2)
+			breadcrumbSep2.style.display = 'none';
 
 		// show all
 		showModules(function() { return true; });
@@ -223,38 +234,54 @@ function locateFragment(uri) {
 	var showTab = function(tab) {
 		// if (Foxtrick.Prefs.isModuleEnabled('MobileEnhancements')) {
 		// 	// mobile
-		// 	$('#navigation-header').text(Foxtrick.L10n.getString('tab.' + tab));
+		// 	document.getElementById('navigation-header').textContent =
+		// 		Foxtrick.L10n.getString('tab.' + tab);
 		// }
 
-		$('#breadcrumb-1').text(Foxtrick.L10n.getString('tab.' + tab));
-		$('#breadcrumb-1').attr('href', generateURI({ tab: tab }));
+		var breadcrumb1 = document.getElementById('breadcrumb-1');
+		if (breadcrumb1) {
+			breadcrumb1.textContent = Foxtrick.L10n.getString('tab.' + tab);
+			breadcrumb1.href = generateURI({ tab: tab });
+		}
 
 		search('', true); // search reset
 
-		$('#pane > div').hide();
-		$('.tabs > li').removeClass('active');
+		var paneDivs = document.querySelectorAll('#pane > div');
+		paneDivs.forEach(function(div) {
+			div.style.display = 'none';
+		});
 
-		$('#tab-' + tab).addClass('active');
-		$('#pane > div[x-on*=' + tab + ']').show();
+		var tabsLi = document.querySelectorAll('.tabs > li');
+		tabsLi.forEach(function(li) {
+			li.classList.remove('active');
+		});
+
+		var activeTab = document.getElementById('tab-' + tab);
+		if (activeTab)
+			activeTab.classList.add('active');
+
+		var visiblePanes = document.querySelectorAll('#pane > div[x-on*="' + tab + '"]');
+		visiblePanes.forEach(function(pane) {
+			pane.style.display = '';
+		});
 	};
 
 	var showFaq = function(id) {
 		showTab('help');
 
-		var div = $('#faq-' + id)[0];
+		var div = document.getElementById('faq-' + id);
 		if (div)
 			div.scrollIntoView(true);
 	};
 
 	var showModule = function(module) {
-		var $module = $('#pref-' + (module ? String(module) : ''));
-		var category = $module.attr('x-category');
+		var moduleEl = document.getElementById('pref-' + (module ? String(module) : ''));
+		var category = moduleEl ? moduleEl.getAttribute('x-category') : null;
 		showTab(category || 'search');
 		search(module, true); // direct search
 
-		var div = $module[0];
-		if (div) {
-			div.scrollIntoView(true);
+		if (moduleEl) {
+			moduleEl.scrollIntoView(true);
 		}
 	};
 
@@ -302,75 +329,26 @@ function searchEvent(ev) {
 	}
 
 	search(encodeURIComponent(ev.target.value));
-	$('#js-top')[0].scrollIntoView();
+	var jsTop = document.getElementById('js-top');
+	if (jsTop)
+		jsTop.scrollIntoView();
 }
 
 // Permissions Management
-
-// TODO: extract and improve
-
+//
 // Check if permissions are granted in init and ask for permission if needed on saving
 // that's unsave since we don't check permissions right before asking for them
 // but since permission request must be in the click handler and not in a callback.
 // This seems to be the only way.
 
-// Should move/get that to the resp. modules
-var neededPermissions = [
-	{
-		modules: ['ExtraShortcuts.No9'],
-		types: { origins: ['http://no9-online.de/*'] },
-	},
-	{
-		modules: ['ExtraShortcuts.Latehome'],
-		types: { origins: ['http://www.latehome.de/*'] },
-	},
-	{
-		modules: ['EmbedMedia.EmbedModeOEmebed'],
-		types: {
-			origins: [
-				'https://vimeo.com/api/*',
-				'https://www.youtube.com/*',
-				'https://www.dailymotion.com/services/*',
-			],
-		},
-	},
-	{
-		modules: ['EmbedMedia.EmbedFlickrImages'],
-		types: { origins: ['https://secure.flickr.com/services/oembed/*'] },
-	},
-	{
-		modules: ['EmbedMedia.EmbedDeviantArtImages'],
-		types: { origins: ['http://backend.deviantart.com/*'] },
-	},
-	{
-		modules: ['EmbedMedia.EmbedSoundCloud'],
-		types: { origins: ['https://soundcloud.com/*'] },
-	},
-	{
-		modules: ['EmbedMedia.EmbedImageshack'],
-		types: { origins: ['https://imageshack.us/*'] },
-	},
-	{
-		modules: ['CopyYouth.AutoSendTrainingReportToHY'],
-		types: { origins: ['https://*.hattrick-youthclub.org/*'] },
-	},
-	{
-		modules: ['CopyYouth.AutoSendRejectedToHY'],
-		types: { origins: ['https://*.hattrick-youthclub.org/*'] },
-	},
-	{
-		modules: ['CopyYouth.AutoSendTrainingChangesToHY'],
-		types: { origins: ['https://*.hattrick-youthclub.org/*'] },
-	},
-	{
-		modules: ['YouthSkills'],
-		types: { origins: ['https://*.hattrick-youthclub.org/*'] },
-	},
-	{
-		modules: ['MatchWeather'],
-		types: { origins: ['http://api.openweathermap.org/*'] },
-	},
-];
+var neededPermissions = [];
+
+/**
+ * Populate neededPermissions
+ */
+function buildNeededPermissions() {
+	neededPermissions = Foxtrick.util.modules.getModulePermissions();
+}
 
 /**
  * Convert module/option into element ID
@@ -406,14 +384,17 @@ function getPermission(needed, showSaved) {
 		// The callback argument will be true if the user granted the permissions.
 		for (var module of needed.modules) {
 			var id = getElementIdFromOption(module);
+			var el = document.querySelector(id);
 			if (!granted) {
-				$(id).prop('checked', false);
+				if (el)
+					el.checked = false;
 				var pref = 'module.' + module + '.enabled';
 				Foxtrick.Prefs.setBool(pref, false);
 				Foxtrick.log('Permission declined:', module);
 			}
 			else {
-				$(id).attr('permission-granted', true);
+				if (el)
+					el.setAttribute('permission-granted', 'true');
 				Foxtrick.log('Permission granted:', module);
 			}
 			if (showSaved) {
@@ -443,8 +424,9 @@ function checkPermissions() {
 		neededPermissions.forEach(function(needed) {
 			needed.modules.forEach(function(module, m, modules) { // jshint ignore:line
 				var id = getElementIdFromOption(module);
+				var el = document.querySelector(id);
 				if (!Foxtrick.Prefs.getBool('module.' + module + '.enabled') ||
-				    $(id).attr('permission-granted') === 'true')
+				    (el && el.getAttribute('permission-granted') === 'true'))
 					return;
 
 				needsPermissions = true;
@@ -480,7 +462,9 @@ function revokePermissions() {
 		chrome.permissions.remove(needed.types, function(result) {
 			for (var module of needed.modules) {
 				var id = getElementIdFromOption(module);
-				$(id).attr('permission-granted', false);
+				var el = document.querySelector(id);
+				if (el)
+					el.setAttribute('permission-granted', 'false');
 				Foxtrick.log('Permission removed:', module, result);
 			}
 		});
@@ -501,29 +485,88 @@ function testPermissions() {
 	if (Foxtrick.platform !== 'Chrome' || !('permissions' in chrome))
 		return;
 
-	var modules = [];
+	let modules = [];
+
+	//TODO: properly support non-boolean options - e.g. radio buttons
+	const updateAlertDisplay = function() {
+		const alertEl = document.getElementById('alert');
+		const alertText = document.getElementById('alert-text');
+		const breadcrumbs = document.getElementById('breadcrumbs');
+
+		const formatPermissionTypes = function(types) {
+			if (!types)
+				return '';
+
+			const parts = [];
+			if (Array.isArray(types.permissions) && types.permissions.length) {
+				parts.push('permissions: ' + types.permissions.join(', '));
+			}
+			if (Array.isArray(types.origins) && types.origins.length) {
+				parts.push('origins: ' + types.origins.join(', '));
+			}
+			return parts.join('; ');
+		};
+
+		if (modules.length > 0) {
+			const strong = document.createElement('strong');
+			strong.textContent = Foxtrick.L10n.getString('prefs.needPermissions');
+
+			const table = document.createElement('table');
+			modules.forEach(function(mod) {
+				const row = document.createElement('tr');
+
+				// eneable/disable checkbox for module/option
+				const checkboxCell = document.createElement('td');
+				const checkbox = document.createElement('input');
+				checkbox.type = 'checkbox';
+				checkbox.dataset.module = mod;
+				const targetSelector = getElementIdFromOption(mod);
+				const targetEl = document.querySelector(targetSelector);
+				if (targetEl?.type === 'checkbox') {
+					checkbox.checked = targetEl.checked;
+				}
+				checkboxCell.appendChild(checkbox);
+				row.appendChild(checkboxCell);
+
+				// module/option description
+				const descCell = document.createElement('td');
+				descCell.textContent = Foxtrick.L10n.getString(`module.${mod}.desc`);
+				row.appendChild(descCell);
+
+				// permission
+				const typesCell = document.createElement('td');
+				const permission = neededPermissions.find(function(item) {
+					return item.modules.indexOf(mod) !== -1;
+				});
+				if (permission?.types) {
+					typesCell.textContent = formatPermissionTypes(permission.types);
+				}
+				row.appendChild(typesCell);
+
+				table.appendChild(row);
+			});
+
+			alertText?.replaceChildren(strong, table);
+
+			alertEl?.classList.remove('hidden');
+			breadcrumbs?.classList.add('hidden');
+		}
+		else {
+			alertText?.replaceChildren();
+			alertEl?.classList.add('hidden');
+		}
+	};
 
 	var checkPermission = function(id, neededPermission, module) {
-		if ($(id).prop('checked') && $(id).attr('permission-granted') == 'false')
+		var el = document.querySelector(id);
+		if (!el)
+			return;
+
+		if (el.checked && el.getAttribute('permission-granted') === 'false')
 			getPermission(neededPermission);
-		else if (!$(id).prop('checked')) {
-
+		else if (!el.checked) {
 			modules = Foxtrick.exclude(modules, module);
-			if (modules.length > 0) {
-
-				var needsPermHtml = '<strong/>' +
-					'<ul><li>' + modules.join('</li><li>') + '</li></ul>';
-
-				var l10n = Foxtrick.L10n.getString('prefs.needPermissions');
-				$('#alert-text').html(needsPermHtml).find('strong').text(l10n);
-
-				$('#alert').removeClass('hidden');
-				$('#breadcrumbs').addClass('hidden');
-			}
-			else {
-				$('#alert-text').text('');
-				$('#alert').addClass('hidden');
-			}
+			updateAlertDisplay();
 		}
 	};
 
@@ -539,22 +582,18 @@ function testPermissions() {
 
 			for (var module of needed.modules) {
 				var id = getElementIdFromOption(module);
-				$(id).attr('permission-granted', result);
-				$(id).click(makeChecker(id, needed, module));
+				var el = document.querySelector(id);
+				if (!el)
+					continue;
+
+				el.setAttribute('permission-granted', String(result));
+				el.addEventListener('click', makeChecker(id, needed, module));
 
 				if (result === false &&
 				    Foxtrick.Prefs.getBool('module.' + module + '.enabled')) {
 
 					Foxtrick.pushNew(modules, needed.modules);
-
-					var needsPermHtml = '<strong/>' +
-						'<ul><li>' + modules.join('</li><li>') + '</li></ul>';
-
-					var l10n = Foxtrick.L10n.getString('prefs.needPermissions');
-					$('#alert-text').html(needsPermHtml).find('strong').text(l10n);
-
-					$('#alert').removeClass('hidden');
-					$('#breadcrumbs').addClass('hidden');
+					updateAlertDisplay();
 				}
 			}
 		});
@@ -563,6 +602,28 @@ function testPermissions() {
 	for (var permission of neededPermissions) {
 		testModulePermission(permission);
 	}
+}
+
+/**
+ * Sync permissions alert table checkboxes to their corresponding module options.
+ */
+function syncPermissionAlertSelections() {
+	var alertText = document.getElementById('alert-text');
+	if (!alertText)
+		return;
+
+	var checkboxes = alertText.querySelectorAll('input[type="checkbox"][data-module]');
+	checkboxes.forEach(function(checkbox) {
+		var mod = checkbox.dataset.module;
+		if (!mod)
+			return;
+
+		var targetSelector = getElementIdFromOption(mod);
+		var targetEl = document.querySelector(targetSelector);
+		if (targetEl && targetEl.type === 'checkbox' && targetEl.checked !== checkbox.checked) {
+			targetEl.click();
+		}
+	});
 }
 
 /**
@@ -577,42 +638,43 @@ function saveEvent(ev) {
 
 	var pref;
 
-	var $target = $(ev.target);
-	if ($target.attr('pref')) {
-		pref = $target.attr('pref');
+	var target = ev.target;
+	var prefAttr = target.getAttribute('pref');
+	if (prefAttr) {
+		pref = prefAttr;
 
-		if ($target.is(':checkbox'))
-			Foxtrick.Prefs.setBool(pref, $target.is(':checked'));
-		else if (ev.target.nodeName.toLowerCase() == 'select') {
-			// calculated just-in-time, so .attr('value') would fail here
-			Foxtrick.Prefs.setString(pref, ev.target.value);
+		if (target.type === 'checkbox')
+			Foxtrick.Prefs.setBool(pref, target.checked);
+		else if (target.nodeName.toLowerCase() === 'select') {
+			// calculated just-in-time, so getAttribute('value') would fail here
+			Foxtrick.Prefs.setString(pref, target.value);
 		}
-		else if ($target.is(':input'))
-			Foxtrick.Prefs.setString(pref, ev.target.value);
+		else if (target.matches('input, textarea'))
+			Foxtrick.Prefs.setString(pref, target.value);
 	}
-	else if (ev.target.nodeName.toLowerCase() == 'option') {
-		pref = $target.parent().attr('pref');
-		var value = ev.target.value;
+	else if (target.nodeName.toLowerCase() === 'option') {
+		pref = target.parentElement.getAttribute('pref');
+		var value = target.value;
 		Foxtrick.Prefs.setString(pref, value);
 	}
 	else {
-		var module = $target.attr('module');
-		if ($target.attr('option')) {
+		var module = target.getAttribute('module');
+		if (target.getAttribute('option')) {
 			Foxtrick.log('option of module');
-			var option = $target.attr('option');
+			var option = target.getAttribute('option');
 
 			pref = module + '.' + option;
-			if ($target.is(':checkbox'))
-				Foxtrick.Prefs.setModuleEnableState(pref, $target.is(':checked'));
-			else if ($target.is(':input'))
-				Foxtrick.Prefs.setModuleOptionsText(pref, ev.target.value);
+			if (target.type === 'checkbox')
+				Foxtrick.Prefs.setModuleEnableState(pref, target.checked);
+			else if (target.matches('input, textarea'))
+				Foxtrick.Prefs.setModuleOptionsText(pref, target.value);
 		}
-		else if ($target.is(':radio')) {
-			if ($target.is(':checked'))
-				Foxtrick.Prefs.setModuleValue(module, $target.prop('value'));
+		else if (target.type === 'radio') {
+			if (target.checked)
+				Foxtrick.Prefs.setModuleValue(module, target.value);
 		}
 		else {
-			Foxtrick.Prefs.setModuleEnableState(module, $target.is(':checked'));
+			Foxtrick.Prefs.setModuleEnableState(module, target.checked);
 			Foxtrick.log('setModuleEnableState');
 		}
 	}
@@ -758,19 +820,32 @@ async function initCoreModules(reInit) {
  * Used for custom options as well
  */
 function initAutoSaveListeners() {
-	var $parent = $('#pane');
+	var parent = document.getElementById('pane');
+	if (!parent)
+		return;
 
 	var listener = function(ev) {
-		var $this = $(this);
+		var target = ev.target;
 
-		if ($this.attr('data-listen') === 'false')
+		if (target.dataset.listen === 'false')
 			return;
 
 		saveEvent(ev);
 	};
 
-	$parent.on('change', ':checkbox, :radio, select', listener);
-	$parent.on('input', ':input, textarea', listener);
+	parent.addEventListener('change', function(ev) {
+		var target = ev.target;
+		if (target.matches('input[type="checkbox"], input[type="radio"], select')) {
+			listener(ev);
+		}
+	});
+
+	parent.addEventListener('input', function(ev) {
+		var target = ev.target;
+		if (target.matches('input, textarea')) {
+			listener(ev);
+		}
+	});
 }
 
 /**
@@ -779,26 +854,49 @@ function initAutoSaveListeners() {
 function initListeners() {
 	initAutoSaveListeners();
 
-	$('#nav-toggle').click(function() {
-		$('#navigation').toggleClass('hidden');
-	});
+	var navToggle = document.getElementById('nav-toggle');
+	var navigation = document.getElementById('navigation');
 
-	$('#navigation').on('click', 'a', function() {
-		if ($('#nav-toggle').is(':visible')) {
-			$('#nav-toggle').click();
-		}
+	if (navToggle) {
+		navToggle.addEventListener('click', function() {
+			if (navigation)
+				navigation.classList.toggle('hidden');
+		});
+	}
 
-		$('#js-top')[0].scrollIntoView();
-	});
+	if (navigation) {
+		navigation.addEventListener('click', function(ev) {
+			if (ev.target.matches('a')) {
+				if (navToggle && navToggle.offsetWidth > 0 && navToggle.offsetHeight > 0) {
+					navToggle.click();
+				}
 
-	$('#search-input')[0].addEventListener('input', searchEvent);
-	$('#save').click(function() {
-		save();
-		$('#alert').addClass('hidden');
-		$('#breadcrumbs').removeClass('hidden');
-	});
+				var jsTop = document.getElementById('js-top');
+				if (jsTop)
+					jsTop.scrollIntoView();
+			}
+		});
+	}
 
-	$('body').click(function(ev) {
+	var searchInput = document.getElementById('search-input');
+	if (searchInput)
+		searchInput.addEventListener('input', searchEvent);
+
+	var saveBtn = document.getElementById('save');
+	if (saveBtn) {
+		saveBtn.addEventListener('click', function() {
+			syncPermissionAlertSelections();
+			save();
+			var alertEl = document.getElementById('alert');
+			var breadcrumbs = document.getElementById('breadcrumbs');
+			if (alertEl)
+				alertEl.classList.add('hidden');
+			if (breadcrumbs)
+				breadcrumbs.classList.remove('hidden');
+		});
+	}
+
+	document.body.addEventListener('click', function(ev) {
 		var nodeName = ev.target.nodeName.toLowerCase();
 		if (nodeName !== 'a' && nodeName !== 'xhtml:a')
 			return;
@@ -821,7 +919,6 @@ function initListeners() {
  * @param  {object}         module
  * @return {HTMLDivElement}
  */
-// eslint-disable-next-line complexity
 function makeModuleDiv(module) {
 	// var getScreenshot = function(link) {
 	// 	var a = document.createElement('a');
@@ -1117,19 +1214,23 @@ function initModules() {
 
 	for (var module of modules) {
 		var obj = makeModuleDiv(module);
-		var $obj = $(obj);
 
 		// show on view-by-category tab
-		$obj.attr('x-on', module.MODULE_CATEGORY + 'search all');
+		var xOn = module.MODULE_CATEGORY + 'search all';
 
 		// show on view-by-page tab
 		if (module.PAGES) {
 			if (Foxtrick.has(module.PAGES, 'all'))
-				$obj.attr('x-on', $obj.attr('x-on') + ' universal');
+				xOn += ' universal';
 			else if (Foxtrick.intersect(module.PAGES, PAGEIDS).length > 0)
-				$obj.attr('x-on', $obj.attr('x-on') + ' on_page');
+				xOn += ' on_page';
 		}
-		$('#pane').append($obj);
+
+		obj.setAttribute('x-on', xOn);
+
+		var pane = document.getElementById('pane');
+		if (pane)
+			pane.appendChild(obj);
 	}
 }
 
@@ -1137,96 +1238,128 @@ function initModules() {
  * Setup main tab options and listeners
  */
 function initMainTab() {
-	var desc = $('#pref-setup-desc')[0];
+	var desc = document.getElementById('pref-setup-desc');
 	var ISSUES_URL = 'https://www.hattrick.org/goto.ashx?path=%2FForum%2FOverview.aspx%3Ff%3D173635%26v%3D0';
 	Foxtrick.L10n.appendLink('prefs.setup.desc', desc, ISSUES_URL);
 
 	// add links to main tab prefs
-	$('#pane > div[x-on*="main"] h3').each(function() {
-		var $this = $(this);
-		if ($this.attr('id')) {
+	var mainHeaders = document.querySelectorAll('#pane > div[x-on*="main"] h3');
+	mainHeaders.forEach(function(header) {
+		if (header.id) {
 			var link = document.createElement('a');
 			link.className = 'module-link';
 			link.textContent = '¶';
-			link.href = generateURI({ id: $this.attr('id') });
+			link.href = generateURI({ id: header.id });
 			link.title = Foxtrick.L10n.getString('module.link');
-			$this.append(link);
+			header.appendChild(link);
 		}
 	});
 
 	// save preferences
-	$('#pref-save-do').click(function() {
-		var savePrefs = $('#pref-save-pref').is(':checked');
-		var saveNotes = $('#pref-save-data').is(':checked');
-		var saveToken = $('#pref-save-token').is(':checked');
-		$('#pref-save-text').val(Foxtrick.Prefs.save({
-			prefs: savePrefs,
-			notes: saveNotes,
-			oauth: saveToken,
-			defaults: true,
-		}));
-	});
+	var prefSaveDo = document.getElementById('pref-save-do');
+	if (prefSaveDo) {
+		prefSaveDo.addEventListener('click', function() {
+			var prefSavePref = document.getElementById('pref-save-pref');
+			var prefSaveData = document.getElementById('pref-save-data');
+			var prefSaveToken = document.getElementById('pref-save-token');
+			var prefSaveText = document.getElementById('pref-save-text');
+
+			var savePrefs = prefSavePref ? prefSavePref.checked : false;
+			var saveNotes = prefSaveData ? prefSaveData.checked : false;
+			var saveToken = prefSaveToken ? prefSaveToken.checked : false;
+
+			if (prefSaveText) {
+				prefSaveText.value = Foxtrick.Prefs.save({
+					prefs: savePrefs,
+					notes: saveNotes,
+					oauth: saveToken,
+					defaults: true,
+				});
+			}
+		});
+	}
 
 	// load preferences
-	$('#pref-load-do').click(function() {
-
-		Foxtrick.Prefs.load($('#pref-load-text').val());
-		$('#pref-load-text').val('');
-
-		window.location.reload();
-	});
-
-	// restore to default
-	$('#pref-stored-restore').click(function() {
-		if (Foxtrick.confirmDialog(Foxtrick.L10n.getString('prefs.restoreDefault.ask'))) {
-
-			Foxtrick.Prefs.restore();
-
-			window.location.reload();
-		}
-	});
-
-	// delete OAuth token/secret
-	$('#pref-delete-token').click(function() {
-		var teamId = $('#select-delete-token-teamIds')[0].value;
-		var delToken = Foxtrick.L10n.getString('prefs.deleteToken.ask').replace('%s', teamId);
-		if (Foxtrick.confirmDialog(delToken)) {
-			var keys = Foxtrick.Prefs.getAllKeysOfBranch('oauth.' + teamId);
-			for (var key of keys) {
-				Foxtrick.Prefs.deleteValue(key);
+	var prefLoadDo = document.getElementById('pref-load-do');
+	if (prefLoadDo) {
+		prefLoadDo.addEventListener('click', function() {
+			var prefLoadText = document.getElementById('pref-load-text');
+			if (prefLoadText) {
+				Foxtrick.Prefs.load(prefLoadText.value);
+				prefLoadText.value = '';
 			}
 
 			window.location.reload();
-		}
-	});
+		});
+	}
+
+	// restore to default
+	var prefStoredRestore = document.getElementById('pref-stored-restore');
+	if (prefStoredRestore) {
+		prefStoredRestore.addEventListener('click', function() {
+			if (Foxtrick.confirmDialog(Foxtrick.L10n.getString('prefs.restoreDefault.ask'))) {
+
+				Foxtrick.Prefs.restore();
+
+				window.location.reload();
+			}
+		});
+	}
+
+	// delete OAuth token/secret
+	var prefDeleteToken = document.getElementById('pref-delete-token');
+	if (prefDeleteToken) {
+		prefDeleteToken.addEventListener('click', function() {
+			var selectDeleteToken = document.getElementById('select-delete-token-teamIds');
+			var teamId = selectDeleteToken ? selectDeleteToken.value : '';
+			var delToken = Foxtrick.L10n.getString('prefs.deleteToken.ask').replace('%s', teamId);
+			if (Foxtrick.confirmDialog(delToken)) {
+				var keys = Foxtrick.Prefs.getAllKeysOfBranch('oauth.' + teamId);
+				for (var key of keys) {
+					Foxtrick.Prefs.deleteValue(key);
+				}
+
+				window.location.reload();
+			}
+		});
+	}
 
 	// disable all
-	$('#pref-stored-disable').click(function() {
-		if (Foxtrick.confirmDialog(Foxtrick.L10n.getString('prefs.disableAllModules.ask'))) {
+	var prefStoredDisable = document.getElementById('pref-stored-disable');
+	if (prefStoredDisable) {
+		prefStoredDisable.addEventListener('click', function() {
+			if (Foxtrick.confirmDialog(Foxtrick.L10n.getString('prefs.disableAllModules.ask'))) {
 
-			Foxtrick.log('preferences: disable all');
-			Foxtrick.Prefs.disableAllModules();
+				Foxtrick.log('preferences: disable all');
+				Foxtrick.Prefs.disableAllModules();
 
-			window.location.reload();
-		}
-	});
+				window.location.reload();
+			}
+		});
+	}
 
 	// revoke permissions
-	$('#pref-revoke-permissions').click(function() {
-		if (Foxtrick.confirmDialog(Foxtrick.L10n.getString('prefs.revokePermissions.ask'))) {
+	var prefRevokePermissions = document.getElementById('pref-revoke-permissions');
+	if (prefRevokePermissions) {
+		prefRevokePermissions.addEventListener('click', function() {
+			if (Foxtrick.confirmDialog(Foxtrick.L10n.getString('prefs.revokePermissions.ask'))) {
 
-			Foxtrick.log('preferences: revoke permissions');
-			revokePermissions();
+				Foxtrick.log('preferences: revoke permissions');
+				revokePermissions();
 
-			window.location.reload();
-		}
-	});
+				window.location.reload();
+			}
+		});
+	}
 
 	// clear cache
-	$('#pref-stored-clear-cache').click(function() {
-		Foxtrick.clearCaches();
-		window.location.reload();
-	});
+	var prefStoredClearCache = document.getElementById('pref-stored-clear-cache');
+	if (prefStoredClearCache) {
+		prefStoredClearCache.addEventListener('click', function() {
+			Foxtrick.clearCaches();
+			window.location.reload();
+		});
+	}
 }
 
 /**
@@ -1240,7 +1373,9 @@ function initChangesTab() {
 	changesLink.className = 'module-link';
 	changesLink.textContent = '¶';
 	changesLink.title = Foxtrick.L10n.getString('module.link');
-	$('div[x-on*="changes"] > h2').append(changesLink);
+	var changesHeader = document.querySelector('div[x-on*="changes"] > h2');
+	if (changesHeader)
+		changesHeader.appendChild(changesLink);
 
 	var parseNotes = function(obj) {
 		if (!obj) {
@@ -1273,7 +1408,9 @@ function initChangesTab() {
 	};
 
 	var updateNotepad = function(selected, versionMap, data) {
-		var list = $('#pref-notepad-list')[0];
+		var list = document.getElementById('pref-notepad-list');
+		if (!list)
+			return;
 		list.textContent = ''; // clear list
 
 		var versionL10n = Foxtrick.L10n.getString('releaseNotes.version');
@@ -1294,7 +1431,9 @@ function initChangesTab() {
 			var isMajor = isMajorVersion(version);
 			if (isMajor) {
 				// set main title
-				$('#pref-notepad-title').text(versionHeader);
+				var notepadTitle = document.getElementById('pref-notepad-title');
+				if (notepadTitle)
+					notepadTitle.textContent = versionHeader;
 			}
 
 			if (!isMajor || minorVersions.length > 1) {
@@ -1341,15 +1480,16 @@ function initChangesTab() {
 			if (!note)
 				continue;
 
-			var $note = $('#translator_note');
-			var list = $note[0];
+			var noteEl = document.getElementById('translator_note');
+			if (!noteEl)
+				continue;
 
-			addNote(note, list, rNotesLinks);
+			addNote(note, noteEl, rNotesLinks);
 
 			if (version === 'beta')
-				$note.append(' ' + statusText);
+				noteEl.appendChild(document.createTextNode(' ' + statusText));
 
-			$note.attr('style', 'display:block;');
+			noteEl.style.display = 'block';
 		}
 	};
 
@@ -1438,7 +1578,10 @@ function initChangesTab() {
 
 			addBetaNote(statusText, data);
 
-			var select = $('#pref-version-release-notes')[0];
+			var select = document.getElementById('pref-version-release-notes');
+			if (!select)
+				return;
+
 			var majorVersions = addVersions(select, versions);
 
 			var update = function() {
@@ -1446,7 +1589,7 @@ function initChangesTab() {
 			};
 
 			update();
-			$(select).change(update);
+			select.addEventListener('change', update);
 
 		}).catch(Foxtrick.catch('changes'));
 
@@ -1466,9 +1609,11 @@ function initHelpTab() {
 			var aboutData = JSON.parse(aboutJSON);
 			var category = aboutData.links;
 
+			var externalLinksList = document.getElementById('external-links-list');
 			Foxtrick.forEach(function(a) {
 				var item = document.createElement('li');
-				$('#external-links-list').append(item);
+				if (externalLinksList)
+					externalLinksList.appendChild(item);
 
 				var link = document.createElement('a');
 				item.appendChild(link);
@@ -1499,7 +1644,9 @@ function initHelpTab() {
 		block.id = 'faq-' + i;
 		block.className = 'module';
 		block.setAttribute('x-on', 'help search');
-		$('#pane').append(block);
+		var pane = document.getElementById('pane');
+		if (pane)
+			pane.appendChild(block);
 
 		// question
 		var header = document.createElement('h3');
@@ -1579,7 +1726,7 @@ function initAboutTab() {
 			item.appendChild(link);
 		}
 
-		$(list).append(item);
+		list.appendChild(item);
 	};
 
 	return Foxtrick.load(Foxtrick.InternalPath + 'data/foxtrick_about.json')
@@ -1589,10 +1736,9 @@ function initAboutTab() {
 			// @ts-ignore
 			var aboutData = JSON.parse(aboutJSON);
 
-			$('.about-list').each(function() {
-
-				var $container = $(this);
-				var type = $container.attr('path');
+			var containers = document.querySelectorAll('.about-list');
+			containers.forEach(function(container) {
+				var type = container.getAttribute('path');
 
 				/** @type {AboutJSONPerson[]|AboutJSONTranslation[]} */
 				// @ts-ignore
@@ -1611,18 +1757,17 @@ function initAboutTab() {
 						item.appendChild(list);
 
 						Foxtrick.map(function(translator) {
-							addItem(translator, $(list));
+							addItem(translator, list);
 						}, trData.translators);
 
-						$container.append(item);
+						container.appendChild(item);
 					}
 					else {
-						addItem(data, $container);
+						addItem(data, container);
 					}
 
 				// @ts-ignore
 				}, category);
-
 			});
 
 		}).catch(Foxtrick.catch('about'));
@@ -1635,9 +1780,10 @@ function initAboutTab() {
  */
 function initTabs() {
 	// attach each tab with corresponding pane
-	$('.tabs li a').each(function() {
-		var tab = $(this).parent().attr('id').replace(/^tab-/, '');
-		$(this).attr('href', generateURI({ tab: tab }));
+	var tabLinks = document.querySelectorAll('.tabs li a');
+	tabLinks.forEach(function(link) {
+		var tab = link.parentElement.id.replace(/^tab-/, '');
+		link.href = generateURI({ tab: tab });
 	});
 
 	// initialize the tabs
@@ -1658,96 +1804,104 @@ function initTabs() {
  */
 function initTextAndValues() {
 	if (Foxtrick.L10n.getString('direction') === 'rtl')
-		$('html').attr('dir', 'rtl');
+		document.documentElement.setAttribute('dir', 'rtl');
 
 	document.title = Foxtrick.L10n.getString('prefs.title');
-	$('#version').text(Foxtrick.version + ' ' + Foxtrick.branch);
+	var versionEl = document.getElementById('version');
+	if (versionEl)
+		versionEl.textContent = Foxtrick.version + ' ' + Foxtrick.branch;
 
 	// initialize text
-	$('body [data-text]').each(function() {
-		var $this = $(this);
-		if ($this.attr('data-text')) {
-			var text = Foxtrick.L10n.getString($this.attr('data-text'));
+	var textElements = document.querySelectorAll('body [data-text]');
+	textElements.forEach(function(el) {
+		if (el.dataset.text) {
+			var text = Foxtrick.L10n.getString(el.dataset.text);
 			var node = document.createTextNode(text);
-			$this.prepend(node);
+			el.insertBefore(node, el.firstChild);
 		}
 	});
 
 	// initialize modules
-	$('#pane [module]').each(function() {
-		var $this = $(this);
-		var module = $this.attr('module');
-		if ($this.attr('option')) {
+	var moduleElements = document.querySelectorAll('#pane [module]');
+	moduleElements.forEach(function(el) {
+		var module = el.getAttribute('module');
+		if (el.getAttribute('option')) {
 			// module option
-			var option = $this.attr('option');
-			if ($this.is(':checkbox')) {
+			var option = el.getAttribute('option');
+			if (el.type === 'checkbox') {
 				if (Foxtrick.Prefs.isModuleOptionEnabled(module, option))
-					$this.prop('checked', true);
+					el.checked = true;
 			}
-			else if ($this.is(':input')) {
+			else if (el.matches('input, textarea')) {
 				// text input
-				this.value = Foxtrick.Prefs.getString('module.' + module + '.' + option);
+				el.value = Foxtrick.Prefs.getString('module.' + module + '.' + option);
 			}
 		}
-		else if ($this.is(':radio')) {
+		else if (el.type === 'radio') {
 			// radio input
 			var selected = Foxtrick.Prefs.getModuleValue(module);
-			if ($this.prop('value') == selected)
-				$this.prop('checked', true);
+			if (el.value == selected)
+				el.checked = true;
 		}
 		else if (Foxtrick.Prefs.isModuleEnabled(module)) {
 			// module itself
-			$this.prop('checked', true);
+			el.checked = true;
 		}
 	});
 
 	// initialize inputs
-	$('#pane input[pref]').each(function() {
-		var $this = $(this);
-		if ($this.is(':checkbox')) {
+	var prefInputs = document.querySelectorAll('#pane input[pref]');
+	prefInputs.forEach(function(el) {
+		if (el.type === 'checkbox') {
 			// checkbox
-			if (Foxtrick.Prefs.getBool($this.attr('pref')))
-				$this.prop('checked', true);
+			if (Foxtrick.Prefs.getBool(el.getAttribute('pref')))
+				el.checked = true;
 		}
 		else {
 			// text input
-			$this.attr('value', Foxtrick.Prefs.getString($this.attr('pref')));
+			el.value = Foxtrick.Prefs.getString(el.getAttribute('pref')) || '';
 		}
 	});
 
-	$('#pane textarea[pref]').each(function() {
-		var $this = $(this);
-		$this.text(Foxtrick.Prefs.getString($this.attr('pref')));
+	var prefTextareas = document.querySelectorAll('#pane textarea[pref]');
+	prefTextareas.forEach(function(el) {
+		el.textContent = Foxtrick.Prefs.getString(el.getAttribute('pref'));
 	});
 
 	// initialize elements with blockers, disable if blocker enabled
-	$('body [blocked-by]').each(function() {
-		var $blockee = $(this);
-		var $blocker = $('#' + $blockee.attr('blocked-by'));
+	var blockedElements = document.querySelectorAll('body [blocked-by]');
+	blockedElements.forEach(function(blockee) {
+		var blockerId = blockee.getAttribute('blocked-by');
+		var blocker = document.getElementById(blockerId);
 
 		var updateStatus = function() {
-			if ($blocker.is(':checked'))
-				$blockee.prop('disabled', true);
+			if (blocker && blocker.checked)
+				blockee.disabled = true;
 			else
-				$blockee.prop('disabled', false);
+				blockee.disabled = false;
 		};
-		$blocker.click(updateStatus);
+
+		if (blocker)
+			blocker.addEventListener('click', updateStatus);
 
 		updateStatus();
 	});
 
 	// initialize elements with dependency, show only if dependency met
-	$('#pane [depends-on]').each(function() {
-		var $depender = $(this);
-		var $dependee = $('#' + $depender.attr('depends-on'));
+	var dependerElements = document.querySelectorAll('#pane [depends-on]');
+	dependerElements.forEach(function(depender) {
+		var dependeeId = depender.getAttribute('depends-on');
+		var dependee = document.getElementById(dependeeId);
 
 		var updateStatus = function() {
-			if ($dependee.is(':checked'))
-				Foxtrick.removeClass($depender[0], 'hidden');
+			if (dependee && dependee.checked)
+				Foxtrick.removeClass(depender, 'hidden');
 			else
-				Foxtrick.addClass($depender[0], 'hidden');
+				Foxtrick.addClass(depender, 'hidden');
 		};
-		$dependee.click(updateStatus);
+
+		if (dependee)
+			dependee.addEventListener('click', updateStatus);
 
 		updateStatus();
 	});
@@ -1756,7 +1910,7 @@ function initTextAndValues() {
 
 	// delete-token description
 	var CHPP_URL = Foxtrick.goToUrl('/MyHattrick/Preferences/ExternalAccessGrants.aspx');
-	var delDesc = $('#pref-delete-token-desc')[0];
+	var delDesc = document.getElementById('pref-delete-token-desc');
 	Foxtrick.L10n.appendLink('prefs.storedData.oauth.delete.desc', delDesc, CHPP_URL);
 
 	// initialize delete-token
@@ -1767,6 +1921,7 @@ function initTextAndValues() {
 		}, oauthKeys);
 		teamIds = Foxtrick.unique(teamIds);
 
+		var selectDeleteTokenTeamIds = document.getElementById('select-delete-token-teamIds');
 		for (var teamId of teamIds) {
 			var id = parseInt(teamId, 10);
 
@@ -1775,7 +1930,8 @@ function initTextAndValues() {
 				item.value = id;
 				item.textContent = id;
 
-				$('#select-delete-token-teamIds').append(item);
+				if (selectDeleteTokenTeamIds)
+					selectDeleteTokenTeamIds.appendChild(item);
 			}
 			else {
 				// delete invalid
@@ -1790,6 +1946,7 @@ function initTextAndValues() {
 	// initialize currency display
 	var currencyKeys = Foxtrick.Prefs.getAllKeysOfBranch('Currency.Code');
 	var rmText = Foxtrick.L10n.getString('button.remove');
+	var prefSetupCurrency = document.getElementById('pref-setup-currency');
 	Foxtrick.forEach(function(key) {
 		var id = parseInt(key.match(/\d+$/), 10);
 		if (isNaN(id) || !id) {
@@ -1824,7 +1981,8 @@ function initTextAndValues() {
 			Foxtrick.Prefs.setBool('preferences.updated', true);
 		});
 
-		$('#pref-setup-currency').append(row);
+		if (prefSetupCurrency)
+			prefSetupCurrency.appendChild(row);
 
 	}, currencyKeys);
 }
@@ -1836,6 +1994,7 @@ async function init() {
 	try {
 		await initCoreModules(false);
 		getPageIds();
+		buildNeededPermissions();
 
 		await initTabs();
 
@@ -1847,20 +2006,35 @@ async function init() {
 
 		testPermissions();
 
-		$('#spinner').addClass('hidden');
-		$('#subheader').removeClass('hidden');
-		$('#content').removeClass('hidden');
+		var spinner = document.getElementById('spinner');
+		var subheader = document.getElementById('subheader');
+		var content = document.getElementById('content');
+
+		if (spinner)
+			spinner.classList.add('hidden');
+		if (subheader)
+			subheader.classList.remove('hidden');
+		if (content)
+			content.classList.remove('hidden');
 
 
 		// if (Foxtrick.Prefs.isModuleEnabled('MobileEnhancements')) {
 		// 	// mobile
-		// 	$('.tabs').hide();
-		// 	$('#content').addClass('ft-mobile');
+		// 	var tabs = document.querySelectorAll('.tabs');
+		// 	tabs.forEach(function(t) { t.style.display = 'none'; });
+		// 	if (content) content.classList.add('ft-mobile');
 		// 	Foxtrick.log(Foxtrick, 'MobileEnhancements');
-		// 	Foxtrick.onClick($('#navigation-header')[0], function() {
-		// 		$('.tabs').toggle();
-		// 		$('#main').toggle();
-		// 	});
+		// 	var navHeader = document.getElementById('navigation-header');
+		// 	if (navHeader) {
+		// 		Foxtrick.onClick(navHeader, function() {
+		// 			tabs.forEach(function(t) {
+		// 				t.style.display = t.style.display === 'none' ? '' : 'none';
+		// 			});
+		// 			var main = document.getElementById('main');
+		// 			if (main)
+		// 				main.style.display = main.style.display === 'none' ? '' : 'none';
+		// 		});
+		// 	}
 		// }
 
 		/* Run a test. */
@@ -1888,8 +2062,11 @@ function initLoader() {
 	if (w)
 		document.body.setAttribute('style', 'width:' + w[1] + 'px;');
 
-	if (document.URL.startsWith('moz-extension://'))
-		$('#main').attr('gecko', ''); // sigh mozilla
+	if (document.URL.startsWith('moz-extension://')) {
+		var main = document.getElementById('main');
+		if (main)
+			main.setAttribute('gecko', ''); // sigh mozilla
+	}
 
 	// Fennec runs init() from injected entry.js (injected)
 	// called directly, it'll run and save actually for some reason
