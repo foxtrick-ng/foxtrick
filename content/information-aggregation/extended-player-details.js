@@ -155,7 +155,7 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 				let wageBaseStr = Foxtrick.formatNumber(base, NBSP);
 				let baseSpan = doc.createElement('span');
 				baseSpan.id = 'ft_bonuswage';
-				baseSpan.setAttribute('style', 'direction: ltr; color:#666666;');
+				baseSpan.setAttribute('style', 'unicode-bidi: isolate; color:#666666;');
 				baseSpan.textContent = `(${wageBaseStr}${NBSP}${symbol})`;
 				Foxtrick.makeFeaturedElement(baseSpan, module);
 
