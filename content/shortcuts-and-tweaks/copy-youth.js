@@ -228,7 +228,7 @@ Foxtrick.modules.CopyYouth = {
 				var mainBody = doc.getElementById('mainBody');
 
 				/** @type {HTMLElement} */
-				let info = mainBody.querySelector('.pmSpeech');
+				let info = mainBody.querySelector('#mainBody > div:last-child');
 				if (!info)
 					return;
 
@@ -256,13 +256,6 @@ Foxtrick.modules.CopyYouth = {
 				plain = plain.replace(/<br>|<\/h2> |<\/h3>/ig, '\n');
 
 				plain = Foxtrick.stripHTML(plain);
-
-				// remove last three paragraphs (two newlines and a sentence
-				// like 'What do you say? Should we give him a chance?'
-				let paragraphs = plain.split(/\n/);
-				// eslint-disable-next-line no-magic-numbers
-				paragraphs = paragraphs.splice(0, paragraphs.length - 3);
-				plain = paragraphs.join('\n');
 
 				Foxtrick.copy(doc, plain);
 
