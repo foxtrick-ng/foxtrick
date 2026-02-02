@@ -199,7 +199,7 @@
 	},
 	"frenchtracker": {
 		"img": "https://www.hattrick.org/Img/flags/5.png",
-		"title": "French U20/NT Tracker",
+		"title": "French U21/NT Tracker",
 		"trackernationalteamlink": {
 			"url": "https://www.hattrick-dtnfff.fr/",
 			"filters": ["leagueid"]
@@ -332,7 +332,7 @@
 		]
 	},
 	"hattrickportal": {
-		"title": "Hattrick Portal NT/U20 tracker",
+		"title": "Hattrick Portal NT/U21 tracker",
 		"img": "https://foxtrick-ng.github.io/foxtrick/linkicons/hattrickportal.ico",
 		"playerslink": {
 			"url": "https://hattrickportal.online/Tracker"
