@@ -10,7 +10,7 @@ Foxtrick.modules.LastLogin = {
 	PAGES: ['managerPage'],
 
 	/** @param {document} doc */
-	change: function(doc) {
+	change: async function(doc) {
 		/** @type {HTMLElement} */
 		var div = doc.querySelector('#pnlLogin');
 		if (!div || div.dataset.done) {
@@ -36,7 +36,7 @@ Foxtrick.modules.LastLogin = {
 			let last = doc.createElement('span');
 			let loginDate = Foxtrick.util.time.getDateFromText(text);
 			let secs = Math.floor((now.getTime() - loginDate.getTime()) / MSECS_IN_SEC);
-			let diffEl = Foxtrick.util.time.timeDiffToSpan(doc, secs, { useSWD: true });
+			let diffEl = await Foxtrick.util.time.timeDiffToSpan(doc, secs, { useSWD: true });
 			let result = diffEl.textContent;
 			if (/NaN/.test(result)) {
 				Foxtrick.log('Could not create timeDiff (NaN)');

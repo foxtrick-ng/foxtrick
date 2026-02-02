@@ -700,9 +700,9 @@ Foxtrick.observe = function(node, shouldStop, options) {
 		this.observe(node, opts);
 	};
 
-	let observer = new MutationObserver((mutations, observer) => {
+	let observer = new MutationObserver(async (mutations, observer) => {
 		observer.disconnect();
-		if (!shouldStop(mutations))
+		if (!(await shouldStop(mutations)))
 			observe.call(observer);
 	});
 
