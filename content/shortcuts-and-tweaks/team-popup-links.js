@@ -67,7 +67,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 		},
 		TeamAnalysis: {
 			ownLink: '/Club/TacticsRoom/',
-			linkByTeam: '/Club/TacticsRoom/?teamId=[teamid]',
+			linkByTeam: '/Club/TacticsRoom/?analyzeTeamId=[teamid]',
 			linkByUser: '/Club/Manager/?userId=[userid]&redir_to_analysis=true',
 		},
 		TransferHistory: {
