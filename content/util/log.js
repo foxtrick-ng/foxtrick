@@ -465,6 +465,11 @@ Foxtrick.log.Reporter = {
 			},
 		);
 
+		// Add ExtraErrorDataIntegration.
+		// Sends custom properties on Error as context.
+		if (sentry.extraErrorDataIntegration)
+			integrations.push(sentry.extraErrorDataIntegration({ depth: 3 }));
+
 		// keepalive currently doesn't work with firefox
 		//@ts-expect-error
 		const keepalive = navigator && navigator.userAgentData ? true: false;
@@ -682,7 +687,9 @@ Foxtrick.log.Reporter = {
 
 		const tags = {};
 		for (const desc of tagDescriptors) {
-			if (desc.needsDoc && !document) continue;
+			if (desc.needsDoc && 
+				(!document || document.URL?.match('extension://.+background.html'))) continue;
+
 			let value;
 			try {
 				value = desc.getValue();

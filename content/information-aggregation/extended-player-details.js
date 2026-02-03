@@ -137,7 +137,10 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 			let wageSpan;
 			if ((wageSpan = wageCell.querySelector('span[title]'))) {
 				let amount = wageCell.firstChild.textContent;
-				wageString = amount + wageSpan.title.replace(/^[\d\s]+/, '');
+				if (wageSpan.title.match(/\[.+\]/)) // ht localisation bug?
+					wageString = wageSpan.title.replace(/\[.+\]/, currencyStr);
+				else
+					wageString = wageSpan.title.replace(/[\d\s]+/, amount);
 			}
 
 			var [wagePre, wageFull] = wageString.split(currencyRe);
@@ -147,12 +150,25 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 
 			let hasBonus = !!bonus;
 			if (hasBonus && wageWOBonus) {
-				wageCell.textContent = wagePre + currencyStr + ' ';
+				//TODO: this exact code is repeated in HtmsPoints - unify
+				const locale = Foxtrick.Prefs.getString('htLanguage');
+				const ignoreLocales = ['az'];
+				if (!ignoreLocales.includes(locale)) {
+					//add nowrap to skills rows
+					const skillSelector = `tr[id^=${Foxtrick.getMainIDPrefix()}ucPlayerSkills_]`;
+					const skillRows = doc.querySelectorAll(skillSelector);
+					skillRows.forEach( node => {
+						if (node.firstElementChild?.nodeName?.toLowerCase() === 'td')
+							Foxtrick.addClass(node.firstElementChild, 'nowrap')
+					});
+				}
+
+				wageCell.textContent = `${wagePre}${NBSP}${currencyStr} `;
 
 				let wageBaseStr = Foxtrick.formatNumber(base, NBSP);
 				let baseSpan = doc.createElement('span');
 				baseSpan.id = 'ft_bonuswage';
-				baseSpan.setAttribute('style', 'direction: ltr; color:#666666;');
+				baseSpan.setAttribute('style', 'unicode-bidi: isolate; color:#666666;');
 				baseSpan.textContent = `(${wageBaseStr}${NBSP}${symbol})`;
 				Foxtrick.makeFeaturedElement(baseSpan, module);
 
@@ -167,7 +183,7 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 
 				let spanSeason = doc.createElement('span');
 				spanSeason.id = 'ft_seasonwage';
-				spanSeason.textContent = wageSeasonStr + NBSP + symbol + perseason;
+				spanSeason.textContent = wageSeasonStr + ' ' + symbol + perseason;
 				Foxtrick.makeFeaturedElement(spanSeason, module);
 
 				wageCell.appendChild(doc.createElement('br'));

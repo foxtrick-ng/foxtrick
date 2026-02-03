@@ -156,7 +156,7 @@ Foxtrick.parseURL = function(url) {
  * @return {Promise<string|FetchError>}
  */
 Foxtrick.fetch = function(url, params) {
-	const ERROR_XHR_FATAL = 'FATAL error in XHR:';
+	const ERROR_FETCH_FATAL = 'FATAL error in fetch: ';
 
 	let pUrl = Foxtrick.parseURL(url);
 
@@ -216,15 +216,22 @@ Foxtrick.fetch = function(url, params) {
 				});
 			})
 			.catch(function(e) {
-				Foxtrick.log(ERROR_XHR_FATAL, e);
+				Foxtrick.log(ERROR_FETCH_FATAL);
 				/** @type {FetchError} */
 				let error = {
 					url: pUrl,
 					status: -1,
-					text: ERROR_XHR_FATAL + e.message,
+					text: ERROR_FETCH_FATAL + e.message,
 					params,
 					_cls: Foxtrick.FETCH_ERROR,
 				};
+
+				// temp code to check where all the fetch errors logged in Sentry are coming from
+				let sError = new Error("Foxtrick.fetch error", { cause: e });
+				Object.assign(sError, error);
+				Foxtrick.log(sError);
+
+				// Foxtrick.log(error); // uncomment this once code above is removed
 				reject(error);
 			});
 	});
