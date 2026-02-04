@@ -8,7 +8,7 @@
 
 Foxtrick.modules['TeamPopupLinks'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.SHORTCUTS_AND_TWEAKS,
-	OUTSIDE_MAINBODY: true,
+	OUTSIDE_MAINBODY: false,
 	PAGES: ['all'],
 	NICE: 10, // after anythings that works on team/manager links
 	// but before staff-marker
@@ -525,17 +525,19 @@ Foxtrick.modules['TeamPopupLinks'] = {
 			}
 		}
 
-		var sidebar = doc.getElementById('sidebar');
-		if (sidebar) {
+		const sidebars = [doc.getElementById('sidebar'), doc.querySelector('#ngMatch .htbox-right')];
+		sidebars.forEach(sidebar => {
+			if (!sidebar)
+				return;
 			let aLinks = sidebar.querySelectorAll('a');
 			for (let aLink of aLinks) {
 				if (!aLink.hasAttribute('href') ||
-				    aLink.querySelector('img:not(.ft-staff-icon)') !== null)
+					aLink.querySelector('img:not(.ft-staff-icon)') !== null)
 					continue; // don't add to buttons
 
 				addSpan(aLink);
 			}
-		}
+		});
 	},
 
 	change: function(doc) {
