@@ -173,7 +173,6 @@ Foxtrick.modules['TeamPopupLinks'] = {
 		module.addPopupLinks(doc);
 	},
 
-	/* eslint-disable complexity */
 	addPopupLinks: function(doc) {
 		const module = this;
 		const MODULE_NAME = module.MODULE_NAME;
@@ -196,6 +195,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 		var sUrl = doc.URL;
 		var ownTeamId = Foxtrick.util.id.getOwnTeamId();
 		var curTeamId = Foxtrick.Pages.All.getTeamId(doc);
+		/* eslint-disable-next-line no-unused-vars */
 		var hasScroll = Foxtrick.util.layout.mainBodyHasScroll(doc);
 		var links = this.LINKS;
 
@@ -224,7 +224,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 				}
 
 				const pages = ['forumViewThread', 'forumWritePost', 'forumModWritePost', 'region'];
-				// @ts-ignore
+				//@ts-expect-error
 				if (!Foxtrick.isPage(doc, pages) &&
 					(Foxtrick.util.layout.isStandard(doc) || parent.nodeName != 'TD')) {
 					// Foxtrick.addClass(aLink, 'ft-nowrap');
@@ -265,8 +265,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 					var teamId = Foxtrick.util.id.getTeamIdFromUrl(orgLink.href);
 					if (teamId) {
 						// eslint-disable-next-line no-unused-vars
-						// @ts-ignore
-						let teamName = orgLink.textContent; // lgtm[js/unused-local-variable]
+						let teamName = orgLink.textContent;
 					}
 
 					var userName;
@@ -300,7 +299,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 						var user = userName;
 						if (user && userId && userId == user.match(/\d+/))
 							user = '';
-						
+
 						var isNationalTeam = Foxtrick.util.id.isNTId(teamId);
 
 						if (isOwnTeam && ownLink)
@@ -476,6 +475,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 					}
 
 					// Swap more/less button position if needed
+					//@ts-expect-error
 					if (down && list.lastChild && list.lastChild.querySelector('[more]')) {
 						let more = list.removeChild(list.lastChild);
 						list.insertBefore(more, list.firstChild);
