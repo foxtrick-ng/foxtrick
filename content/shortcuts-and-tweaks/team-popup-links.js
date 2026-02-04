@@ -446,17 +446,39 @@ Foxtrick.modules['TeamPopupLinks'] = {
 
 					var down = false;
 
-					let pos = Foxtrick.getElementPosition(orgLink, mainBody);
-					var pT = pos.top;
-					if (hasScroll && pT - mainBody.scrollTop < mainBody.offsetHeight / 2 ||
-					    pT - doc.body.scrollTop < 300 || !mainBody) { // = popdown
+					const linkRect = orgLink.getBoundingClientRect();
+					const viewportHeight = doc.documentElement.clientHeight;
+					const viewportWidth = doc.documentElement.clientWidth;
 
-						if (list.lastChild) {
-							let more = list.removeChild(list.lastChild);
-							list.insertBefore(more, list.firstChild);
-						}
-
+					// Default to positioning up, unless it would be clipped by the top
+					// Use 200px as estimated popup height to check for clipping
+					const estimatedPopupHeight = 200;
+					if (linkRect.top < estimatedPopupHeight) {
+						// Not enough space above - position below the link
+						list.style.top = linkRect.bottom + 'px';
+						list.style.bottom = 'auto';
 						down = true;
+					} else {
+						// Position above the link
+						list.style.bottom = (viewportHeight - linkRect.top) + 'px';
+						list.style.top = 'auto';
+						down = false;
+					}
+
+					// Handle left/right positioning based on mouse pointer and document direction
+					const isRTL = doc.documentElement.getAttribute('dir') === 'rtl';
+					if (isRTL) {
+						list.style.right = (viewportWidth - ev.clientX - 10) + 'px';
+						list.style.left = 'auto';
+					} else {
+						list.style.left = (ev.clientX - 10) + 'px';
+						list.style.right = 'auto';
+					}
+
+					// Swap more/less button position if needed
+					if (down && list.lastChild && list.lastChild.querySelector('[more]')) {
+						let more = list.removeChild(list.lastChild);
+						list.insertBefore(more, list.firstChild);
 					}
 
 					Foxtrick.addClass(list, 'ft-popup-list-' + (down ? 'down' : 'up'));
@@ -466,7 +488,16 @@ Foxtrick.modules['TeamPopupLinks'] = {
 						parentTPL.remove();
 
 					Foxtrick.insertAfter(list, orgLink);
+					// Hide popup on scroll
+					let scrollHandler = function() {
+						if (list && list.parentNode) {
+							list.remove();
+						}
+						window.removeEventListener('scroll', scrollHandler, true);
+					};
+					window.addEventListener('scroll', scrollHandler, true);
 				};
+
 				Foxtrick.listen(aLink, 'mouseover', showPopup, false);
 				span.appendChild(aLink);
 			}
