@@ -19,7 +19,7 @@ html[dir="rtl"] td .ft-popup-span {
 ul.ft-popup-list {
 	font-size: 11px;
 	display: none;
-	position: absolute;
+	position: fixed;
 	background-color: #ffffff;
 	border: solid 2px #267f30;
 	padding: 0px;
@@ -30,28 +30,6 @@ ul.ft-popup-list {
 }
 html[data-theme="standard"] ul.ft-popup-list {
 	border-radius: 10px;
-}
-
-html[dir="ltr"] ul.ft-popup-list {
-	left:  10px;
-	right: -moz-initial;
-	right: initial;
-}
-html[dir="rtl"] ul.ft-popup-list {
-	right: 10px;
-	left: -moz-initial;
-	left: initial;
-}
-
-ul.ft-popup-list-up {
-	bottom:12px; /* = text height */
-}
-
-ul.ft-popup-list-down {
-	top:12px; /* = line height */
-}
-h1 ul.ft-popup-list-down {
-	top: 27px;
 }
 
 .ft-popup-span:hover ul.ft-popup-list {

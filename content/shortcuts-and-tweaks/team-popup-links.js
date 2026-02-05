@@ -8,15 +8,17 @@
 
 Foxtrick.modules['TeamPopupLinks'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.SHORTCUTS_AND_TWEAKS,
-	OUTSIDE_MAINBODY: true,
+	OUTSIDE_MAINBODY: false,
 	PAGES: ['all'],
 	NICE: 10, // after anythings that works on team/manager links
 	// but before staff-marker
 	CSS: Foxtrick.InternalPath + 'resources/css/popup-links.css',
 
-	OPTIONS: ['TeamHighlight', 'TeamLinks', 'UserLinks', 'CustomLink'],
+	OPTIONS: ['PopupDelay', 'TeamHighlight', 'TeamLinks', 'UserLinks', 'CustomLink'],
+	OPTION_EDITS: true,
+	OPTION_EDITS_DISABLED_LIST: [false, true, true, true, true ],
 	OPTION_TEXTS: true,
-	OPTION_TEXTS_DISABLED_LIST: [true, true, true, false],
+	OPTION_TEXTS_DISABLED_LIST: [true, true, true, true, false],
 
 	LINKS: {
 		Team: {
@@ -173,7 +175,6 @@ Foxtrick.modules['TeamPopupLinks'] = {
 		module.addPopupLinks(doc);
 	},
 
-	/* eslint-disable complexity */
 	addPopupLinks: function(doc) {
 		const module = this;
 		const MODULE_NAME = module.MODULE_NAME;
@@ -196,6 +197,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 		var sUrl = doc.URL;
 		var ownTeamId = Foxtrick.util.id.getOwnTeamId();
 		var curTeamId = Foxtrick.Pages.All.getTeamId(doc);
+		/* eslint-disable-next-line no-unused-vars */
 		var hasScroll = Foxtrick.util.layout.mainBodyHasScroll(doc);
 		var links = this.LINKS;
 
@@ -224,7 +226,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 				}
 
 				const pages = ['forumViewThread', 'forumWritePost', 'forumModWritePost', 'region'];
-				// @ts-ignore
+				//@ts-expect-error
 				if (!Foxtrick.isPage(doc, pages) &&
 					(Foxtrick.util.layout.isStandard(doc) || parent.nodeName != 'TD')) {
 					// Foxtrick.addClass(aLink, 'ft-nowrap');
@@ -237,7 +239,8 @@ Foxtrick.modules['TeamPopupLinks'] = {
 				parent.insertBefore(span, aLink);
 
 				// to show a pop-up!
-				var showPopup = function(ev) {
+				let list;
+				var showPopup = function(ev, mouseX) {
 					var findLink = function(node) {
 						if (node.nodeName == 'A' && !Foxtrick.hasClass(node, 'ft-no-popup'))
 							return node;
@@ -265,8 +268,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 					var teamId = Foxtrick.util.id.getTeamIdFromUrl(orgLink.href);
 					if (teamId) {
 						// eslint-disable-next-line no-unused-vars
-						// @ts-ignore
-						let teamName = orgLink.textContent; // lgtm[js/unused-local-variable]
+						let teamName = orgLink.textContent;
 					}
 
 					var userName;
@@ -287,7 +289,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 					var ownTopTeamLinks = orgLink.parentNode.parentNode.nodeName == 'DIV' &&
 						orgLink.parentNode.parentNode.id == 'teamLinks';
 
-					var list = Foxtrick.createFeaturedElement(doc, module, 'ul');
+					list = Foxtrick.createFeaturedElement(doc, module, 'ul');
 					list.className = 'ft-popup-list';
 
 					var addItem = function(key, isOwnTeam, teamId, userId, userName, ownLink,
@@ -300,7 +302,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 						var user = userName;
 						if (user && userId && userId == user.match(/\d+/))
 							user = '';
-						
+
 						var isNationalTeam = Foxtrick.util.id.isNTId(teamId);
 
 						if (isOwnTeam && ownLink)
@@ -437,7 +439,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 								link.setAttribute('more', 'true');
 								link.textContent = Foxtrick.L10n.getString('more');
 							}
-							Foxtrick.onClick(link, showPopup);
+							Foxtrick.onClick(link, (ev) => showPopup(ev, mouseX));
 							item.appendChild(link);
 							list.appendChild(item);
 						}
@@ -445,18 +447,40 @@ Foxtrick.modules['TeamPopupLinks'] = {
 					}
 
 					var down = false;
+					const linkRect = orgLink.getBoundingClientRect();
+					const viewportHeight = doc.documentElement.clientHeight;
+					const viewportWidth = doc.documentElement.clientWidth;
 
-					let pos = Foxtrick.getElementPosition(orgLink, mainBody);
-					var pT = pos.top;
-					if (hasScroll && pT - mainBody.scrollTop < mainBody.offsetHeight / 2 ||
-					    pT - doc.body.scrollTop < 300 || !mainBody) { // = popdown
-
-						if (list.lastChild) {
-							let more = list.removeChild(list.lastChild);
-							list.insertBefore(more, list.firstChild);
-						}
-
+					// Default to positioning up, unless it would be clipped by the top
+					// Use 200px as estimated popup height to check for clipping
+					const estimatedPopupHeight = 200;
+					if (linkRect.top < estimatedPopupHeight) {
+						// Not enough space above - position below the link
+						list.style.top = linkRect.bottom + 'px';
+						list.style.bottom = 'auto';
 						down = true;
+					} else {
+						// Position above the link
+						list.style.bottom = (viewportHeight - linkRect.top) + 'px';
+						list.style.top = 'auto';
+						down = false;
+					}
+
+					// Handle left/right positioning based on mouse pointer and document direction
+					const isRTL = doc.documentElement.getAttribute('dir') === 'rtl';
+					if (isRTL) {
+						list.style.right = (viewportWidth - mouseX - 15) + 'px';
+						list.style.left = 'auto';
+					} else {
+						list.style.left = (mouseX - 15) + 'px';
+						list.style.right = 'auto';
+					}
+
+					// Swap more/less button position if needed
+					//@ts-expect-error
+					if (down && list.lastChild && list.lastChild.querySelector('[more]')) {
+						let more = list.removeChild(list.lastChild);
+						list.insertBefore(more, list.firstChild);
 					}
 
 					Foxtrick.addClass(list, 'ft-popup-list-' + (down ? 'down' : 'up'));
@@ -465,9 +489,49 @@ Foxtrick.modules['TeamPopupLinks'] = {
 					if (parentTPL)
 						parentTPL.remove();
 
+					// Hide popup on scroll
+					let scrollHandler = function() {
+						removePopup();
+						window.removeEventListener('scroll', scrollHandler, true);
+					};
+					window.addEventListener('scroll', scrollHandler, true);
+
 					Foxtrick.insertAfter(list, orgLink);
 				};
-				Foxtrick.listen(aLink, 'mouseover', showPopup, false);
+
+				const removePopup = function() {
+					clearPopupTimeout();
+					list && list.remove();
+				}
+
+				// We display the popup after a short delay
+				let delay = 0;
+				if (Foxtrick.Prefs.isModuleOptionEnabled('TeamPopupLinks','PopupDelay')) {
+					const id = 'module.TeamPopupLinks.PopupDelay_text';
+					const delayPref = Foxtrick.Prefs.getString(id);
+					if (Number.isFinite(+delayPref))
+						delay = parseInt(delayPref, 10);
+				}
+
+				let mouseX = 0;
+				const popupHandler = function(ev) {
+					removePopup();
+
+					aLink.addEventListener('mousemove', (ev) => {
+						mouseX = ev.pageX;
+					});
+
+					timeoutId = setTimeout(() => showPopup(ev, mouseX), delay);
+				}
+				Foxtrick.listen(aLink, 'mouseover', popupHandler, false);
+
+				// Cancel the delayed appearance if mouse is moved out
+				let timeoutId = null;
+				const clearPopupTimeout = function() {
+					timeoutId && clearTimeout(timeoutId);
+				}
+				Foxtrick.listen(aLink, 'mouseleave', clearPopupTimeout, false);
+
 				span.appendChild(aLink);
 			}
 		};
@@ -494,17 +558,19 @@ Foxtrick.modules['TeamPopupLinks'] = {
 			}
 		}
 
-		var sidebar = doc.getElementById('sidebar');
-		if (sidebar) {
+		const sidebars = [doc.getElementById('sidebar'), doc.querySelector('#ngMatch .htbox-right')];
+		sidebars.forEach(sidebar => {
+			if (!sidebar)
+				return;
 			let aLinks = sidebar.querySelectorAll('a');
 			for (let aLink of aLinks) {
 				if (!aLink.hasAttribute('href') ||
-				    aLink.querySelector('img:not(.ft-staff-icon)') !== null)
+					aLink.querySelector('img:not(.ft-staff-icon)') !== null)
 					continue; // don't add to buttons
 
 				addSpan(aLink);
 			}
-		}
+		});
 	},
 
 	change: function(doc) {
