@@ -14,9 +14,11 @@ Foxtrick.modules['TeamPopupLinks'] = {
 	// but before staff-marker
 	CSS: Foxtrick.InternalPath + 'resources/css/popup-links.css',
 
-	OPTIONS: ['TeamHighlight', 'TeamLinks', 'UserLinks', 'CustomLink'],
+	OPTIONS: ['PopupDelay', 'TeamHighlight', 'TeamLinks', 'UserLinks', 'CustomLink'],
+	OPTION_EDITS: true,
+	OPTION_EDITS_DISABLED_LIST: [false, true, true, true, true ],
 	OPTION_TEXTS: true,
-	OPTION_TEXTS_DISABLED_LIST: [true, true, true, false],
+	OPTION_TEXTS_DISABLED_LIST: [true, true, true, true, false],
 
 	LINKS: {
 		Team: {
@@ -237,7 +239,8 @@ Foxtrick.modules['TeamPopupLinks'] = {
 				parent.insertBefore(span, aLink);
 
 				// to show a pop-up!
-				var showPopup = function(ev) {
+				let list;
+				var showPopup = function(ev, mouseX) {
 					var findLink = function(node) {
 						if (node.nodeName == 'A' && !Foxtrick.hasClass(node, 'ft-no-popup'))
 							return node;
@@ -286,7 +289,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 					var ownTopTeamLinks = orgLink.parentNode.parentNode.nodeName == 'DIV' &&
 						orgLink.parentNode.parentNode.id == 'teamLinks';
 
-					var list = Foxtrick.createFeaturedElement(doc, module, 'ul');
+					list = Foxtrick.createFeaturedElement(doc, module, 'ul');
 					list.className = 'ft-popup-list';
 
 					var addItem = function(key, isOwnTeam, teamId, userId, userName, ownLink,
@@ -436,7 +439,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 								link.setAttribute('more', 'true');
 								link.textContent = Foxtrick.L10n.getString('more');
 							}
-							Foxtrick.onClick(link, showPopup);
+							Foxtrick.onClick(link, (ev) => showPopup(ev, mouseX));
 							item.appendChild(link);
 							list.appendChild(item);
 						}
@@ -444,7 +447,6 @@ Foxtrick.modules['TeamPopupLinks'] = {
 					}
 
 					var down = false;
-
 					const linkRect = orgLink.getBoundingClientRect();
 					const viewportHeight = doc.documentElement.clientHeight;
 					const viewportWidth = doc.documentElement.clientWidth;
@@ -467,10 +469,10 @@ Foxtrick.modules['TeamPopupLinks'] = {
 					// Handle left/right positioning based on mouse pointer and document direction
 					const isRTL = doc.documentElement.getAttribute('dir') === 'rtl';
 					if (isRTL) {
-						list.style.right = (viewportWidth - ev.clientX - 10) + 'px';
+						list.style.right = (viewportWidth - mouseX - 15) + 'px';
 						list.style.left = 'auto';
 					} else {
-						list.style.left = (ev.clientX - 10) + 'px';
+						list.style.left = (mouseX - 15) + 'px';
 						list.style.right = 'auto';
 					}
 
@@ -487,18 +489,49 @@ Foxtrick.modules['TeamPopupLinks'] = {
 					if (parentTPL)
 						parentTPL.remove();
 
-					Foxtrick.insertAfter(list, orgLink);
 					// Hide popup on scroll
 					let scrollHandler = function() {
-						if (list && list.parentNode) {
-							list.remove();
-						}
+						removePopup();
 						window.removeEventListener('scroll', scrollHandler, true);
 					};
 					window.addEventListener('scroll', scrollHandler, true);
+
+					Foxtrick.insertAfter(list, orgLink);
 				};
 
-				Foxtrick.listen(aLink, 'mouseover', showPopup, false);
+				const removePopup = function() {
+					clearPopupTimeout();
+					list && list.remove();
+				}
+
+				// We display the popup after a short delay
+				let delay = 0;
+				if (Foxtrick.Prefs.isModuleOptionEnabled('TeamPopupLinks','PopupDelay')) {
+					const id = 'module.TeamPopupLinks.PopupDelay_text';
+					const delayPref = Foxtrick.Prefs.getString(id);
+					if (Number.isFinite(+delayPref))
+						delay = parseInt(delayPref, 10);
+				}
+
+				let mouseX = 0;
+				const popupHandler = function(ev) {
+					removePopup();
+
+					aLink.addEventListener('mousemove', (ev) => {
+						mouseX = ev.pageX;
+					});
+
+					timeoutId = setTimeout(() => showPopup(ev, mouseX), delay);
+				}
+				Foxtrick.listen(aLink, 'mouseover', popupHandler, false);
+
+				// Cancel the delayed appearance if mouse is moved out
+				let timeoutId = null;
+				const clearPopupTimeout = function() {
+					timeoutId && clearTimeout(timeoutId);
+				}
+				Foxtrick.listen(aLink, 'mouseleave', clearPopupTimeout, false);
+
 				span.appendChild(aLink);
 			}
 		};
