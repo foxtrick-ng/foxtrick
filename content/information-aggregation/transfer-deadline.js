@@ -10,22 +10,41 @@ Foxtrick.modules['TransferDeadline'] = {
 	PAGES: ['transferSearchResult', 'playerDetails', 'transfer', 'bookmarks'],
 	CSS: Foxtrick.InternalPath + 'resources/css/transfer-deadline.css',
 
-	run: function(doc) {
+	/** @type {WeakSet<Document> | null} */
+	_runLocks: null,
+
+	run: async function(doc) {
+		if (this._runLocks?.has(doc))
+			return;
+
 		// Check if deadline already set
 		if (doc.getElementsByClassName('ft-deadline').length > 0)
 			return;
 
-		if (Foxtrick.isPage(doc, 'transferSearchResult'))
-			this.runTransferResult(doc);
-		else if (Foxtrick.isPage(doc, 'playerDetails'))
-			this.runPlayerDetail(doc);
-		else if (Foxtrick.isPage(doc, 'transfer'))
-			this.runPlayerList(doc);
-		else if (Foxtrick.isPage(doc, 'bookmarks'))
-			this.runTransferResult(doc);
+		if (!this._runLocks)
+			this._runLocks = new WeakSet();
+
+		this._runLocks.add(doc);
+		try {
+			if (Foxtrick.isPage(doc, 'transferSearchResult'))
+				await this.runTransferResult(doc);
+			else if (Foxtrick.isPage(doc, 'playerDetails'))
+				await this.runPlayerDetail(doc);
+			else if (Foxtrick.isPage(doc, 'transfer'))
+				await this.runPlayerList(doc);
+			else if (Foxtrick.isPage(doc, 'bookmarks'))
+				await this.runTransferResult(doc);
+		} catch (e) {
+			Foxtrick.log(e);
+		} finally {
+			this._runLocks?.delete(doc);
+		}
 	},
 
 	change: async function(doc) {
+		if (this._runLocks?.has(doc))
+			return;
+
 		if (Foxtrick.isPage(doc, 'playerDetails'))
 			await this.runPlayerDetail(doc);
 		else if (Foxtrick.isPage(doc, 'bookmarks'))
