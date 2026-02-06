@@ -1580,15 +1580,18 @@ Foxtrick.Pages.Players.getPlayerList = function(doc, callback, options) {
 							if (node.nodeName === '#text') {
 								// the text is in a child text node of currentPara,
 								// so we remove all tags
-								leagueText += node.textContent;
+								leagueText += node.textContent.toLowerCase();
 							}
 						}, currentPara.childNodes);
 
 						for (let j in Foxtrick.XMLData.League) {
 							// README: this will break with localized league names
 							let id = parseInt(j, 10);
-							let league = Foxtrick.L10n.getCountryNameNative(id);
-							if (leagueText.indexOf(league) > -1) {
+							// this is surely madness
+							let leagueName = Foxtrick.L10n.getCountryNameNative(id).toLowerCase();
+							let countryName = Foxtrick.L10n.getCountryNameCountry(id).toLowerCase();
+							let ntName = Foxtrick.XMLData.getNTNameByLeagueId(id).toLowerCase();
+							if (leagueText.includes(countryName) || leagueText.includes(ntName) || leagueText.includes(leagueName)) {
 								player.currentLeagueId = id;
 								break;
 							}

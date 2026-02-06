@@ -800,14 +800,7 @@ Foxtrick.L10n.getCountryName = function(leagueId) {
  * @returns {string}
  */
 Foxtrick.L10n.getCountryNameEnglish = function(leagueId) {
-	var ret = 'New Moon';
-	try {
-		ret = Foxtrick.XMLData.League[leagueId].EnglishName;
-	}
-	catch (e) {
-		Foxtrick.log('getCountryNameEnglish:', leagueId, e);
-	}
-	return ret;
+	return this._getCountryName(leagueId, 'EnglishName');
 };
 
 /**
@@ -819,19 +812,61 @@ Foxtrick.L10n.getCountryNameEnglish = function(leagueId) {
  * @returns {string}
  */
 Foxtrick.L10n.getCountryNameNative = function(leagueId) {
-	var ret = 'New Moon';
+	return this._getCountryName(leagueId, 'LeagueName');
+};
+
+/**
+ * Get country name from Country object.
+ *
+ * Returns 'New Moon' if the method fails.
+ *
+ * @param  {number} leagueId
+ * @returns {string}
+ */
+Foxtrick.L10n.getCountryNameCountry = function(leagueId) {
+	return this._getCountryName(leagueId, 'CountryName');
+};
+
+/**
+ * Get short country name.
+ *
+ * Returns 'New Moon' if the method fails.
+ *
+ * @param  {number} leagueId
+ * @returns {string}
+ */
+Foxtrick.L10n.getCountryNameShort = function(leagueId) {
+	return this._getCountryName(leagueId, 'ShortName');
+};
+
+/**
+ * @param {number} leagueId
+ * @param {string} propertyName
+ * @returns {string} countryName
+ */
+Foxtrick.L10n._getCountryName = function(leagueId, propertyName) {
+	let ret;
 	try {
 		let league = Foxtrick.XMLData.League[leagueId];
 		if (!league)
-			throw new Error(`'${leagueId}' not found`);
+			throw new Error(`LeagueId '${leagueId}' not found`);
 
-		ret = league.LeagueName;
+		if (propertyName === 'CountryName')
+			ret = league.Country.CountryName;
+		else
+			ret = league[propertyName];
+	} catch (e) {
+		const msg = `_getCountryName ${propertyName}`;
+		let err = new Error(msg, { cause: e})
+		//@ts-expect-error
+		err.leagueId = leagueId;
+		Foxtrick.log(`${msg} ${leagueId}`, err)
 	}
-	catch (e) {
-		Foxtrick.log('getCountryNameNative:', leagueId, e);
-	}
+	if(!ret)
+		ret = 'New Moon';
 	return ret;
-};
+}
+
 
 /**
  * Get localized country name (trimmed).
