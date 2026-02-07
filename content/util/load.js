@@ -228,7 +228,23 @@ Foxtrick.fetch = function(url, params) {
 
 				// temp code to check where all the fetch errors logged in Sentry are coming from
 				let sError = new Error("Foxtrick.fetch error", { cause: e });
-				Object.assign(sError, error);
+				let sUrl = {};
+				try {
+					const u = new URL(pUrl);
+					let search = '[ft-stripped]';
+					if (u.protocol === 'chrome-extension:' || u.protocol === 'moz-extension:')
+						search = u.search;
+					Object.assign(sUrl, {
+						origin: u.origin,
+						pathname: u.pathname,
+						search,
+					});
+				} catch {/*ignore*/}
+				Object.assign(sError, {
+					_cls: Foxtrick.FETCH_ERROR,
+					method: type,
+					sUrl,
+				});
 				Foxtrick.log(sError);
 
 				// Foxtrick.log(error); // uncomment this once code above is removed
