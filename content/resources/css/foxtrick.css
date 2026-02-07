@@ -485,3 +485,20 @@ html[data-theme="simple"] tr.darkereven {
 	content: "\e900" / "FT";
 	font-size: 1.1em;
 }
+
+#ft-bug-report-message {
+	box-sizing: border-box;
+	width: 100%;
+	line-height: 1;
+	min-height: 5em;
+	resize: vertical;
+}
+
+@supports (field-sizing: content) {
+	#ft-bug-report-message {
+		field-sizing: content;
+		line-height: unset;
+		min-height: 5lh;
+		resize: none;
+	}
+}
