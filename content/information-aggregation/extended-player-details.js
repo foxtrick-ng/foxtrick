@@ -163,7 +163,10 @@ Foxtrick.modules['ExtendedPlayerDetailsWage'] = {
 					});
 				}
 
-				wageCell.textContent = `${wagePre}${NBSP}${currencyStr} `;
+				if (wagePre.trim() !== '')
+					wageCell.textContent = `${wagePre}${NBSP}${currencyStr} `;
+				else
+					wageCell.textContent = `${currencyStr} `;
 
 				let wageBaseStr = Foxtrick.formatNumber(base, NBSP);
 				let baseSpan = doc.createElement('span');
