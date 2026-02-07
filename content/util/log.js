@@ -274,7 +274,7 @@ Foxtrick.modules.Reporter = {
 	FORUM_URL : '/Forum/Overview.aspx?v=0&f=173635',
 
 	/**
-	 * Adds a link to send Foxtrick log
+	 * Adds a link to manually send a Foxtrick bug report.
 	 * @param {document} doc
 	 */
 	addBugReportLink: function(doc) {
@@ -303,9 +303,27 @@ Foxtrick.modules.Reporter = {
 			sorry.textContent = Foxtrick.L10n.getString('reportBug.sorry');
 			info.appendChild(sorry);
 
+			const describe = doc.createElement('p');
+			const maxLength = 2000;
+
+			const messageLabel = doc.createElement('label');
+			messageLabel.setAttribute('for', 'ft-bug-report-message');
+			const labelText = Foxtrick.L10n.getString('reportBug.describe.message.title').replace('%1', maxLength.toString())
+			messageLabel.textContent = labelText;
+			describe.appendChild(messageLabel);
+
+			const messageBox = doc.createElement('textarea');
+			messageBox.id = 'ft-bug-report-message';
+			messageBox.maxLength = maxLength;
+			messageBox.setAttribute('aria-label', labelText);
+			messageBox.placeholder = Foxtrick.L10n.getString('reportBug.describe.message.placeholder');
+			describe.appendChild(messageBox);
+			info.appendChild(describe);
+
 			const data = doc.createElement('p');
 			Foxtrick.L10n.appendLink('reportBug.error.data', data, BUG_DATA_URL);
 			info.appendChild(data);
+
 
 			const report = doc.createElement('button');
 			report.type = 'button';
@@ -313,11 +331,14 @@ Foxtrick.modules.Reporter = {
 			Foxtrick.onClick(report, function() {
 				const doc = this.ownerDocument;
 				hideNote();
-				Foxtrick.modules.Reporter.reportBug(doc);
+				let message = messageBox.value;
+				message = message.normalize().trim().slice(0, maxLength);
+				Foxtrick.modules.Reporter.reportBug(doc, { message });
 			});
 			info.appendChild(report);
 
 			Foxtrick.util.note.add(doc, info, NOTE_ID, { closable: true, focus: true });
+			setTimeout(() => messageBox.focus(), 0);
 		};
 
 		Foxtrick.onClick(reportBugSpan, showReportingDialog);
@@ -328,8 +349,9 @@ Foxtrick.modules.Reporter = {
 	 * Trigger sending of bug report.
 	 * Show note with reference id that has been copied to clipboard.
 	 * @param {document} doc
+	 * @param {object} [reportContext] Optional report context.
 	 */
-	reportBug: function(doc) {
+	reportBug: function(doc, reportContext) {
 		const reportBug = function(log) {
 			if (log === '')
 				return;
@@ -349,16 +371,13 @@ Foxtrick.modules.Reporter = {
 				result.textContent = ref;
 				info.appendChild(result);
 
-				const forum = doc.createElement('p');
-				Foxtrick.L10n.appendLink('reportBug.forumNew', forum, Foxtrick.modules.Reporter.FORUM_URL);
-				info.appendChild(forum);
-
 				const NOTE_ID = 'ft-bug-report-link-note';
 				Foxtrick.util.note.add(doc, info, NOTE_ID, { closable: true, focus: true });
 			};
 
 			const prefs = Foxtrick.Prefs.save({ skipFiles: true });
-			Foxtrick.reportBug(log, prefs, showNote);
+			const context = reportContext && typeof reportContext === 'object' ? reportContext : {};
+			Foxtrick.reportBug(log, prefs, context, showNote);
 		};
 
 		Foxtrick.SB.ext.sendRequest({ req: 'getDebugLog' }, ({ log }) => {
@@ -877,6 +896,8 @@ Foxtrick.log.Reporter = {
 		const scope = this._scope;
 		this._setReportingData(scope);
 		scope.setTag('ft.referenceId', hint.referenceId);
+		if (hint.extra)
+			scope.setContext('Foxtrick', hint.extra);
 		scope.captureMessage(message, 'debug', hint);
 	},
 
@@ -951,11 +972,13 @@ Foxtrick.log.Reporter = {
 
 /**
  * Report a bug to remote logging server, attaching debug log and prefs.
- * @param {string} bug The debug log contents.
+ * @param {string} log The debug log contents.
  * @param {string} prefs The prefs contents.
+ * @param {object} context Additional contextual information.
+ * @param {string} [context.message] Message describing the issue.
  * @param {function(string):void} [refIdCb] Optional callback to receive the reference ID.
  */
-Foxtrick.reportBug = function(bug, prefs, refIdCb) {
+Foxtrick.reportBug = function(log, prefs, context, refIdCb) {
 	if (!Foxtrick.Prefs.isModuleOptionEnabled('Reporter', 'reportBug'))
 		return;
 
@@ -977,22 +1000,32 @@ Foxtrick.reportBug = function(bug, prefs, refIdCb) {
 
 	const MAX_LENGTH = 50; // KiB
 	const referenceId = Math.floor((1 + Math.random()) * 0x10000000000).toString(16).slice(1);
+
+	let messageText = 'Bug report: ';
+	if (typeof context?.message === 'string' && context.message.length > 0) {
+		messageText += context.message;
+		delete context.message;
+	} else {
+		messageText += referenceId;
+	}
+
+	/** @type {ReporterEventOptions} */
 	const reportOptions = {
 		attachments: [
 			{
 				filename: 'debuglog.txt',
-				data: truncateString(bug, MAX_LENGTH),
+				data: truncateString(log, MAX_LENGTH),
 			},
 			{
 				filename: 'prefs.txt',
 				data: truncateString(prefs, MAX_LENGTH),
 			},
 		],
+		extra: context,
 		referenceId,
 	}
 
-	reporter.reportMessage('Bug report - ' + referenceId, reportOptions);
-
+	reporter.reportMessage(messageText, reportOptions);
 	refIdCb && refIdCb(referenceId);
 };
 
