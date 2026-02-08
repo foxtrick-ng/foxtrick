@@ -103,7 +103,10 @@ Foxtrick.Pages.Players.isYouth = function(doc) {
  * @return {boolean}
  */
 Foxtrick.Pages.Players.isYouthPerfView = function(doc) {
-	return !!doc.querySelector('.youthPlayerPerformance');
+	if (this.isYouth(doc))
+		return !!doc.querySelector('.youthPlayerPerformance');
+	else
+		return false;
 };
 
 /**
