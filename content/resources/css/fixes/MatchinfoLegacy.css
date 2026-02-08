@@ -1,0 +1,5 @@
+/* Prevent header buttons overlapping icons in Legacy match view. */
+#testingNewHeader .matchInfo {
+	padding: 20px 0px 0px 0px;
+	margin-right: -25px;
+}

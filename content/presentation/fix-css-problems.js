@@ -13,12 +13,14 @@ Foxtrick.modules.FixcssProblems = {
 	OPTIONS: [
 		'RTL_Fixes',
 		'MatchReportRatingsFontFix',
+		'MatchinfoLegacy',
 		'RemoveForumSneakPeak',
 	],
 
 	OPTIONS_CSS: [
 		Foxtrick.InternalPath + 'resources/css/fixes/RTL_Fixes.css',
 		Foxtrick.InternalPath + 'resources/css/fixes/MatchReportRatingsFontFix.css',
+		Foxtrick.InternalPath + 'resources/css/fixes/MatchinfoLegacy.css',
 		Foxtrick.InternalPath + 'resources/css/fixes/RemoveForumSneakPeak.css',
 	],
 };
