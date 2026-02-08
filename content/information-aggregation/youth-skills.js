@@ -5,6 +5,7 @@
 Foxtrick.modules['YouthSkills'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.INFORMATION_AGGREGATION,
 	PAGES: ['youthPlayers', 'youthPlayerDetails'],
+	OPTIONS: ['showInfoBox'],
 	CSS: Foxtrick.InternalPath + 'resources/css/youth-skills.css',
 	NICE: -10,
 	PERMISSIONS: {
@@ -814,7 +815,7 @@ Foxtrick.modules['YouthSkills'] = {
 		};
 
 		entry = doc.querySelector('#mainBody > .playerList');
-		if (entry)
+		if (entry && Foxtrick.Prefs.isModuleOptionEnabled(module, 'showInfoBox'))
 			drawMessage(doc);
 
 		// get skills from HY
