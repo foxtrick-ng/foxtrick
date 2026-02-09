@@ -685,3 +685,21 @@ html[dir="rtl"] .right {
 		display: block !important;
 	}
 }
+
+/* split side menu into columns in small viewports (like the action popup window) */
+@media only screen and (max-height: 720px) {
+	#navigation {
+		column-count: 3;
+		column-gap: 12px;
+		column-fill: auto;
+		height: calc(100vh - 160px);
+		overflow-y: auto;
+	}
+	@supports (height: 1dvh) {
+		#navigation { height: calc(100dvh - 160px); }
+	}
+
+	#navigation > * {
+		break-inside: avoid;
+	}
+}
