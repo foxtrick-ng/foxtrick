@@ -1635,7 +1635,7 @@ function initHelpTab() {
 			src = src[locale];
 		}
 
-		return src.faq;
+		return src?.faq ? src.faq : {};
 	};
 
 	var addFAQItem = function(item, itemLocal, i, faqLinks) {
