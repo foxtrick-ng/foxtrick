@@ -52,13 +52,3 @@ de:
         <li><module>SkillTable</module></li>
         <li><module>TeamStats</module></li>
         </ul>
-    privacy:
-      question: Wie schützt Foxtrick meine Privatsphäre?
-      answer: |
-        <p>FoxTrick lädt keine Deiner Daten oder Einstellungen auf einen Foxtrick-Server; FoxTrick versendet auch keinerlei private Daten inklusive Benutzernamen, Passwort und Spieler ID mit den Fähigkeiten etc. an Dritte.</p>
-
-        <p>Die meisten Daten, soweit unten nicht explizit anders vermerkt, werden mit der HTTP GET Methode gesendet und sie werden auschließlich gesendet, wenn Du auf einen entsprechenden Link klickst.</p>
-
-        <p>Das heißt, dass Du sehen kannst welche Daten weitergeleitet werden, indem Du den URI (Uniform resource Identifier) des externen Link betrachtest. Keine Daten werden ohne Deine Einwilligung versendet. Wie oben dargestellt betrifft das keinerlei privaten Daten.</p>
-
-        <p>Eine Ausnahme stellen die Module <module>HTMSPrediction</module> und <module>HTEVPrediction</module> dar, bei denen Match-Ratings mittels XMLHttpRequest zu den betreffenden Seiten gesendet bzw. von diesen empfangen werden.</p>

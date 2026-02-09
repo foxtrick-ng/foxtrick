@@ -9,5 +9,3 @@ et:
       question: Milline on teavitushelide suuruse piirang ja kust neid leida võib?
     authorize:
       question: Miks ma peaksin Foxtrickil lubama oma meeskonna andmetele ligi pääseda?
-    privacy:
-      question: Kuidas FoxTrick kaitseb minu privaatsust?

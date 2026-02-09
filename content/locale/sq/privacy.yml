@@ -1,0 +1,14 @@
+sq: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Politika e privatësisë</h4>
+        <p>Foxtrick nuk ngarkon të dhënat tuaja personale ose preferencat në serverët e tij, 
+        as nuk ndan informacionin tuaj privat - duke përfshirë emrat e përdoruesve, fjalëkalimet 
+        ose të dhënat e lojës me palë të treta, përveç rasteve specifike të nevojshme për:</p>
+        <ol>
+          <li>Ofrimin e veçorive të Foxtrick.</li>
+          <li>Dërgimin e raporteve të gabimeve dhe të dhënave analitike.</li>
+        </ol>
+        <p>Shikoni <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Politikën e privatësisë së Foxtrick</a> të plotë për detaje.</p><br>

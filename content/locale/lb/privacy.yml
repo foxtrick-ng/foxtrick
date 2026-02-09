@@ -1,0 +1,14 @@
+lb: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Dateschutzrichtlinn</h4>
+        <p>Foxtrick luet Är perséinlech Donnéeën oder Astellungen net op seng eege Serveren 
+        erop an deeltÄr privat Informatiounen - abegraff Benotzernimm, Passwierder oder 
+        Spilldaten net mat Drëtten, ausser a spezifesche Fäll déi néideg sinn fir:</p>
+        <ol>
+          <li>Foxtrick-Funktiounen ze bidden.</li>
+          <li>Feelerberichten an analytesch Donnéeën ze schécken.</li>
+        </ol>
+        <p>Kuckt déi voll <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick Dateschutzrichtlinn</a> fir Detailer.</p><br>

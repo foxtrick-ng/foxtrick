@@ -79,6 +79,7 @@ RESOURCES = \
 	faq.yml \
 	foxtrick.properties \
 	foxtrick.screenshots \
+	privacy.yml \
 	release-notes-links.yml \
 	release-notes.yml \
 

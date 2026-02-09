@@ -53,13 +53,3 @@ zh-CN:
         <li><module>SkillTable</module></li>
         <li><module>TeamStats</module></li>
         </ul>
-    privacy:
-      question: FoxTrick 将会如何保护我的隐私？
-      answer: |
-        <p>FoxTrick不会把任何你的数据或者设置上传到FoxTrick的服务器，也不会将你的隐私数据，包括但不限于你的用户名、密码，与技能关联的球员ID，发送给第三方。</p>
-
-        <p>大部分传递给第三方的数据，除非在下面特别指明，将会使用HTTP GET方法来发送，而且仅在你点击一个连接时才发送这些数据。</p>
-
-        <p>这就是说，通过分析一个外部链接的URI（统一资源定位符），你可以知道什么数据会被发送。未经允许，任何数据都不会被发送。就像上面提到的，这里面不会包括任何隐私数据。</p>
-
-        <p>例外包括 <module>HTMSPrediction</module> 和 <module>HTEVPrediction</module>模块，在这两个模块中，比赛评级数据通过XMLHttpRequest的形式与相关网站进行交换。</p>

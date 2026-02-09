@@ -1,0 +1,14 @@
+nl: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Privacybeleid</h4>
+        <p>Foxtrick uploadt uw persoonlijke gegevens of voorkeuren niet naar eigen servers 
+        en deelt uw privégegevens - waaronder gebruikersnamen, wachtwoorden of spelgegevens 
+        niet met derden, behalve in specifieke gevallen die nodig zijn om:</p>
+        <ol>
+          <li>Foxtrick-functies te bieden.</li>
+          <li>Foutrapporten en analytische gegevens te verzenden.</li>
+        </ol>
+        <p>Bekijk het volledige <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick Privacybeleid</a> voor meer informatie.</p><br>

@@ -1,0 +1,14 @@
+cs: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Zásady ochrany osobních údajů</h4>
+        <p>Foxtrick nenahrává vaše osobní údaje ani předvolby na své vlastní servery 
+        ani nesdílí vaše soukromé informace - včetně uživatelských jmen, hesel nebo herních 
+        dat s třetími stranami, s výjimkou konkrétních případů nezbytných pro:</p>
+        <ol>
+          <li>Poskytování funkcí Foxtrick.</li>
+          <li>Odesílání hlášení o chybách a analytických dat.</li>
+        </ol>
+        <p>Přečtěte si úplné <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Zásady ochrany osobních údajů Foxtrick</a> pro podrobnosti.</p><br>

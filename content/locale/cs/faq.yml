@@ -53,13 +53,3 @@ cs:
         <li><module>SkillTable</module></li>
         <li><module>TeamStats</module></li>
         </ul>
-    privacy:
-      question: Jak chrání FoxTrick moje soukromí?
-      answer: |
-        <p>FoxTrick nenahraje tvá data nebo nastavení na server FoxTricku; FoxTrick také nepošle tvá osobní data, včetně tvého uživatelského jména, hesla a ID hráčů vázaných s vlastnostmi žádné třetí straně.</p>
-
-        <p>Většina dat předávaná třetím stranám, pokud není jednoznačně uvedeno jinak, jsou posílána HTTP GET motodou, a jsou pouze odeslána na základě tebou stisknutého odkazu.</p>
-
-        <p>To znamená, že se můžeš přesně podívat, jaká data jsou odesílána na základě URI (Uniform Resource Identifier) externího odkazu a žádná data nebudou odeslána bez tvého souhlasu. Jak již bylo zmíněno výše, osobní data nejsou zahrnuta.</p>
-
-        <p>Výjimkou jsou moduly <module>HTMSPrediction</module> a <module>HTEVPrediction</module>, které získávají a předávají zápasová hodnocení přímo z daných stránek na základě XMLHttpRequest.</p>

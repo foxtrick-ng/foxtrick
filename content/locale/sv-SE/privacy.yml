@@ -1,0 +1,14 @@
+sv-SE: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Integritetspolicy</h4>
+        <p>Foxtrick laddar inte upp dina personuppgifter eller inställningar till sina egna 
+        servrar och delar inte heller din privata information - inklusive användarnamn, lösenord 
+        eller speldata med tredjeparter, förutom i specifika fall som krävs för att:</p>
+        <ol>
+          <li>Tillhandahålla Foxtrick-funktioner.</li>
+          <li>Skicka felrapporter och analysdata.</li>
+        </ol>
+        <p>Se den fullständiga <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick Integritetspolicyn</a> för detaljer.</p><br>

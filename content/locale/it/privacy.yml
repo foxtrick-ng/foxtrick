@@ -1,0 +1,14 @@
+it: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Informativa sulla privacy</h4>
+        <p>Foxtrick non carica i tuoi dati personali o le tue preferenze sui propri server, 
+        né condivide le tue informazioni private - inclusi nomi utente, password o dati di 
+        gioco con terze parti, tranne in casi specifici necessari per:</p>
+        <ol>
+          <li>Fornire le funzionalità di Foxtrick.</li>
+          <li>Inviare segnalazioni di errori e dati analitici.</li>
+        </ol>
+        <p>Consulta la <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Informativa sulla privacy di Foxtrick</a> completa per i dettagli.</p><br>

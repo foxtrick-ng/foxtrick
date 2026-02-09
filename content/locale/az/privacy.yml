@@ -1,0 +1,15 @@
+az: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Məxfilik Siyasəti</h4>
+        <p>Foxtrick şəxsi məlumatlarınızı və ya seçimlərinizi öz serverlərinə yükləmir, 
+        həmçinin şəxsi məlumatlarınızı - istifadəçi adları, parollar və ya oyun məlumatları 
+        daxil olmaqla üçüncü tərəflərlə paylaşmır, aşağıdakılar üçün tələb olunan xüsusi 
+        hallar istisna olmaqla:</p>
+        <ol>
+          <li>Foxtrick xüsusiyyətlərini təmin etmək.</li>
+          <li>Xəta hesabatı və analitik məlumatları göndərmək.</li>
+        </ol>
+        <p>Ətraflı məlumat üçün tam <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick Məxfilik Siyasəti</a>nə baxın.</p><br>

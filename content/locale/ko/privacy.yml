@@ -1,0 +1,14 @@
+ko: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>개인정보 보호정책</h4>
+        <p>Foxtrick은 귀하의 개인 데이터나 환경설정을 자체 서버에 업로드하지 않으며, 
+        사용자 이름, 비밀번호 또는 게임 데이터를 포함한 귀하의 개인 정보를 제3자와 
+        공유하지 않습니다. 다만, 다음을 위해 필요한 특정 경우는 예외입니다:</p>
+        <ol>
+          <li>Foxtrick 기능 제공.</li>
+          <li>오류 보고 및 분석 데이터 전송.</li>
+        </ol>
+        <p>자세한 내용은 전체 <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick 개인정보 보호정책</a> 을 참조하세요.</p><br>

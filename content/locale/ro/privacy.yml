@@ -1,0 +1,14 @@
+ro: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Politica de confidențialitate</h4>
+        <p>Foxtrick nu încarcă datele dumneavoastră personale sau preferințele pe propriile 
+        servere și nu partajează informațiile dumneavoastră private - inclusiv nume de utilizator, 
+        parole sau date de joc cu terțe părți, cu excepția cazurilor specifice necesare pentru:</p>
+        <ol>
+          <li>Furnizarea funcționalităților Foxtrick.</li>
+          <li>Trimiterea rapoartelor de erori și a datelor analitice.</li>
+        </ol>
+        <p>Consultați <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Politica de confidențialitate Foxtrick</a> completă pentru detalii.</p><br>
