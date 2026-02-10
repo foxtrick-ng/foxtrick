@@ -8,11 +8,10 @@
 
 Foxtrick.modules.CopyYouth = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.SHORTCUTS_AND_TWEAKS,
-	PAGES: ['youthTraining', 'youthPlayerDetails', 'youthOverview',
-		'youthFixtures'],
+	PAGES: ['youthTraining', 'youthPlayerDetails', 'youthOverview'],
 	OPTIONS: [
 		'TrainingReport', 'AutoSendTrainingReportToHY', 'ScoutComment',
-		'AutoSendRejectedToHY', 'AutoSendTrainingChangesToHY', 'FixturesSource',
+		'AutoSendRejectedToHY', 'AutoSendTrainingChangesToHY',
 	],
 	PERMISSIONS: {
 		AutoSendTrainingReportToHY: { origins: ['https://*.hattrick-youthclub.org/*'] },
@@ -469,52 +468,6 @@ Foxtrick.modules.CopyYouth = {
 		})().catch(Foxtrick.catch(module));
 	},
 
-	/** @param {document} doc */
-	addFixturesSource: function(doc) {
-		var copySource = function() {
-			var fixBr = function(text) {
-				return text.replace(/<br\/?>/g, '<br />');
-			};
-
-			try {
-				let html = '<html>' + doc.documentElement.innerHTML + ' </html>';
-				html = fixBr(html);
-				Foxtrick.copy(doc, html, 'text/html');
-
-				// display note
-				let container = doc.createElement('div');
-				let p = doc.createElement('p');
-				p.textContent = Foxtrick.L10n.getString('copy.fixturesSource.copied');
-				container.appendChild(p);
-
-				// README: host down
-				// let linkContainer = doc.createElement('div');
-				// let [start, end] = Foxtrick.L10n.getString('button.goto').split('%s');
-				// linkContainer.textContent = start;
-
-				// let url = 'http://www.ht-ys.org/read_fixtures';
-				// let a = doc.createElement('a');
-				// a.href = url;
-				// a.target = '_ht_ys';
-				// a.textContent = 'http://www.ht-ys.org';
-				// linkContainer.appendChild(a);
-				// linkContainer.appendChild(doc.createTextNode(end));
-				// container.appendChild(linkContainer);
-
-				Foxtrick.util.note.add(doc, container, 'ft-youthfixtures-source-copy-note');
-			}
-			catch (e) {
-				Foxtrick.log(e);
-			}
-		};
-
-		let copyL10n = Foxtrick.L10n.getString('copy.fixturesSource');
-		let button = Foxtrick.util.copyButton.add(doc, copyL10n);
-		if (button) {
-			Foxtrick.addClass(button, 'ft-copy-fixtures-source');
-			Foxtrick.onClick(button, copySource);
-		}
-	},
 
 	/** @param {document} doc */
 	run: function(doc) {
@@ -531,10 +484,6 @@ Foxtrick.modules.CopyYouth = {
 		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'ScoutComment') &&
 		    Foxtrick.isPage(doc, ['youthPlayerDetails', 'youthOverview']))
 			module.addScoutComment(doc);
-
-		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'FixturesSource') &&
-		    Foxtrick.isPage(doc, 'youthFixtures'))
-			module.addFixturesSource(doc);
 
 	},
 
