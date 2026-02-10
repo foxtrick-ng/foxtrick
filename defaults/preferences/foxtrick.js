@@ -55,7 +55,7 @@ pref("extensions.foxtrick.prefs.module.CopyYouth.TrainingReport.enabled", true);
 pref("extensions.foxtrick.prefs.module.CopyYouth.AutoSendTrainingChangesToHY.enabled", true);
 pref("extensions.foxtrick.prefs.module.CopyYouth.AutoSendTrainingReportToHY.enabled", true);
 pref("extensions.foxtrick.prefs.module.CopyYouth.ScoutComment.enabled", true);
-pref("extensions.foxtrick.prefs.module.CopyYouth.AutoSendRejectedToHY.enabled", true);
+pref("extensions.foxtrick.prefs.module.CopyYouth.AutoSendRejectedToHY.enabled", false);
 pref("extensions.foxtrick.prefs.module.CountryList.enabled", true);
 pref("extensions.foxtrick.prefs.module.CountryList.Flags.enabled", true);
 pref("extensions.foxtrick.prefs.module.CountryList.FlagSort.enabled", true);
