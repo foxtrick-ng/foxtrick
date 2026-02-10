@@ -31,7 +31,7 @@ Foxtrick.modules.CopyYouth = {
 	},
 
 	/** @param {document} doc */
-	addTrainingReport: function(doc) {
+	addTrainingReport: async function(doc) {
 		const module = this;
 
 		/**
@@ -182,6 +182,8 @@ Foxtrick.modules.CopyYouth = {
 		// send the TrainingReport to HY automatically
 		if (!Foxtrick.Prefs.isModuleOptionEnabled(module, 'AutoSendTrainingReportToHY'))
 			return;
+		if (!(await Foxtrick.Prefs.isModuleOptionPermitted(module, 'AutoSendTrainingReportToHY')))
+			return;
 
 		// DEBUG: Always send this report, can be used to test
 		// Foxtrick.sessionSet('YouthClub.sendTrainingReport', true);
@@ -218,7 +220,7 @@ Foxtrick.modules.CopyYouth = {
 	},
 
 	/** @param {document} doc */
-	addScoutComment: function(doc) {
+	addScoutComment: async function(doc) {
 		const module = this;
 
 		/** @param {boolean} sendToHY */
@@ -342,7 +344,9 @@ Foxtrick.modules.CopyYouth = {
 			let [acceptButton, rejectButton] = alertdiv.querySelectorAll('input');
 
 			// auto send rejected players to HY, api see above
-			if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'AutoSendRejectedToHY')) {
+			if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'AutoSendRejectedToHY') &&
+				await Foxtrick.Prefs.isModuleOptionPermitted(module, 'AutoSendRejectedToHY')) {
+
 				let reject = Foxtrick.L10n.getString('module.CopyYouth.AutoSendRejectedToHY.desc');
 				rejectButton.title = reject;
 				Foxtrick.onClick(rejectButton, () => copyReport(true));
@@ -475,15 +479,18 @@ Foxtrick.modules.CopyYouth = {
 
 		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'TrainingReport') &&
 		    Foxtrick.isPage(doc, 'youthTraining'))
-			module.addTrainingReport(doc);
+			module.addTrainingReport(doc).catch(Foxtrick.log);
 
-		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'AutoSendTrainingChangesToHY') &&
-		    Foxtrick.isPage(doc, 'youthTraining'))
-			module.monitorTraining(doc);
+		Foxtrick.Prefs.isModuleOptionPermitted(module, 'AutoSendTrainingChangesToHY').then( permitted => {
+			if (permitted &&
+				Foxtrick.Prefs.isModuleOptionEnabled(module, 'AutoSendTrainingChangesToHY') &&
+				Foxtrick.isPage(doc, 'youthTraining'))
+				module.monitorTraining(doc);
+		}).catch(Foxtrick.log);
 
 		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'ScoutComment') &&
 		    Foxtrick.isPage(doc, ['youthPlayerDetails', 'youthOverview']))
-			module.addScoutComment(doc);
+			module.addScoutComment(doc).catch(Foxtrick.log);
 
 	},
 
@@ -493,6 +500,6 @@ Foxtrick.modules.CopyYouth = {
 
 		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'ScoutComment') &&
 		    Foxtrick.isPage(doc, 'youthOverview'))
-			module.addScoutComment(doc);
+			module.addScoutComment(doc).catch(Foxtrick.log);
 	},
 };
