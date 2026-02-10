@@ -917,9 +917,9 @@ function initListeners() {
  * Make module div container with module options and their descriptions
  *
  * @param  {object}         module
- * @return {HTMLDivElement}
+ * @returns {Promise<HTMLDivElement>}
  */
-function makeModuleDiv(module) {
+async function makeModuleDiv(module) {
 	// var getScreenshot = function(link) {
 	// 	var a = document.createElement('a');
 	// 	a.className = 'screenshot';
@@ -990,7 +990,7 @@ function makeModuleDiv(module) {
 	// or purely initializes them and returns null
 	var customOptions = [];
 	if (typeof module.OPTION_FUNC == 'function') {
-		var genOptions = module.OPTION_FUNC(document);
+		var genOptions = await module.OPTION_FUNC(document);
 		if (genOptions) {
 			if (Array.isArray(genOptions)) {
 				for (var field of genOptions)
@@ -1187,7 +1187,7 @@ function makeModuleDiv(module) {
 /**
  * Create module containers and initialize their attributes
  */
-function initModules() {
+async function initModules() {
 	var modules = [];
 	for (var m in Foxtrick.modules)
 		modules.push(Foxtrick.modules[m]);
@@ -1213,7 +1213,7 @@ function initModules() {
 	});
 
 	for (var module of modules) {
-		var obj = makeModuleDiv(module);
+		var obj = await makeModuleDiv(module);
 
 		// show on view-by-category tab
 		var xOn = module.MODULE_CATEGORY + 'search all';
@@ -1793,10 +1793,9 @@ function initTabs() {
 	var changes = initChangesTab();
 	var help = initHelpTab();
 	var about = initAboutTab();
+	const modules = initModules();
 
-	initModules();
-
-	return Promise.all([changes, help, about]);
+	return Promise.all([changes, help, about, modules]);
 }
 
 /**
