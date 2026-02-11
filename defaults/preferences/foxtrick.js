@@ -111,6 +111,7 @@ pref("extensions.foxtrick.prefs.module.Fans.ShowSumFans.enabled", true);
 pref("extensions.foxtrick.prefs.module.Filter.enabled", true);
 pref("extensions.foxtrick.prefs.module.Filter.ShowOwned.enabled", true);
 pref("extensions.foxtrick.prefs.module.FixcssProblems.enabled", true);
+pref("extensions.foxtrick.prefs.module.FixcssProblems.DisableCPAFormatting.enabled", false);
 pref("extensions.foxtrick.prefs.module.FixcssProblems.MatchReportRatingsFontFix.enabled", false);
 pref("extensions.foxtrick.prefs.module.FixcssProblems.RemoveForumSneakPeak.enabled", false);
 pref("extensions.foxtrick.prefs.module.FixcssProblems.RTL_Fixes.enabled", false);

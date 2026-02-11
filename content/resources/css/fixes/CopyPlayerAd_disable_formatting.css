@@ -1,0 +1,10 @@
+/* CPA - coloured cells in youth player forum posts */
+#mainWrapper table.htMlTable td:has(em:empty), #mainWrapper table.htMlTable td:has(i:empty) {
+	background-color: unset !important;
+}
+#mainWrapper table.htMlTable td:has(strong:empty), #mainWrapper table.htMlTable td:has(b:empty) {
+	background-color: unset !important;
+}
+#mainWrapper table.htMlTable td:has(u:empty) {
+	background-color: unset !important;
+}
