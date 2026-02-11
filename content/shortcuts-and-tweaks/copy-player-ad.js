@@ -313,11 +313,13 @@ Foxtrick.modules.CopyPlayerAd = {
 				exec: async (str, data) => {
 					/** @type {?HYPlayer} */
 					let hyPlayer = getHyPlayer(data.playerId);
-					let hySkills = {};
+					/** @type {?HYSkills} */
+					let hySkills;
 					if (hyPlayer)
 						hySkills = hyPlayer.skills;
 
-					// hyc skill id mapping
+					// map table row index to hyc skill id
+					/** @type {HYSkillIdx[]} */
 					const skillMap = [
 						6,  // 'keeper'
 						8,  // 'defending'
@@ -373,8 +375,7 @@ Foxtrick.modules.CopyPlayerAd = {
 					// re-build table
 					let output = '[table]';
 					for (let skill of inputSkills) {
-						/** @type {HYSkill} */
-						const hySkill = hySkills?.[skill.hyIndex];
+						const hySkill = /**@type {HYSkill}*/ (hySkills?.[skill.hyIndex]);
 						output += `[tr][th]${skill.name}[/th]`;
 
 						let [ability, potential] = [skill.ability, skill.potential];
@@ -428,8 +429,8 @@ Foxtrick.modules.CopyPlayerAd = {
 					}
 
 					// experience
-					if (hySkills[10]) {
-						let exp = (hySkills[10]);
+					if (hySkills?.[10]) {
+						let exp = /**@type {HYExp}*/ (hySkills[10]);
 						exp = Math.round(exp *10) / 10;
 
 						let query = {
@@ -1165,7 +1166,7 @@ Foxtrick.modules.CopyPlayerAd = {
  * @property {string} [ability] - Ability or undefined, e.g. '6'.
  * @property {string} [abilityDenom] - Ability demonimation, e.g. 'passable'.
  * @property {string} [denomStr] - Skill demonimations string, e.g. 'passable / unknown '.
- * @property {number} [hyIndex] - Associated hyc skill id.
+ * @property {HYSkillIdx} [hyIndex] - Associated hyc skill id.
  * @property {string} [matched] - String matched from table.
  * @property {string} [name] - Skill name in table, e.g. 'Keeper.'
  * @property {string} [potential] - Potential or undefined, e.g. undefined.
