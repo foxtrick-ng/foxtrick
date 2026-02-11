@@ -496,3 +496,6 @@ html[data-theme="simple"] tr.darkereven {
 #mainWrapper table.htMlTable td:has(u:empty) {
 	background-color: #f3f3f3;
 }
+#mainWrapper table.htMlTable td:has(u > u:empty) {
+	background-color: #dfdfdf;
+}

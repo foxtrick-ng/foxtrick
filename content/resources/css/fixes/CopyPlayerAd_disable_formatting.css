@@ -8,3 +8,6 @@
 #mainWrapper table.htMlTable td:has(u:empty) {
 	background-color: unset !important;
 }
+#mainWrapper table.htMlTable td:has(u > u:empty) {
+	background-color: unset !important;
+}

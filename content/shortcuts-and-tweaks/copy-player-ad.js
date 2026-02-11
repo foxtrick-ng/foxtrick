@@ -422,6 +422,8 @@ Foxtrick.modules.CopyPlayerAd = {
 							cellContent = '[i][/i]' + cellContent;
 						else if (hasAbility)
 							cellContent = '[b][/b]' + cellContent;
+						else if (hasPotential)
+							cellContent = '[u][u][/u][/u]' + cellContent;
 						else
 							cellContent = '[u][/u]' + cellContent;
 
