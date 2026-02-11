@@ -16,7 +16,13 @@ html[data-theme="simple"] .copyicon.ft-copy-player-ad {
 	padding: 3px 10px 3px 15px;
 }
 
-/* highlight maxed skills in forum posts */
+/* CPA - coloured cells in youth player forum posts */
 #mainWrapper table.htMlTable td:has(em:empty), #mainWrapper table.htMlTable td:has(i:empty) {
-	background-color: #fd3;
+	background-color: #fe6;
+}
+#mainWrapper table.htMlTable td:has(strong:empty), #mainWrapper table.htMlTable td:has(b:empty) {
+	background-color: #8e7;
+}
+#mainWrapper table.htMlTable td:has(u:empty) {
+	background-color: #f3f3f3;
 }
