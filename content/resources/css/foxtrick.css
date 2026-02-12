@@ -483,5 +483,8 @@ html[data-theme="simple"] tr.darkereven {
 
 .ft-icon-header::before {
 	content: "\e900" / "FT";
-	font-size: 1.1em;
+	/*FIXME: set Font Metrics and Alignment Options properly in icomoon so that
+	FT glyphs align correctly, and we can get rid of these micro-adjustments.*/
+	font-size: 1.05em;
+	padding: 0px 1px 1px 0px;
 }
