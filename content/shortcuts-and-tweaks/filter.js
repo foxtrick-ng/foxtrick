@@ -632,7 +632,7 @@ Foxtrick.modules.Filter = {
 		/** @type {CHPPParams} */
 		const args = [
 			['file', 'players'],
-			['version', '2.2'],
+			['version', '2.8'],
 			['teamId', teamId],
 		];
 

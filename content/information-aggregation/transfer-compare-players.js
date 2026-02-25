@@ -66,7 +66,7 @@ Foxtrick.modules.TransferComparePlayers = {
 			/** @type {CHPPParams} */
 			var detailsArgs = [
 				['file', 'playerdetails'],
-				['version', '2.1'],
+				['version', '3.2'],
 				['playerId', playerId],
 			];
 			Foxtrick.util.api.retrieve(doc, detailsArgs, { cache: 'session' }, (xml, errorText) => {

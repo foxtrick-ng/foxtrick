@@ -72,7 +72,7 @@ Foxtrick.modules.CurrentTransfers = {
 			return [
 				[
 					['file', 'playerdetails'],
-					['version', '2.5'],
+					['version', '3.2'],
 					['playerId', player.id],
 				],
 				{ cache },

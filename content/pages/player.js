@@ -1133,7 +1133,7 @@ Foxtrick.Pages.Player.getPlayer = function(doc, playerId, callback) {
 
 		// README: version 2.5 is used in current transfers, but with specific deadlines
 		// otherwise few gains are obtained by upgrading, new fields are commented below
-		['version', '2.1'],
+		['version', '3.2'],
 		['playerId', playerId],
 	];
 	Foxtrick.util.api.retrieve(doc, args, { cache: 'session' }, (xml, errorText) => {
@@ -1225,6 +1225,7 @@ Foxtrick.Pages.Player.getPlayer = function(doc, playerId, callback) {
 				'CareerHattricks',
 				'CupGoals',
 				'Experience',
+				['genderId', 'GenderID'],
 
 				// README: version=2.2
 				// 'ArrivalDate',
