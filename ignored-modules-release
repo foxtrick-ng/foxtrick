@@ -1,3 +1,6 @@
+information-aggregation/cross-table.js
+information-aggregation/current-transfers.js
+information-aggregation/supporterstats-enhancements.js
 presentation/currency-converter.js
 presentation/mobile-enhancements.js
 presentation/tabs-test.js
