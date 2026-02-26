@@ -723,6 +723,8 @@ pref("extensions.foxtrick.prefs.module.TeamPopupLinks.UserLinks.enabled", true);
 pref("extensions.foxtrick.prefs.module.TeamPopupLinks.YouthMatches.default", false);
 pref("extensions.foxtrick.prefs.module.TeamPopupLinks.YouthMatches.more", true);
 pref("extensions.foxtrick.prefs.module.TeamPopupLinks.YouthMatches.newTab", false);
+pref("extensions.foxtrick.prefs.module.TeamPopupLinks.PopupDelay.enabled", true);
+pref("extensions.foxtrick.prefs.module.TeamPopupLinks.PopupDelay_text", "500");
 pref("extensions.foxtrick.prefs.module.TeamSelectBox.enabled", true);
 pref("extensions.foxtrick.prefs.module.TeamSelectBox.RememberState.enabled", true);
 pref("extensions.foxtrick.prefs.module.TeamStats.Current_league.enabled", true);
