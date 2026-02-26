@@ -220,10 +220,10 @@ Foxtrick.modules.CopyPlayerAd = {
 			{
 				name: 'split-attributes',
 				playerType: 'senior',
-				regex: '^.+\\..+\\..+\\.',
+				regex: '^[^\\d]+?\\.[^\\d]+?\\.[^\\d]+?\\.',
 				type: 'replace',
 				exec: (str) => {
-					const match = str.match('^(.+\\.)\\s?(.+\\..+\\.)');
+					const match = str.match('^(.+?\\.)\\s?(.+?\\..+?\\.)');
 					if (match?.length == 3)
 						return `${match[1]}[br]${match[2]}`;
 				},
