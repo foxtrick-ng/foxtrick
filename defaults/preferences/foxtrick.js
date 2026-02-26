@@ -777,6 +777,7 @@ pref("extensions.foxtrick.prefs.module.YouthSkillHideUnknown.enabled", false);
 pref("extensions.foxtrick.prefs.module.YouthSkillHideUnknown.HideMaximalKeyWord.enabled", false);
 pref("extensions.foxtrick.prefs.module.YouthSkillHideUnknown.HideUnknown.enabled", false);
 pref("extensions.foxtrick.prefs.module.YouthSkills.enabled", true);
+pref("extensions.foxtrick.prefs.module.YouthSkills.showInfoBox.enabled", true);
 pref("extensions.foxtrick.prefs.module.U21LastMatch.enabled", true);
 pref("extensions.foxtrick.prefs.module.U21LastMatch.YouthPlayers.enabled", true);
 pref("extensions.foxtrick.prefs.module.U21LastMatch.SeniorPlayers.enabled", true);
