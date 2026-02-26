@@ -58,7 +58,6 @@ module.CopyRatings.enabled
 module.CopyYouth.AutoSendRejectedToHY.enabled
 module.CopyYouth.AutoSendTrainingChangesToHY.enabled
 module.CopyYouth.AutoSendTrainingReportToHY.enabled
-module.CopyYouth.FixturesSource.enabled
 module.CopyYouth.ScoutComment.enabled
 module.CopyYouth.TrainingReport.enabled
 module.CopyYouth.enabled

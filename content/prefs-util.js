@@ -576,6 +576,38 @@ Foxtrick.Prefs.getNeededPermissions = function() {
 };
 
 /**
+ * Test whether the browser has permitted the necessary permissions
+ * for a module option.
+ * @param {string|FTAppModuleMixin} module - module name or module
+ * @param {string} option - option name
+ * @returns {Promise<boolean>}
+ */
+Foxtrick.Prefs.isModuleOptionPermitted = async function(module, option) {
+	try {
+		const m = typeof module === 'string' ? Foxtrick.modules[module] : module;
+		if (typeof m !== 'object')
+			throw new Error('invalid module.');
+
+		const perm = m.PERMISSIONS?.[option];
+		if (typeof perm !== 'object' || !Array.isArray(perm.origins) || perm.origins.length <= 0)
+			throw new Error(`invalid option permission: ${option}.`);
+
+		return await new Promise((resolve, reject) => {
+			Foxtrick.containsPermission(perm, p => {
+				if (p.error)
+					reject(new Error(p.error));
+				else
+					resolve(!!p);
+				});
+		});
+	} catch (e) {
+		const msg = 'Error: isModuleOptionPermitted - ' + e.message;
+		Foxtrick.log(new Error(msg, { cause: e }));
+		return false;
+	}
+}
+
+/**
  * Test whether a pref key is an actual option,
  * but not a personal pref or oAuth token
  *

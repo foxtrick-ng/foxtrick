@@ -8,11 +8,12 @@
 
 Foxtrick.modules.CopyYouth = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.SHORTCUTS_AND_TWEAKS,
-	PAGES: ['youthTraining', 'youthPlayerDetails', 'youthOverview',
-		'youthFixtures'],
+	PAGES: ['youthTraining', 'youthPlayerDetails', 'youthOverview'],
+	// 'AutoSendRejectedToHY' temporarily removed from OPTIONS to
+	// hide option in prefs until feature is fixed
 	OPTIONS: [
 		'TrainingReport', 'AutoSendTrainingReportToHY', 'ScoutComment',
-		'AutoSendRejectedToHY', 'AutoSendTrainingChangesToHY', 'FixturesSource',
+		'AutoSendTrainingChangesToHY',
 	],
 	PERMISSIONS: {
 		AutoSendTrainingReportToHY: { origins: ['https://*.hattrick-youthclub.org/*'] },
@@ -32,7 +33,7 @@ Foxtrick.modules.CopyYouth = {
 	},
 
 	/** @param {document} doc */
-	addTrainingReport: function(doc) {
+	addTrainingReport: async function(doc) {
 		const module = this;
 
 		/**
@@ -183,6 +184,8 @@ Foxtrick.modules.CopyYouth = {
 		// send the TrainingReport to HY automatically
 		if (!Foxtrick.Prefs.isModuleOptionEnabled(module, 'AutoSendTrainingReportToHY'))
 			return;
+		if (!(await Foxtrick.Prefs.isModuleOptionPermitted(module, 'AutoSendTrainingReportToHY')))
+			return;
 
 		// DEBUG: Always send this report, can be used to test
 		// Foxtrick.sessionSet('YouthClub.sendTrainingReport', true);
@@ -219,7 +222,7 @@ Foxtrick.modules.CopyYouth = {
 	},
 
 	/** @param {document} doc */
-	addScoutComment: function(doc) {
+	addScoutComment: async function(doc) {
 		const module = this;
 
 		/** @param {boolean} sendToHY */
@@ -343,7 +346,9 @@ Foxtrick.modules.CopyYouth = {
 			let [acceptButton, rejectButton] = alertdiv.querySelectorAll('input');
 
 			// auto send rejected players to HY, api see above
-			if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'AutoSendRejectedToHY')) {
+			if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'AutoSendRejectedToHY') &&
+				await Foxtrick.Prefs.isModuleOptionPermitted(module, 'AutoSendRejectedToHY')) {
+
 				let reject = Foxtrick.L10n.getString('module.CopyYouth.AutoSendRejectedToHY.desc');
 				rejectButton.title = reject;
 				Foxtrick.onClick(rejectButton, () => copyReport(true));
@@ -469,52 +474,6 @@ Foxtrick.modules.CopyYouth = {
 		})().catch(Foxtrick.catch(module));
 	},
 
-	/** @param {document} doc */
-	addFixturesSource: function(doc) {
-		var copySource = function() {
-			var fixBr = function(text) {
-				return text.replace(/<br\/?>/g, '<br />');
-			};
-
-			try {
-				let html = '<html>' + doc.documentElement.innerHTML + ' </html>';
-				html = fixBr(html);
-				Foxtrick.copy(doc, html, 'text/html');
-
-				// display note
-				let container = doc.createElement('div');
-				let p = doc.createElement('p');
-				p.textContent = Foxtrick.L10n.getString('copy.fixturesSource.copied');
-				container.appendChild(p);
-
-				// README: host down
-				// let linkContainer = doc.createElement('div');
-				// let [start, end] = Foxtrick.L10n.getString('button.goto').split('%s');
-				// linkContainer.textContent = start;
-
-				// let url = 'http://www.ht-ys.org/read_fixtures';
-				// let a = doc.createElement('a');
-				// a.href = url;
-				// a.target = '_ht_ys';
-				// a.textContent = 'http://www.ht-ys.org';
-				// linkContainer.appendChild(a);
-				// linkContainer.appendChild(doc.createTextNode(end));
-				// container.appendChild(linkContainer);
-
-				Foxtrick.util.note.add(doc, container, 'ft-youthfixtures-source-copy-note');
-			}
-			catch (e) {
-				Foxtrick.log(e);
-			}
-		};
-
-		let copyL10n = Foxtrick.L10n.getString('copy.fixturesSource');
-		let button = Foxtrick.util.copyButton.add(doc, copyL10n);
-		if (button) {
-			Foxtrick.addClass(button, 'ft-copy-fixtures-source');
-			Foxtrick.onClick(button, copySource);
-		}
-	},
 
 	/** @param {document} doc */
 	run: function(doc) {
@@ -522,19 +481,18 @@ Foxtrick.modules.CopyYouth = {
 
 		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'TrainingReport') &&
 		    Foxtrick.isPage(doc, 'youthTraining'))
-			module.addTrainingReport(doc);
+			module.addTrainingReport(doc).catch(Foxtrick.log);
 
-		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'AutoSendTrainingChangesToHY') &&
-		    Foxtrick.isPage(doc, 'youthTraining'))
-			module.monitorTraining(doc);
+		Foxtrick.Prefs.isModuleOptionPermitted(module, 'AutoSendTrainingChangesToHY').then( permitted => {
+			if (permitted &&
+				Foxtrick.Prefs.isModuleOptionEnabled(module, 'AutoSendTrainingChangesToHY') &&
+				Foxtrick.isPage(doc, 'youthTraining'))
+				module.monitorTraining(doc);
+		}).catch(Foxtrick.log);
 
 		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'ScoutComment') &&
 		    Foxtrick.isPage(doc, ['youthPlayerDetails', 'youthOverview']))
-			module.addScoutComment(doc);
-
-		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'FixturesSource') &&
-		    Foxtrick.isPage(doc, 'youthFixtures'))
-			module.addFixturesSource(doc);
+			module.addScoutComment(doc).catch(Foxtrick.log);
 
 	},
 
@@ -544,6 +502,6 @@ Foxtrick.modules.CopyYouth = {
 
 		if (Foxtrick.Prefs.isModuleOptionEnabled(module, 'ScoutComment') &&
 		    Foxtrick.isPage(doc, 'youthOverview'))
-			module.addScoutComment(doc);
+			module.addScoutComment(doc).catch(Foxtrick.log);
 	},
 };
