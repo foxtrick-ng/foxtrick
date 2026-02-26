@@ -1,0 +1,14 @@
+is: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Persónuverndarstefna</h4>
+        <p>Foxtrick hleður ekki persónulegum gögnum þínum eða stillingum upp á eigin netþjóna 
+        né deilir einkaupplýsingum þínum - þar á meðal notendanöfnum, lykilorðum eða 
+        leikjagögnum með þriðju aðilum, nema í sérstökum tilvikum sem krafist er til að:</p>
+        <ol>
+          <li>Veita Foxtrick eiginleika.</li>
+          <li>Senda villutilkynningar og greiningargögn.</li>
+        </ol>
+        <p>Sjá heildar <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick Persónuverndarstefnu</a> til að fá nánari upplýsingar.</p><br>

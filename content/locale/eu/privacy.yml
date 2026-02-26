@@ -1,0 +1,15 @@
+eu: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Pribatutasun-politika</h4>
+        <p>Foxtrick-ek ez ditu zure datu pertsonalak edo hobespenak bere zerbitzarietara igotzen, 
+        ezta zure informazio pribatua partekatzen ere - erabiltzaile-izenak, pasahitzak edo 
+        jokoaren datuak barne - hirugarren aldeekin, kasu zehatz batzuetan izan ezik, 
+        hauetarako beharrezkoak direnak:</p>
+        <ol>
+          <li>Foxtrick-en funtzioak eskaintzea.</li>
+          <li>Errore-txostenak eta datu analitikoak bidaltzea.</li>
+        </ol>
+        <p>Ikusi osoa <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick Pribatutasun-politika</a> xehetasunetarako.</p><br>

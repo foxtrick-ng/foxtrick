@@ -1,0 +1,14 @@
+mt: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Politika tal-Privatezza</h4>
+        <p>Foxtrick ma jtellax id-data personali jew il-preferenzi tiegħek fuq is-servers tiegħu 
+        u lanqas ma jaqsamx l-informazzjoni privata tiegħek - inklużi usernames, passwords jew 
+        data tal-logħba ma' partijiet terzi, ħlief f'każijiet speċifiċi meħtieġa biex:</p>
+        <ol>
+          <li>Jipprovdi l-funzjonalitajiet ta' Foxtrick.</li>
+          <li>Jibgħat rapporti ta' żbalji u data analitika.</li>
+        </ol>
+        <p>Ara l-<a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Politika tal-Privatezza ta' Foxtrick</a> sħiħa għad-dettalji.</p><br>

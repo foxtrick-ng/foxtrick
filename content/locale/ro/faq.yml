@@ -53,13 +53,3 @@ ro:
         <li><module>SkillTable</module></li>
         <li><module>TeamStats</module></li>
         </ul>
-    privacy:
-      question: Cum va păstra Foxtrick confidențialitatea?
-      answer: |
-        <p>FoxTrick nu va încărca orice date sau preferințele pe un server FoxTrick; nici nu va trimite FoxTrick oricare dintre datele dvs. personale, inclusiv, dar nu limitat la numele de utilizator, parola și ID-ul de jucător asociate cu calitățile.</p>
-
-        <p>Majoritatea datelor transmise unor terțe părți, cu excepția cazului în mod explicit de mai jos, sunt trimise cu metoda HTTP GET, și vor fi trimise numai de către tine făcând clic pe un link.</p>
-
-        <p>Asta este, vei fi capabil să vezi ce date sunt transmise prin inspectarea URI (Uniform Resource Identifier) al unui link extern, iar datele nu vor fi trimise fără acordul dumneavoastră. Așa cum s-a menționat mai sus, nu există date private implicate.</p>
-
-        <p>Modulele excepție sunt <module>HTMSPrediction</module> și <module>HTEVPrediction</module>, unde ratings sunt transmise și primite de la site-uri cu XMLHttpRequest.</p>

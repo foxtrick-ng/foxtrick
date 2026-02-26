@@ -816,6 +816,11 @@ Foxtrick.addBoxToSidebar = function(doc, title, content, prec, forceLeft, isExpa
 		boxHead.className = 'boxHead';
 		dest.appendChild(boxHead);
 
+		// FT header icon
+		const iconSpan = doc.createElement('span');
+		Foxtrick.addClass(iconSpan, 'header-icon ft-icon-header');
+		boxHead.appendChild(iconSpan);
+
 		// boxHead - h2
 		let h2 = doc.createElement('h2');
 		h2.textContent = title;

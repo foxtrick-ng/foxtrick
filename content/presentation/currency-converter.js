@@ -17,11 +17,11 @@ Foxtrick.modules.CurrencyConverter = {
 	 * @param  {document} doc
 	 * @return {HTMLSelectElement}
 	 */
-	OPTION_FUNC: function(doc) {
+	OPTION_FUNC: async function(doc) {
 		var currencySelect = doc.createElement('select');
 		currencySelect.setAttribute('pref', 'module.CurrencyConverter.to');
 		var currencies = [];
-		var currency = Foxtrick.util.load.sync(Foxtrick.InternalPath + 'data/htcurrency.json');
+		var currency = await Foxtrick.util.load.internal(Foxtrick.InternalPath + 'data/htcurrency.json');
 		var currencyJSON = JSON.parse(currency);
 		var currencyNodes = currencyJSON.hattrickcurrencies;
 		for (let { code, name: desc } of currencyNodes)

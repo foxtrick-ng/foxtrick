@@ -40,6 +40,7 @@
 			"content/lib/gauge.js",
 			"content/lib/sentry.js",
 			"content/lib/extraerrordata.js",
+			"content/lib/rewriteframes.js",
 			// <!-- end ext-lib -->
 
 			"content/lib/integration.js",
@@ -286,7 +287,9 @@
 	"host_permissions": [
 		"*://chpp.hattrick.org/*",
 		"*://*.foxtrick.org/*",
-		"https://www.fantamondi.it/*",
+		"https://www.fantamondi.it/*"
+	],
+	"optional_host_permissions": [
 		"https://*.hattrick-youthclub.org/*",
 		"http://no9-online.de/*",
 		"http://www.latehome.de/*",

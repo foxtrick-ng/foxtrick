@@ -5,6 +5,7 @@
 Foxtrick.modules['YouthSkills'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.INFORMATION_AGGREGATION,
 	PAGES: ['youthPlayers', 'youthPlayerDetails'],
+	OPTIONS: ['showInfoBox'],
 	CSS: Foxtrick.InternalPath + 'resources/css/youth-skills.css',
 	NICE: -10,
 	PERMISSIONS: {
@@ -562,6 +563,8 @@ Foxtrick.modules['YouthSkills'] = {
 
 			/** @type {HTMLElement[]} */
 			let skillContainers;
+			const isPerfView = Foxtrick.Pages.Players.isYouthPerfView(doc);
+
 			if (isPlayerDetails && isLegacy)
 				skillContainers = [doc.querySelector('#mainBody .mainBox')];
 			else if (isPlayerDetails)
@@ -595,11 +598,14 @@ Foxtrick.modules['YouthSkills'] = {
 					let max = Math.max(cap, capMinimal);
 					let maxPred = Math.floor((skill.cap_maximal || 0) * 10) / 10;
 
-					if (pred || current || max || maxPred)
-						setSkill(skillContainer, ROW_MAP[sk], { current, pred, max, maxPred });
-
 					if (top)
 						markTopSkill(skillContainer, ROW_MAP[sk]);
+
+					if (isPerfView)
+						continue;
+
+					if (pred || current || max || maxPred)
+						setSkill(skillContainer, ROW_MAP[sk], { current, pred, max, maxPred });
 				}
 			}
 
@@ -666,67 +672,76 @@ Foxtrick.modules['YouthSkills'] = {
 				return glyph;
 			}
 
+			/**
+			 * Add player specialties.
+			 * @param {HTMLElement[]} specContainers
+			 */
+			const addSpecialties = function(specContainers) {
+				for (let specContainer of specContainers) {
+					// don't add multiple times
+					if (specContainer.querySelector('.ft-hy-spec'))
+						continue;
+
+					const playerId = getPlayerId(specContainer);
+					// stop if player unknown in HY
+					if (!(playerId in json))
+						continue;
+					const player = json[playerId];
+
+					// add specialty
+					const specialty = player.speciality; // HY TYPO
+					if (specialty) {
+						if (isLegacy) {
+							if (isPlayerDetails) {
+								// skip if specialty known on HT
+								if (specContainer.querySelector('p') || specContainer.querySelector('strong'))
+									continue;
+
+								const info = doc.createElement('p');
+								info.textContent = `${Foxtrick.L10n.getString('Specialty')}: `;
+								info.appendChild(createSpecSpan(specialty));
+								specContainer.prepend(info);
+							} else {
+								const info = specContainer.querySelector('p');
+								if (!info)
+									throw new Error('YouthSkills: invalid spec container');
+								const text = info.textContent;
+
+								// skip if specialty known on HT
+								if (/\[/.test(text))
+									continue;
+
+								if (info.firstChild)
+									info.firstChild.after(createSpecSpan(specialty));
+								else
+									info.appendChild(createSpecSpan(specialty));
+							}
+						} else {
+							// skip if specialty known on HT
+							if (specContainer.querySelector('tr[id$="_trSpeciality"]'))
+								continue;
+
+							const specTr = createSpecTr(specialty);
+
+							const tbody = specContainer.querySelector('tbody');
+							if (tbody && tbody.firstChild)
+								tbody.insertBefore(specTr, tbody.firstChild);
+							else
+								throw new Error('YouthSkills: invalid player skill table')
+						}
+					}
+				}
+			}
+
 			/** @type {HTMLElement[]} */
 			let specContainers;
 			if (isPlayerDetails && isLegacy)
 				specContainers = [doc.querySelector('.playerInfo')];
-			else 
+			else
 				specContainers = skillContainers;
 
-			for (let specContainer of specContainers) {
-				// don't add multiple times
-				if (specContainer.querySelector('.ft-hy-spec'))
-					continue;
-
-				const playerId = getPlayerId(specContainer);
-				// stop if player unknown in HY
-				if (!(playerId in json))
-					continue;
-				const player = json[playerId];
-
-				// add specialty
-				const specialty = player.speciality; // HY TYPO
-				if (specialty) {
-					if (isLegacy) {
-						if (isPlayerDetails) {
-							// skip if specialty known on HT
-							if (specContainer.querySelector('p') || specContainer.querySelector('strong'))
-								continue;
-
-							const info = doc.createElement('p');
-							info.textContent = `${Foxtrick.L10n.getString('Specialty')}: `;
-							info.appendChild(createSpecSpan(specialty));
-							specContainer.prepend(info);
-						} else {
-							const info = specContainer.querySelector('p');
-							if (!info)
-								throw new Error('YouthSkills: invalid spec container');
-							const text = info.textContent;
-
-							// skip if specialty known on HT
-							if (/\[/.test(text))
-								continue;
-
-							if (info.firstChild)
-								info.firstChild.after(createSpecSpan(specialty));
-							else
-								info.appendChild(createSpecSpan(specialty));
-						}
-					} else {
-						// skip if specialty known on HT
-						if (specContainer.querySelector('tr[id$="_trSpeciality"]'))
-							continue;
-
-						const specTr = createSpecTr(specialty);
-
-						const tbody = specContainer.querySelector('tbody');
-						if (tbody && tbody.firstChild)
-							tbody.insertBefore(specTr, tbody.firstChild);
-						else
-							throw new Error('YouthSkills: invalid player skill table')
-					}
-				}
-			}
+			if (!isPerfView)
+				addSpecialties(specContainers);
 		};
 
 
@@ -814,7 +829,7 @@ Foxtrick.modules['YouthSkills'] = {
 		};
 
 		entry = doc.querySelector('#mainBody > .playerList');
-		if (entry)
+		if (entry && Foxtrick.Prefs.isModuleOptionEnabled(module, 'showInfoBox'))
 			drawMessage(doc);
 
 		// get skills from HY

@@ -1,0 +1,15 @@
+hu: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Adatvédelmi irányelvek</h4>
+        <p>A Foxtrick nem tölti fel személyes adatait vagy beállításait saját szervereire, 
+        és nem osztja meg magáninformációit - beleértve a felhasználóneveket, jelszavakat 
+        vagy játékadatokat harmadik felekkel, kivéve bizonyos esetekben, amelyek szükségesek 
+        a következőkhöz:</p>
+        <ol>
+          <li>A Foxtrick funkciók biztosítása.</li>
+          <li>Hibajelentések és analitikai adatok küldése.</li>
+        </ol>
+        <p>Tekintse meg a teljes <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick Adatvédelmi irányelveket</a> a részletekért.</p><br>

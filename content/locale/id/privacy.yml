@@ -1,0 +1,15 @@
+id: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Kebijakan Privasi</h4>
+        <p>Foxtrick tidak mengunggah data pribadi atau preferensi Anda ke servernya sendiri, 
+        dan tidak membagikan informasi pribadi Anda - termasuk nama pengguna, kata sandi, 
+        atau data permainan kepada pihak ketiga, kecuali dalam kasus tertentu yang diperlukan 
+        untuk:</p>
+        <ol>
+          <li>Menyediakan fitur Foxtrick.</li>
+          <li>Mengirim laporan kesalahan dan data analitik.</li>
+        </ol>
+        <p>Lihat <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Kebijakan Privasi Foxtrick</a> selengkapnya untuk detail.</p><br>

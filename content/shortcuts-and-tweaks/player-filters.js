@@ -36,6 +36,9 @@ Foxtrick.modules['PlayerFilters'] = {
 		var optionAll = doc.createElement('option');
 		optionAll.value = 'all';
 		optionAll.textContent = '-- ' + Foxtrick.L10n.getString('Filters.label') + ' --';
+		// Don't overlap HT 'Show table' button
+		if (!Foxtrick.Pages.All.isLegacy(doc))
+			filterSelect.classList.add('sorting');
 		filterSelect.appendChild(optionAll);
 
 		var optionAdd = doc.createElement('option');

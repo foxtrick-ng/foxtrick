@@ -917,9 +917,9 @@ function initListeners() {
  * Make module div container with module options and their descriptions
  *
  * @param  {object}         module
- * @return {HTMLDivElement}
+ * @returns {Promise<HTMLDivElement>}
  */
-function makeModuleDiv(module) {
+async function makeModuleDiv(module) {
 	// var getScreenshot = function(link) {
 	// 	var a = document.createElement('a');
 	// 	a.className = 'screenshot';
@@ -990,7 +990,7 @@ function makeModuleDiv(module) {
 	// or purely initializes them and returns null
 	var customOptions = [];
 	if (typeof module.OPTION_FUNC == 'function') {
-		var genOptions = module.OPTION_FUNC(document);
+		var genOptions = await module.OPTION_FUNC(document);
 		if (genOptions) {
 			if (Array.isArray(genOptions)) {
 				for (var field of genOptions)
@@ -1187,7 +1187,7 @@ function makeModuleDiv(module) {
 /**
  * Create module containers and initialize their attributes
  */
-function initModules() {
+async function initModules() {
 	var modules = [];
 	for (var m in Foxtrick.modules)
 		modules.push(Foxtrick.modules[m]);
@@ -1213,7 +1213,7 @@ function initModules() {
 	});
 
 	for (var module of modules) {
-		var obj = makeModuleDiv(module);
+		var obj = await makeModuleDiv(module);
 
 		// show on view-by-category tab
 		var xOn = module.MODULE_CATEGORY + 'search all';
@@ -1635,7 +1635,7 @@ function initHelpTab() {
 			src = src[locale];
 		}
 
-		return src.faq;
+		return src?.faq ? src.faq : {};
 	};
 
 	var addFAQItem = function(item, itemLocal, i, faqLinks) {
@@ -1775,14 +1775,57 @@ function initAboutTab() {
 }
 
 /**
+ * Setup privacy tab
+ * @returns {Promise<void>}
+ */
+function initPrivacyTab() {
+	const parsePrivacy = function(src) {
+		if (!src)
+			return null;
+
+		for (var locale in src) {
+			// yaml obj has only one property: locale code
+			// ignoring it and taking privacy sub-property directly
+			src = src[locale];
+		}
+
+		return src.privacy ? src.privacy : null;
+	};
+
+	const privacyYml = Foxtrick.load(Foxtrick.InternalPath + 'privacy.yml').then(Foxtrick.parseYAML);
+
+	const lang = Foxtrick.Prefs.getString('htLanguage');
+	const privacyLocalSrc = Foxtrick.InternalPath + 'locale/' + lang + '/privacy.yml';
+	const privacyLocalYml = Foxtrick.load(privacyLocalSrc).then(Foxtrick.parseYAML);
+
+	return Promise.all([privacyYml, privacyLocalYml]).then(function(resp) {
+		let privacy = parsePrivacy(resp[0]);
+		const privacyLocal = parsePrivacy(resp[1]);
+
+		if (!privacy) {
+			Foxtrick.log(new Error('NO PRIVACY YML!!!'));
+			return;
+		}
+
+		// prefer localized value
+		privacy = privacyLocal ? privacyLocal : privacy;
+
+		var div = document.getElementById('about-privacy');
+		if (div && typeof privacy.policy?.['data-collection-policy'] === 'string')
+			div.innerHTML = privacy.policy['data-collection-policy'];
+
+	}).catch(Foxtrick.catch('privacy'));
+}
+
+/**
  * Setup all tabs
  * @return {Promise<void[]>}
  */
 function initTabs() {
 	// attach each tab with corresponding pane
-	var tabLinks = document.querySelectorAll('.tabs li a');
+	const tabLinks = document.querySelectorAll('.tabs li a');
 	tabLinks.forEach(function(link) {
-		var tab = link.parentElement.id.replace(/^tab-/, '');
+		const tab = link.parentElement.id.replace(/^tab-/, '');
 		link.href = generateURI({ tab: tab });
 	});
 
@@ -1790,13 +1833,13 @@ function initTabs() {
 
 	initMainTab();
 
-	var changes = initChangesTab();
-	var help = initHelpTab();
-	var about = initAboutTab();
+	const changes = initChangesTab();
+	const help = initHelpTab();
+	const about = initAboutTab();
+	const privacy = initPrivacyTab();
+	const modules = initModules();
 
-	initModules();
-
-	return Promise.all([changes, help, about]);
+	return Promise.all([changes, help, about, privacy, modules]);
 }
 
 /**

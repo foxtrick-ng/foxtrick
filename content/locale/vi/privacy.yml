@@ -1,0 +1,15 @@
+vi: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Chính sách quyền riêng tư</h4>
+        <p>Foxtrick không tải dữ liệu cá nhân hoặc tùy chọn của bạn lên máy chủ của mình, 
+        cũng không chia sẻ thông tin riêng tư của bạn - bao gồm tên người dùng, mật khẩu 
+        hoặc dữ liệu trò chơi với bên thứ ba, ngoại trừ trong các trường hợp cụ thể cần 
+        thiết để:</p>
+        <ol>
+          <li>Cung cấp các tính năng của Foxtrick.</li>
+          <li>Gửi báo cáo lỗi và dữ liệu phân tích.</li>
+        </ol>
+        <p>Xem đầy đủ <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Chính sách quyền riêng tư của Foxtrick</a> để biết chi tiết.</p><br>

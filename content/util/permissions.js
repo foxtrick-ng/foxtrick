@@ -13,7 +13,7 @@ if (!this.Foxtrick)
 /* eslint-enable */
 
 Foxtrick.containsPermission = function(types, callback) {
-	if (Foxtrick.platform == 'Chrome' && Foxtrick.Manifest.manifest_version == 2) {
+	if (Foxtrick.platform == 'Chrome') {
 		if (Foxtrick.context == 'content')
 			Foxtrick.SB.ext.sendRequest({ req: 'containsPermission', types: types }, callback);
 		else

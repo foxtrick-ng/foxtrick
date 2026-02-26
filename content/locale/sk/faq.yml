@@ -9,5 +9,3 @@ sk:
       question: Aký je veľkostný limit pre upozorňovacie zvuky a kde môžu byť uložené?
     authorize:
       question: Prečo mám autorizovať FoxTrick, aby mal prístup k dátam môjho tímu?
-    privacy:
-      question: Ako ochráni FoxTrick moje súkromné údaje?

@@ -1,0 +1,14 @@
+ja: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>プライバシーポリシー</h4>
+        <p>Foxtrickはお客様の個人データや設定を自社のサーバーにアップロードしたり、 
+        ユーザー名、パスワード、ゲームデータを含むお客様の個人情報を第三者と共有したり 
+        することはありません。ただし、以下の目的に必要な特定の場合を除きます：</p>
+        <ol>
+          <li>Foxtrickの機能を提供すること。</li>
+          <li>エラー報告および分析データを送信すること。</li>
+        </ol>
+        <p>詳細については、完全な <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrickプライバシーポリシー</a> をご覧ください。</p><br>

@@ -239,8 +239,13 @@ td.ft-lineup-cell { vertical-align: middle }
 .bold{ font-weight:700; }
 
 /* TeamStats filter */
-.ft-select-container { float: right; width: auto; }
-.ft-select-container > select { display: block; margin: 0; clear: right; }
+.ft-select-container {
+	width: auto;
+	float: inline-end;
+	padding-top: 5px;
+}
+.ft-select-container:has(#foxtrick-filter-select.sorting) { padding-top: 20px; }
+.ft-select-container > select { display: block; margin: 0; clear: both; float: inline-end }
 #foxtrick-filter-select option[value="attribute-all"] {background-color:#ccc;}
 
 /* same style as HT's a.flag img */
@@ -483,5 +488,39 @@ html[data-theme="simple"] tr.darkereven {
 
 .ft-icon-header::before {
 	content: "\e900" / "FT";
-	font-size: 1.1em;
+	/*FIXME: set Font Metrics and Alignment Options properly in icomoon so that
+	FT glyphs align correctly, and we can get rid of these micro-adjustments.*/
+	font-size: 1.05em;
+	padding: 0px 1px 1px 0px;
+}
+
+/* CopyPlayerAd - coloured cells in youth player forum posts */
+#mainWrapper table.htMlTable td:has(em:empty), #mainWrapper table.htMlTable td:has(i:empty) {
+	background-color: #fe6;
+}
+#mainWrapper table.htMlTable td:has(strong:empty), #mainWrapper table.htMlTable td:has(b:empty) {
+	background-color: #8e7;
+}
+#mainWrapper table.htMlTable td:has(u:empty) {
+	background-color: #f3f3f3;
+}
+#mainWrapper table.htMlTable td:has(u > u:empty) {
+	background-color: #dfdfdf;
+}
+
+#ft-bug-report-message {
+	box-sizing: border-box;
+	width: 100%;
+	line-height: 1;
+	min-height: 5em;
+	resize: vertical;
+}
+
+@supports (field-sizing: content) {
+	#ft-bug-report-message {
+		field-sizing: content;
+		line-height: unset;
+		min-height: 5lh;
+		resize: none;
+	}
 }

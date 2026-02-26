@@ -54,13 +54,3 @@ vi:
         <li><module>SkillTable</module></li>
         <li><module>TeamStats</module></li>
         </ul>
-    privacy:
-      question: Foxtrick sẽ làm thế nào để bảo vệ quyền riêng tư của tôi?
-      answer: |
-        <p>FoxTrick sẽ không tải lên bất cứ dữ liệu hay tùy chỉnh nào của người chơi lên máy chủ; cùng với đó sẽ không gửi bất cứ dữ liệu riêng tư nào, bao gồm tên sử dụng, mật khẩu, và ID của cầu thủ cũng như các kĩ năng của cầu thủ đó đến bên thứ ba.</p>
-
-        <p>Phần lớn các dữ liệu chuyển sang bên thứ ba, trừ khi được nêu rõ ràng dưới đây, được gửi với phương thức HTTP GET, và sẽ chỉ được gửi khi bạn bấm vào đường dẫn.</p>
-
-        <p>Điều này có nghĩa là bạn sẽ có thể xem được những dữ liệu nào được chuyển bằng cách kiểm tra URI (định danh tài nguyên đồng dạng) của một đường dẫn bên ngoài, và không có dữ liệu nào sẽ được gửi đi mà không có sự đồng ý của bạn. Như đã nói, điều này không bao gồm dữ liệu cá nhân.</p>
-
-        <p>Các ngoại lệ là module <module>HTMSPrediction</module> và <module>HTEVPrediction</module>, nơi mà thông số trận đấu được chuyển tới và được nhận bởi trang web tương ứng với XMLHttpRequest.</p>

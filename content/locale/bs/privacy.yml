@@ -1,0 +1,14 @@
+bs: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Politika privatnosti</h4>
+        <p>Foxtrick ne učitava vaše lične podatke ili postavke na svoje servere, 
+        niti dijeli vaše privatne informacije - uključujući korisnička imena, lozinke ili 
+        podatke igre s trećim stranama, osim u specifičnim slučajevima potrebnim za:</p>
+        <ol>
+          <li>Pružanje funkcija Foxtrick-a.</li>
+          <li>Slanje izvještaja o greškama i analitičkih podataka.</li>
+        </ol>
+        <p>Pogledajte potpunu <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Politiku privatnosti Foxtrick-a</a> za detalje.</p><br>
