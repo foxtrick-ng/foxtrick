@@ -465,12 +465,14 @@ Foxtrick.loader.background.browserLoad = async function() {
 			};
 		}
 		// from permissions.js
-		this.requests.containsPermission = ({ types }, sender, sendResponse) => {
-			// @param origin - permission origin to check
-			// @callback boolean wether permission is set or not
-			Foxtrick.containsPermission(types, sendResponse);
-			return true; // async
-		};
+		if (Foxtrick.Manifest.manifest_version == 2) {
+			this.requests.containsPermission = ({ types }, sender, sendResponse) => {
+				// @param origin - permission origin to check
+				// @callback boolean wether permission is set or not
+					Foxtrick.containsPermission(types, sendResponse);
+					return true; // async
+			};
+		}
 
 		// TODO
 		// Those 2 don't work when invoked from content scripts

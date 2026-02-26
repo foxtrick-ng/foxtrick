@@ -287,7 +287,9 @@
 	"host_permissions": [
 		"*://chpp.hattrick.org/*",
 		"*://*.foxtrick.org/*",
-		"https://www.fantamondi.it/*",
+		"https://www.fantamondi.it/*"
+	],
+	"optional_host_permissions": [
 		"https://*.hattrick-youthclub.org/*",
 		"http://no9-online.de/*",
 		"http://www.latehome.de/*",

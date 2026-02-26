@@ -73,6 +73,10 @@ chrome.runtime.onMessage.addListener((msg, sender, responseCallback) => {
 			Notify.create(msg.msg, sender, msg)
 				.then(responseCallback);
 			return true;
+
+		case 'containsPermission':
+			chrome.permissions.contains(msg.types, responseCallback);
+			return true;
 	}
 	return false;
 });
