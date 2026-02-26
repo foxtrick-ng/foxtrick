@@ -491,6 +491,20 @@ html[data-theme="simple"] tr.darkereven {
 	font-size: 1.1em;
 }
 
+/* CopyPlayerAd - coloured cells in youth player forum posts */
+#mainWrapper table.htMlTable td:has(em:empty), #mainWrapper table.htMlTable td:has(i:empty) {
+	background-color: #fe6;
+}
+#mainWrapper table.htMlTable td:has(strong:empty), #mainWrapper table.htMlTable td:has(b:empty) {
+	background-color: #8e7;
+}
+#mainWrapper table.htMlTable td:has(u:empty) {
+	background-color: #f3f3f3;
+}
+#mainWrapper table.htMlTable td:has(u > u:empty) {
+	background-color: #dfdfdf;
+}
+
 #ft-bug-report-message {
 	box-sizing: border-box;
 	width: 100%;

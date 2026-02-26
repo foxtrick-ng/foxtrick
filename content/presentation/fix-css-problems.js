@@ -11,6 +11,7 @@ Foxtrick.modules.FixcssProblems = {
 	PAGES: ['all'],
 
 	OPTIONS: [
+		'DisableCPAFormatting',
 		'RTL_Fixes',
 		'MatchReportRatingsFontFix',
 		'MatchinfoLegacy',
@@ -18,6 +19,7 @@ Foxtrick.modules.FixcssProblems = {
 	],
 
 	OPTIONS_CSS: [
+		Foxtrick.InternalPath + 'resources/css/fixes/CopyPlayerAd_disable_formatting.css',
 		Foxtrick.InternalPath + 'resources/css/fixes/RTL_Fixes.css',
 		Foxtrick.InternalPath + 'resources/css/fixes/MatchReportRatingsFontFix.css',
 		Foxtrick.InternalPath + 'resources/css/fixes/MatchinfoLegacy.css',

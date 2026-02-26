@@ -311,13 +311,15 @@ Foxtrick.modules.CopyPlayerAd = {
 				regex: '^\\[table\\].+\\[/table\\]$',
 				type: 'replace',
 				exec: async (str, data) => {
-					/** @type {HYPlayer} */
-					let player = getHyPlayer(data.playerId);
-					if (!player)
-						return;
+					/** @type {?HYPlayer} */
+					let hyPlayer = getHyPlayer(data.playerId);
+					/** @type {?HYSkills} */
+					let hySkills;
+					if (hyPlayer)
+						hySkills = hyPlayer.skills;
 
-					const hySkills = player.skills;
-					// hyc skill id mapping
+					// map table row index to hyc skill id
+					/** @type {HYSkillIdx[]} */
 					const skillMap = [
 						6,  // 'keeper'
 						8,  // 'defending'
@@ -373,12 +375,14 @@ Foxtrick.modules.CopyPlayerAd = {
 					// re-build table
 					let output = '[table]';
 					for (let skill of inputSkills) {
-						/** @type {HYSkill} */
-						const hySkill = hySkills[skill.hyIndex];
+						const hySkill = /**@type {HYSkill}*/ (hySkills?.[skill.hyIndex]);
 						output += `[tr][th]${skill.name}[/th]`;
 
 						let [ability, potential] = [skill.ability, skill.potential];
-						let isUnknown = !skill.valuesStr // nothing at all known about skill in ht
+						const isUnknown = !skill.valuesStr // nothing at all known about skill in ht
+						const hasAbility = Number.isFinite(parseInt(ability, 10));
+						const hasPotential = Number.isFinite(parseInt(potential, 10));
+						const isMaxed = hasAbility && hasPotential && hySkill?.maxed;
 
 						if (hySkill) {
 							if (hySkill.current)
@@ -408,17 +412,27 @@ Foxtrick.modules.CopyPlayerAd = {
 							cellContent = `${skill.abilityDenom} / ${skill.potentialDenom} (${ability} / ${potential})`;
 						}
 
-						if (hySkill && hySkill.top3)
+						if (hySkill?.top3)
 							cellContent = `[b]${cellContent}[/b]`;
-						if (hySkill && hySkill.maxed)
-							cellContent = `[i][/i][i]${cellContent}[/i]`; // empty [i] used to set cell bg-color with css
+						if (hySkill?.maxed)
+							cellContent = `[i]${cellContent}[/i]`;
+
+						// add colours - css hack to style forum table cells
+						if (isMaxed)
+							cellContent = '[i][/i]' + cellContent;
+						else if (hasAbility)
+							cellContent = '[b][/b]' + cellContent;
+						else if (hasPotential)
+							cellContent = '[u][u][/u][/u]' + cellContent;
+						else
+							cellContent = '[u][/u]' + cellContent;
 
 						output += `[td]${cellContent}[/td][/tr]`;
 					}
 
 					// experience
-					if (hySkills[10]) {
-						let exp = (hySkills[10]);
+					if (hySkills?.[10]) {
+						let exp = /**@type {HYExp}*/ (hySkills[10]);
 						exp = Math.round(exp *10) / 10;
 
 						let query = {
@@ -437,7 +451,7 @@ Foxtrick.modules.CopyPlayerAd = {
 						};
 						const expDenom =  Foxtrick.L10n.getHTLangProperty(query, data.locale);
 
-						output += `[tr][th]${expName}[/th][td]${expDenom} (~ ${exp})[/td][/tr]`;
+						output += `[tr][th]${expName}[/th][td][u][/u]${expDenom} (~ ${exp})[/td][/tr]`;
 					}
 
 					output += '[/table]';
@@ -528,14 +542,14 @@ Foxtrick.modules.CopyPlayerAd = {
 		/**
 		 * Get hyc skill info for a player.
 		 * @param {number} id - playerId
-		 * @returns {?HYPlayer}
+		 * @returns {?HYPlayer} - player object or null if no player info for any reason
 		 */
 		const getHyPlayer = function(id) {
 			if (!_hySkills)
 				return null;
 			/** @type {HYPlayer} */
 			const playerSkills = _hySkills[id];
-			return playerSkills;
+			return playerSkills ? playerSkills : null;
 		}
 
 		/**
@@ -1154,7 +1168,7 @@ Foxtrick.modules.CopyPlayerAd = {
  * @property {string} [ability] - Ability or undefined, e.g. '6'.
  * @property {string} [abilityDenom] - Ability demonimation, e.g. 'passable'.
  * @property {string} [denomStr] - Skill demonimations string, e.g. 'passable / unknown '.
- * @property {number} [hyIndex] - Associated hyc skill id.
+ * @property {HYSkillIdx} [hyIndex] - Associated hyc skill id.
  * @property {string} [matched] - String matched from table.
  * @property {string} [name] - Skill name in table, e.g. 'Keeper.'
  * @property {string} [potential] - Potential or undefined, e.g. undefined.
