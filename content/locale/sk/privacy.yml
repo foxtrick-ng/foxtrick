@@ -1,0 +1,14 @@
+sk: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Zásady ochrany osobných údajov</h4>
+        <p>Foxtrick nenahráva vaše osobné údaje ani preferencie na vlastné servery 
+        a nezdieľa vaše súkromné informácie - vrátane používateľských mien, hesiel alebo 
+        herných údajov s tretími stranami, s výnimkou špecifických prípadov potrebných na:</p>
+        <ol>
+          <li>Poskytovanie funkcií Foxtrick.</li>
+          <li>Odosielanie hlásení o chybách a analytických údajov.</li>
+        </ol>
+        <p>Pozrite si úplné <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Zásady ochrany osobných údajov Foxtrick</a> pre podrobnosti.</p><br>

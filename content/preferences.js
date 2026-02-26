@@ -1775,14 +1775,57 @@ function initAboutTab() {
 }
 
 /**
+ * Setup privacy tab
+ * @returns {Promise<void>}
+ */
+function initPrivacyTab() {
+	const parsePrivacy = function(src) {
+		if (!src)
+			return null;
+
+		for (var locale in src) {
+			// yaml obj has only one property: locale code
+			// ignoring it and taking privacy sub-property directly
+			src = src[locale];
+		}
+
+		return src.privacy ? src.privacy : null;
+	};
+
+	const privacyYml = Foxtrick.load(Foxtrick.InternalPath + 'privacy.yml').then(Foxtrick.parseYAML);
+
+	const lang = Foxtrick.Prefs.getString('htLanguage');
+	const privacyLocalSrc = Foxtrick.InternalPath + 'locale/' + lang + '/privacy.yml';
+	const privacyLocalYml = Foxtrick.load(privacyLocalSrc).then(Foxtrick.parseYAML);
+
+	return Promise.all([privacyYml, privacyLocalYml]).then(function(resp) {
+		let privacy = parsePrivacy(resp[0]);
+		const privacyLocal = parsePrivacy(resp[1]);
+
+		if (!privacy) {
+			Foxtrick.log(new Error('NO PRIVACY YML!!!'));
+			return;
+		}
+
+		// prefer localized value
+		privacy = privacyLocal ? privacyLocal : privacy;
+
+		var div = document.getElementById('about-privacy');
+		if (div && typeof privacy.policy?.['data-collection-policy'] === 'string')
+			div.innerHTML = privacy.policy['data-collection-policy'];
+
+	}).catch(Foxtrick.catch('privacy'));
+}
+
+/**
  * Setup all tabs
  * @return {Promise<void[]>}
  */
 function initTabs() {
 	// attach each tab with corresponding pane
-	var tabLinks = document.querySelectorAll('.tabs li a');
+	const tabLinks = document.querySelectorAll('.tabs li a');
 	tabLinks.forEach(function(link) {
-		var tab = link.parentElement.id.replace(/^tab-/, '');
+		const tab = link.parentElement.id.replace(/^tab-/, '');
 		link.href = generateURI({ tab: tab });
 	});
 
@@ -1790,13 +1833,14 @@ function initTabs() {
 
 	initMainTab();
 
-	var changes = initChangesTab();
-	var help = initHelpTab();
-	var about = initAboutTab();
+	const changes = initChangesTab();
+	const help = initHelpTab();
+	const about = initAboutTab();
+	const privacy = initPrivacyTab();
 
 	initModules();
 
-	return Promise.all([changes, help, about]);
+	return Promise.all([changes, help, about, privacy]);
 }
 
 /**

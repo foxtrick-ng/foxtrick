@@ -45,13 +45,3 @@ da:
         <li><module>SkillTable</module></li>
         <li><module>TeamStats</module></li>
         </ul>
-    privacy:
-      question: Hvordan vil FoxTrick beskytte mine personlige oplysninger?
-      answer: |
-        <p>FoxTrick vil ikke uploade nogen af ​​dine data eller præferencer til en server på FoxTrick, ej heller vil FoxTrick sende nogen af ​​dine private data, herunder, dit brugernavn, adgangskode og spiller ID forbundet med spiller evner til tredjepart.</p>
-
-        <p>De fleste data videregivet til tredjepart, "medmindre det udtrykkeligt er angivet nedenfor", sendes med HTTP GET-metoden, og vil kun blive sendt ved at klikke på et link.</p>
-
-        <p>Dvs. at du vil være i stand til at se, hvilke data der videregives ved at gennemgå URI (Uniform Resource Identifier) af et eksternt link, og ingen data vil blive sendt uden dit samtykke. Som allerede nævnt, ingen private data er involveret.</p>
-
-        <p>Undtagelserne er moduler <module>HTMSPrediction</module> og <module>HTEVPrediction</module>, , hvor kamp ratings videregives til og modtages fra de respektive sites med XMLHttpRequest.</p>

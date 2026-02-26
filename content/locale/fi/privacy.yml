@@ -1,0 +1,14 @@
+fi: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Tietosuojakäytäntö</h4>
+        <p>Foxtrick ei lataa henkilötietojasi tai asetuksiasi omille palvelimilleen 
+        eikä jaa yksityisiä tietojasi - mukaan lukien käyttäjänimiä, salasanoja tai 
+        pelitietoja kolmansille osapuolille, paitsi tietyissä tapauksissa, jotka ovat tarpeen:</p>
+        <ol>
+          <li>Foxtrick-ominaisuuksien tarjoamiseksi.</li>
+          <li>Virheraporttien ja analytiikkatietojen lähettämiseksi.</li>
+        </ol>
+        <p>Katso koko <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick tietosuojakäytäntö</a> lisätietoja varten.</p><br>

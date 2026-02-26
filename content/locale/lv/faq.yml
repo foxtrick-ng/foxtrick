@@ -17,5 +17,3 @@ lv:
       question: Kāds ir brīdinājuma skaņu izmēra ierobežojums un kur tās var atrast?
     authorize:
       question: Kāpēc būtu jāatļauj FoxTrick piekļūt manas komandas datiem?
-    privacy:
-      question: Kā FoxTrick aizsargā manu konfidencialitāti?

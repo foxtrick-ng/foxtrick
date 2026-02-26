@@ -1,0 +1,14 @@
+no: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Personvernpolicy</h4>
+        <p>Foxtrick laster ikke opp dine personlige data eller preferanser til sine egne servere 
+        og deler heller ikke din private informasjon - inkludert brukernavn, passord eller 
+        spilldata med tredjeparter, bortsett fra i spesifikke tilfeller som kreves for å:</p>
+        <ol>
+          <li>Tilby Foxtrick-funksjoner.</li>
+          <li>Sende feilrapporter og analytiske data.</li>
+        </ol>
+        <p>Se den fullstendige <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick Personvernpolicyen</a> for detaljer.</p><br>

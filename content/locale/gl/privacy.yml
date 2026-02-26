@@ -1,0 +1,14 @@
+gl: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Política de privacidade</h4>
+        <p>Foxtrick non sobe os teus datos persoais nin preferencias aos seus propios servidores, 
+        nin comparte a túa información privada - incluíndo nomes de usuario, contrasinais ou 
+        datos do xogo con terceiros, agás en casos específicos necesarios para:</p>
+        <ol>
+          <li>Proporcionar funcionalidades de Foxtrick.</li>
+          <li>Enviar informes de erros e datos analíticos.</li>
+        </ol>
+        <p>Consulta a <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Política de privacidade de Foxtrick</a> completa para máis detalles.</p><br>

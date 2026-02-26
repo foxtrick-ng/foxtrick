@@ -1,0 +1,14 @@
+lt: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Privatumo politika</h4>
+        <p>Foxtrick neįkelia jūsų asmeninių duomenų ar nuostatų į savo serverius 
+        ir nesidalija jūsų privačia informacija - įskaitant vartotojų vardus, slaptažodžius 
+        ar žaidimo duomenis su trečiosiomis šalimis, išskyrus konkrečius atvejus, būtinus:</p>
+        <ol>
+          <li>Foxtrick funkcijų teikimui.</li>
+          <li>Klaidų ataskaitų ir analitinių duomenų siuntimui.</li>
+        </ol>
+        <p>Peržiūrėkite visą <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick Privatumo politiką</a> dėl detalių.</p><br>

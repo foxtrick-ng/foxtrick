@@ -21,5 +21,3 @@ vls-BE:
       question: Wat is de maximum grootte van bestanden voor waarschuwingsgeluiden en waar kunnen ze opgeslagen worden?
     authorize:
       question: Waarom moet ik FoxTrick toestemming geven mijn team data te raadplegen?
-    privacy:
-      question: Hoe beschermt FoxTrick mijn privacy?

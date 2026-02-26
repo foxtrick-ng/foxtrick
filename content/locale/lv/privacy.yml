@@ -1,0 +1,14 @@
+lv: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Privātuma politika</h4>
+        <p>Foxtrick neaugšupielādē jūsu personas datus vai preferences savos serveros 
+        un nedalās ar jūsu privāto informāciju - ieskaitot lietotājvārdus, paroles vai 
+        spēles datus ar trešajām pusēm, izņemot īpašos gadījumos, kas nepieciešami, lai:</p>
+        <ol>
+          <li>Nodrošinātu Foxtrick funkcijas.</li>
+          <li>Nosūtītu kļūdu ziņojumus un analītiskos datus.</li>
+        </ol>
+        <p>Skatiet pilnu <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick Privātuma politiku</a> lai iegūtu sīkāku informāciju.</p><br>

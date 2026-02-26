@@ -53,13 +53,3 @@ hr:
         <li><module>SkillTable</module></li>
         <li><module>TeamStats</module></li>
         </ul>
-    privacy:
-      question: Kako će Foxtrick zaštititi moju privatnost?
-      answer: |
-        <p>Foxtrick neće prikupljati ni bilo gdje prenositi vaše osobne podatke ni postavke; niti će na druge stranice automatski prosljeđivati ​​bilo koji od vaših osobnih podataka, uključujući i ime za logiranje, lozinku, ID-ove igrača ili njihove osobine i vještine.</p>
-
-        <p>Podaci koji se prosljeđuju drugim stranicama, osim ako je to izričito navedeno ispod, šalju se 'HTTP GET' metodom, i to samo ako vi kliknete na link ka tom alatu ili stranici.</p>
-
-        <p>Uz to, možete i vidjeti sve podatke koji se prosljeđuju jer će biti naznačeni u 'URI' (Uniform Resource Identifier) eksternom linku, i nijedan podatak neće biti poslan bez vaše dozvole. I kao što smo gore već napomenuli, nijedan vaš privatni podatak neće biti kompromitiran.</p>
-
-        <p>Jedini izuzetak predstavljaju moduli <module>HTMSPrediction</module> i <module>HTEVPrediction</module>, kod kojih se ocjene utakmice, 'XMLHttpRequest' metodom, šalju na odgovarajuće stranice.</p>

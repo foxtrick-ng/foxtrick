@@ -1,0 +1,15 @@
+pt-PT: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Política de Privacidade</h4>
+        <p>O Foxtrick não carrega os seus dados pessoais ou preferências para os seus próprios 
+        servidores nem partilha as suas informações privadas - incluindo nomes de utilizador, 
+        palavras-passe ou dados do jogo com terceiros, exceto em casos específicos necessários 
+        para:</p>
+        <ol>
+          <li>Fornecer funcionalidades do Foxtrick.</li>
+          <li>Enviar relatórios de erros e dados analíticos.</li>
+        </ol>
+        <p>Consulte a <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Política de Privacidade do Foxtrick</a> completa para mais detalhes.</p><br>

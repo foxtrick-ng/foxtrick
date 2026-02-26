@@ -1,0 +1,14 @@
+vls-BE: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>Privacybeleid</h4>
+        <p>Foxtrick loadt joun persoanlijke gegevens of voorkeurn nie op noa eign servers 
+        en deelt joun privégegevens - woarounder gebruikersnoamn, wachtwoordn of spelgegevens 
+        nie mee derde partijn, buutn in specifieke gevalln die neudig zyn om:</p>
+        <ol>
+          <li>Foxtrick-functies te biedn.</li>
+          <li>Foutrapportn en analytysche gegevens te verstuurn.</li>
+        </ol>
+        <p>Bekijk 't volledige <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick Privacybeleid</a> voe mier informoatie.</p><br>

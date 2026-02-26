@@ -48,13 +48,3 @@ es-ES:
         <li><module>SkillTable</module></li> 
         <li><module>TeamStats</module></li>
         </ul>
-    privacy:
-      question: '¿Cómo protege mi privacidad FoxTrick?'
-      answer: |
-        <p>FoxTrick no compartirá tus datos ni tu configuración con ningún servidor de FoxTrick; tampoco enviará nombres, contraseñas, IDs de jugador ni ningún otro dato privado a terceros.</p>
-
-        <p>La mayoría de los datos que pasan a terceros, entre los que no están los anteriormente especificados, lo hacen por medio de HTTP y deberás hacer clic en un enlace para permitirlo.</p>
-
-        <p>De esta forma, podrás ver los datos que pasan inspeccionando la URI (Identificador Uniforme de Recursos) de un enlace externo y nada será enviado sin tu consentimiento. Cabe destacar, que los datos privados no se verán involucrados.</p>
-
-        <p>Las excepciones son los módulos <module>HTMSPrediction</module> y <module>HTEVPrediction</module>, donde los valores coincidentes pasan y se reciben de los sitios respectivos mediante XMLHttpRequest.</p>

@@ -30,10 +30,3 @@ pl:
         <li><module>SeriesFlags</module></li></ul>  
         <p>Niektóre moduły mogą podać wiele informacji, jeśli mają dostęp do danych z Hattricka:</p>  
         <ul><li><module>SkillTable</module></li> <li><module>TeamStats</module></li></ul>
-    privacy:
-      question: Jak FoxTrick będzie chronił moją prywatność?
-      answer: |
-        <p>FoxTrick nie będzie pobierać żadnych Twoich danych ani preferencji na serwer FoxTricka; nie wyśle też osobom postronnym żadnych danych prywatnych, w tym Twojej nazwy użytkownika, hasła czy  identyfikatora gracza skojarzonego z umiejętnościami.</p>
-        <p>Większość danych przekazywanych osobom trzecim, chyba że wyraźnie określone poniżej, jest wysyłanych za pomocą metody HTTP GET i zostanie wysłane tylko, jeśli klikniesz link.</p>
-        <p>Oznacza to, że będzie można zobaczyć, jakie dane są przekazywane sprawdzając identyfikator URI (Uniform Resource Identifier) linku zewnętrznego, a żadne dane nie będą przesyłane bez Twojej zgody. Jak stwierdzono powyżej, nie ma mowy o żadnych prywatnych danych.</p>  
-        <p>Wyjątkami są moduły <module>HTMSPrediction</module> i <module>HTEVPrediction</module>, gdzie oceny meczowe są przekazywane do i otrzymywane z odpowiednich stron poprzez XMLHttpRequest.</p>

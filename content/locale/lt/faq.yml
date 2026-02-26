@@ -54,13 +54,3 @@ lt:
         <li><module>SkillTable</module></li>
         <li><module>TeamStats</module></li>
         </ul>
-    privacy:
-      question: Kaip Foxtrick saugo mano privatumą?
-      answer: |
-        <p>FoxTrick nesiųs jokių Jūsų duomenų ar nustatymų į Foxtrick (ar kitus) serverius, įskaitant vartotojo vardus ir slaptažodžius, žaidėjų ID, įgūdžius ir t. t..</p>
-
-        <p>Dauguma į kitus serverius siunčiamų duomenų,  išskyrus paminėtus žemiau, siunčiami „HTTP GET“ metodu ir tik tada, kai paspaudžiate nuorodą.</p>
-
-        <p>Tai reiškia, kad galėsite matyti siunčiamus duomenis peržiūrėję nuorodos adresą: jokie duomenys nebus siunčiami be Jūsų sutikimo. Kaip ir minėta anksčiau, privatūs duomenys niekada nėra siunčiami.</p>
-
-        <p>Išimtys: <module>HTMSPrediction</module> ir <module>HTEVPrediction</module> moduliai, kurie siunčia ir gauna rungtynių reitingus iš atitinkamų portalų naudodami XMLHttpRequest technologiją.</p>

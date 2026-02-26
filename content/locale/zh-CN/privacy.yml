@@ -1,0 +1,14 @@
+zh-CN: 
+  privacy: 
+    policy: 
+      data-collection-policy: |
+        <h4>隐私政策</h4>
+        <p>Foxtrick 不会将您的个人数据或偏好上传到自己的服务器， 
+        也不会与第三方共享您的私人信息（包括用户名、密码或游戏数据）， 
+        除非在以下特定情况下需要：</p>
+        <ol>
+          <li>提供 Foxtrick 功能。</li>
+          <li>发送错误报告和分析数据。</li>
+        </ol>
+        <p>查看完整的 <a href="https://foxtrick-ng.github.io/privacy.html" target="_blank">
+        Foxtrick 隐私政策</a> 了解详情。</p><br>

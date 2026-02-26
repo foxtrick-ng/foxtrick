@@ -53,13 +53,3 @@ id:
         <li><module>SkillTable</module></li>
         <li><module>TeamStats</module></li>
         </ul>
-    privacy:
-      question: Bagaimana FoxTrick melindungi privasi saya?
-      answer: |
-        <p>FoxTrick tidak akan mengunggah data atau preferensi Anda ke server FoxTrick; FoxTrick juga tidak akan mengirimkan data pribadi Anda, termasuk namun tidak terbatas pada nama pengguna, kata sandi, dan ID pemain Anda yang terkait dengan keterampilan kepada pihak ketiga.</p>
-
-        <p>Sebagian besar data dikirimkan ke pihak ketiga, kecuali dinyatakan secara eksplisit di bawah, dikirim dengan metode HTTP GET, dan hanya akan dikirim setelah mengklik tautan.</p>
-
-        <p>Artinya, Anda akan dapat melihat data apa yang dilewati dengan memeriksa URI (Uniform Resource Identifier) dari tautan eksternal, dan tidak ada data yang akan dikirim tanpa persetujuan Anda. Seperti yang dinyatakan di atas, tidak ada data pribadi yang terlibat.</p>
-
-        <p>Pengecualiannya adalah modul <module>HTMSPrediction</module> dan <module>HTEVPrediction</module> di mana nilai kecocokan dilewatkan dan diterima dari situs masing-masing dengan XMLHttpRequest.</p>

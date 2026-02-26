@@ -52,13 +52,3 @@ tr:
         <li> <module> SkillTable </ module> </ li>
         <li> <module> TeamStats </ module> </ li>
         </ ul>
-    privacy:
-      question: FoxTrick gizliliğimi nasıl koruyacak?
-      answer: |
-        <p>Foxtrick ne bilgilerinizi ya da ayarlarınızı kendi server'ına yükleyecek ne de kullanıcı adınız, şifreniz, oyuncu ID'leri ve oyuncularınızın yeteneklerini içeren özel bilgilerinizi 3.şahıslarla paylaşmayacaktır.</p>
-
-        <p>3.şahıslara aktarılmış bilgiler, açıkça aşağıda belirtildiği gibi HTTP GET methodu kullanılarak gönderilmiş olup bu olay sadece sizin bir link'e tıklamanızla gerçekleşmektedir.</p>
-
-        <p>Bunu, harici bir link olan URI(Uniform Resource Identifier) ile inceleyerek hangi bilgilerin aktarıldığını görebilecek ve hiçbir bilgi sizin izniniz olmadan gönderilmeyecektir. Yukarıda belirtildiği gibi, hiçbir gizli bilginizi içermemektedir.</p>
-
-        <p><module>HTMSPrediction</module> ve <module>HTEVPrediction</module> modülleri kullanılarak XMLHttpRequest sahipli sitelere gerçekleşen maç reytingleri veri aktarımı bunun dışındadır.</p>
