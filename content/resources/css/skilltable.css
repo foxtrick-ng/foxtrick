@@ -115,10 +115,11 @@ html[dir="rtl"] .ft_skilltable_fullNames.on_top .ft_skilltableRight {
 html[firefox] .on_top .ft_skilltableRight {
 	margin-top: 2px;
 }
+.ft_skilltablediv { padding: 10px 0px 10px 0px }
 .ft_skilltablediv h2 { margin: 10px 0; }
 .ft_skilltablediv.transfer { margin: 35px 0; }
-html[dir="ltr"] .ft_skilltablediv { margin: 35px 0 35px -8px; }
-html[dir="rtl"] .ft_skilltablediv { margin: 35px -8px 35px 0; }
+html[dir="ltr"] .ft_skilltablediv { margin-left: -8px; }
+html[dir="rtl"] .ft_skilltablediv { margin-right: -8px; }
 .ft_skilltable td:nth-child(even) { background-color: #eeeeee; }
 .ft_skilltable td:nth-child(odd) { background-color: white; }
 .ft_skilltable tr { height: 21px; }
