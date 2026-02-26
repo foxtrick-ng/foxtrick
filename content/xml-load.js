@@ -107,8 +107,8 @@ Foxtrick.XMLData = {
 		if (team)
 			return team.NationalTeamName;
 
-		// team not in local nationalTeamsJSON, fallback to league name
-		return Foxtrick.L10n.getCountryNameNative(id);
+		// team not in local nationalTeamsJSON, fallback to country name
+		return Foxtrick.L10n.getCountryNameCountry(id);
 	},
 };
 
