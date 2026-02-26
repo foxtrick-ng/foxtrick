@@ -32,6 +32,7 @@
 			"content/lib/gauge.js",
 			"content/lib/sentry.js",
 			"content/lib/extraerrordata.js",
+			"content/lib/rewriteframes.js",
 			// <!-- end ext-lib -->
 
 			"content/lib/integration.js",

@@ -489,6 +489,23 @@ Foxtrick.log.Reporter = {
 		if (sentry.extraErrorDataIntegration)
 			integrations.push(sentry.extraErrorDataIntegration({ depth: 3 }));
 
+		// Add RewriteFramesIntegration.
+		// Matches chrome-extension://<id>/ OR moz-extension://<id>/
+		// and replaces the entire prefix with app:///
+		if (sentry.rewriteFramesIntegration)
+			integrations.push(sentry.rewriteFramesIntegration({
+				iteratee: (frame) => {
+					if (frame.filename) {
+						frame.filename = frame.filename.replace(
+							/^(?:chrome|moz)-extension:\/\/[^/]+\//,
+							"app:///"
+						);
+					}
+					return frame;
+				},
+			}));
+
+
 		// keepalive currently doesn't work with firefox
 		//@ts-expect-error
 		const keepalive = navigator && navigator.userAgentData ? true: false;
