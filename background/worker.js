@@ -75,7 +75,18 @@ chrome.runtime.onMessage.addListener((msg, sender, responseCallback) => {
 			return true;
 
 		case 'containsPermission':
-			chrome.permissions.contains(msg.types, responseCallback);
+			try {
+				chrome.permissions.contains(msg.types)
+					.then(function(result) {
+						responseCallback(result);
+					})
+					.catch(function(err) {
+						responseCallback({ __permError: String(err) });
+					});
+			}
+			catch (e) {
+				responseCallback({ __permError: String(e) });
+			}
 			return true;
 	}
 	return false;
