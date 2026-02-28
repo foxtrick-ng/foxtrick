@@ -72,7 +72,7 @@ function clearCache() {
 }
 
 function openPrefs() {
-	document.location.href = 'preferences.html?width=700#tab=on_page';
+	document.location.href = 'preferences.html?width=700&context=popup#tab=on_page';
 }
 
 function init() {
