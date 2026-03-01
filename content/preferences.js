@@ -2105,6 +2105,9 @@ function initLoader() {
 	if (w)
 		document.body.setAttribute('style', 'width:' + w[1] + 'px;');
 
+	if (/[?&]context=popup/.test(document.location.href))
+		document.body.classList.add('popup-view');
+
 	if (document.URL.startsWith('moz-extension://')) {
 		var main = document.getElementById('main');
 		if (main)
