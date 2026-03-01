@@ -542,7 +542,9 @@ Foxtrick.Prefs.getNeededPermissions = function() {
 			}
 
 			Foxtrick.containsPermission(item.types, function(granted) {
-				if (granted) {
+				// treat undefined as granted: works around MV3 service worker
+				// message channel issues where responseCallback is never called
+				if (granted !== false) {
 					resolve(null);
 					return;
 				}

@@ -14,8 +14,17 @@ if (!this.Foxtrick)
 
 Foxtrick.containsPermission = function(types, callback) {
 	if (Foxtrick.platform == 'Chrome') {
-		if (Foxtrick.context == 'content')
-			Foxtrick.SB.ext.sendRequest({ req: 'containsPermission', types: types }, callback);
+		if (Foxtrick.context == 'content') {
+			Foxtrick.SB.ext.sendRequest({ req: 'containsPermission', types: types }, function(response) {
+				if (response && response.__permError) {
+					Foxtrick.log(new Error('containsPermission: ' + response.__permError));
+					callback(undefined);
+				}
+				else {
+					callback(response);
+				}
+			});
+		}
 		else
 			chrome.permissions.contains(types, callback);
 
