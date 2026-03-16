@@ -37,6 +37,22 @@ Foxtrick.Pages.All.isOwn = function(doc) {
 };
 
 /**
+ * Test whether this is an HFI page
+ * @param  {document}  doc
+ * @returns {boolean|null} null if HFI state cannot be determined
+ */
+Foxtrick.Pages.All.isHFI = function(doc) {
+	const hasRibbon = !!doc.querySelector('.club-gender-ribbon-img');
+	const teamLinks = doc.getElementById('teamLinks');
+	if (!teamLinks) {
+		Foxtrick.log(new Error('isHFI - teamLinks not found'));
+		return null;
+	}
+	const ownTeamIsHFI = Foxtrick.util.id.findLeagueId(teamLinks) == 3000 ? true : false;
+	return (ownTeamIsHFI != hasRibbon);
+};
+
+/**
  * Test whether this page is a youth page
  * @param  {document}  doc
  * @return {boolean}
