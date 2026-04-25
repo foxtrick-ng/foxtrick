@@ -8,11 +8,6 @@
  * @author CatzHoek, LA-MJ
  */
 
-/* TODO
-- verificare che l'utente abbia accesso CHPP altrimenti usa partite amichevoli generiche
-- se l'utente ha accesso CHPP, visualizzare un messaggio di caricamento fino a che non sono state processate tutte le partite, e un messaggio di errore se la chiamata fallisce
- */
-
 'use strict';
 
 Foxtrick.modules.PlayerStatsExperience = {
@@ -134,9 +129,12 @@ Foxtrick.modules.PlayerStatsExperience = {
 
 		// define algorithm
 
-		/** @param {HTMLTableElement} statsTable */
+		/** 
+		 * @param {HTMLTableElement} statsTable
+		 * @param {boolean} isAuthorized
+		 */
 		// eslint-disable-next-line complexity
-		var runStatsTable = async function(statsTable) {
+		var runStatsTable = async function(statsTable, isAuthorized) {
 
 			// START ROW UTILS
 
@@ -328,6 +326,7 @@ Foxtrick.modules.PlayerStatsExperience = {
 					const match = gameIconDataUrl.match(/[?&]matchID=(\d+)/);
 					const matchID = match ? match[1] : null;
 
+					if (!isAuthorized) return Promise.resolve('friendly'); // fallback to generic friendly if not authorized to access CHPP
 					return getMatchDetails(matchID)
 						.then(details => {
 							const matchType = details.num('MatchType');
@@ -759,7 +758,8 @@ Foxtrick.modules.PlayerStatsExperience = {
 		if (!statsTable)
 			return;
 
-		await runStatsTable(statsTable);
+		const isAuthorized = Foxtrick.util.api.authorized();
+		await runStatsTable(statsTable, isAuthorized);
 
 		var matchListTable = Foxtrick.createFeaturedElement(doc, module, 'div');
 		let table = doc.createElement('table');
