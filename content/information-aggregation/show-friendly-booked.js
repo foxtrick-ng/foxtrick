@@ -46,7 +46,7 @@ Foxtrick.modules.ShowFriendlyBooked = {
 					['file', 'teamdetails'],
 					['teamId', teamId],
 				];
-				Foxtrick.util.api.retrieve(doc, params, { cache: 'default' }, (xml, errorText) => {
+				Foxtrick.util.api.retrieve(doc, params, { cache: 'default' }, async (xml, errorText) => {
 					if (!xml || errorText) {
 						destCell.textContent = Foxtrick.L10n.getString('status.error.abbr');
 						destCell.title = errorText;
@@ -69,8 +69,19 @@ Foxtrick.modules.ShowFriendlyBooked = {
 						img.src = '/Img/Icons/transparent.gif';
 						img.alt = img.title = Foxtrick.L10n.getString('team.status.booked');
 						img.className = 'ft_friendly';
-						Foxtrick.makeFeaturedElement(img, module);
-						destCell.appendChild(img);
+						try {
+							const matchId = await module.getMatchId(doc, teamId, parseInt(friendly.textContent));
+							const anchor = doc.createElement('a');
+							anchor.href = `/Club/Matches/Match.aspx?matchID=${matchId}`;
+							anchor.appendChild(img);
+							destCell.appendChild(anchor);
+							Foxtrick.makeFeaturedElement(anchor, module);
+						} catch (error) {
+							Foxtrick.log('Error getting match ID for team ' + teamId + ': ' + error);
+							destCell.appendChild(img);
+							Foxtrick.makeFeaturedElement(img, module);
+						}
+						
 					}
 				});
 			}
@@ -124,4 +135,50 @@ Foxtrick.modules.ShowFriendlyBooked = {
 			show();
 		}
 	},
+
+	/**
+	 * @param {Document} doc
+	 * @param {number} teamId
+	 * @param {number} friendlyTeamId
+	 * @returns {Promise<number>} matchId if friendly booked, 0 if not booked, -1 if unknown
+	 *  */	
+	getMatchId: function(doc, teamId, friendlyTeamId) {
+		function getLastMatchDate() {
+			const lastMatchDate = new Date()
+			lastMatchDate.setDate(lastMatchDate.getDate() + 10); // 1 week later should be enough to cover the friendly
+			return lastMatchDate.toISOString().replace('T', ' ').replace(/\..+/, '');
+		}
+
+		/** @type {CHPPParams} */
+		let params = [
+			['version', '2.9'],
+			['file', 'matches'],
+			['teamId', teamId],
+			['LastMatchDate', getLastMatchDate()],
+		];
+		return new Promise((resolve, reject) => {
+			Foxtrick.util.api.retrieve(doc, params, { cache: 'default' }, async (xml, errorText) => {
+				if (!xml || errorText) {				
+					Foxtrick.log(errorText);
+					return reject(errorText);
+				}
+				let matchId = -1;
+				const teamNodes = xml.querySelectorAll('HomeTeamID, AwayTeamID');
+
+				for (const node of teamNodes) {
+					if (parseInt(node.textContent) !== friendlyTeamId) continue;
+
+					const matchNode = node.closest('Match'); // più robusto di parentNode.parentNode
+					matchId = parseInt(matchNode.querySelector('MatchID').textContent);
+					break; // esci appena trovi il match
+				}
+				if (matchId === -1) {
+					return reject('No match found for team ' + teamId + ' and friendly team ' + friendlyTeamId);
+				}
+				return resolve(matchId);
+			});
+		})
+	}
 };
+
+
