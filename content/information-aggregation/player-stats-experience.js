@@ -41,7 +41,7 @@ Foxtrick.modules.PlayerStatsExperience = {
 	// eslint-disable-next-line max-len
 	/** @typedef {'series'|'cup'|'challenger_cup_1'|'challenger_cup_2'|'challenger_cup_3'|'consolation_cup'|'friendly'|'qualifier'|'masters'|'nt_worldcup'|'nations_cup'|'nt_wildcard'|'nt_contender'|'nt_cup_europe'|'nt_cup_americas'|'nt_cup_africa'|'nt_cup_asia'|'nt_worldcup_u21'|'nations_cup_u21'|'nt_wildcard_u21'|'nt_contender_u21'|'nt_cup_europe_u21'|'nt_cup_americas_u21'|'nt_cup_africa_u21'|'nt_cup_asia_u21'} GameIconClass */
 	// eslint-disable-next-line max-len
-	/** @typedef {'series'|'cup'|'challenger_cup_1'|'challenger_cup_2'|'challenger_cup_3'|'consolation_cup'|'friendly'|'qualifier'|'masters'|'matchNtContenderLeague'|'matchNtContinental'|'matchNtContinentalKO'|'matchNtNationsCup'|'matchNtNationsCupKO'|'matchNtWildcard'|'matchNtWorldCup'|'matchNtFriendly'|'matchNtLeague'|'matchNtFinals'|'matchNtFriendlyNew'|'matchNtWorldCupFinals'} MatchTypeClass */
+	/** @typedef {'series'|'cup'|'challenger_cup_1'|'challenger_cup_2'|'challenger_cup_3'|'consolation_cup'|'friendly'|'qualifier'|'masters'|'matchNtContenderLeague'|'matchNtContinental'|'matchNtContinentalKO'|'matchNtNationsCup'|'matchNtNationsCupKO'|'matchNtWildcard'|'matchNtWorldCup'|'matchNtFriendly'|'matchNtLeague'|'matchNtFinals'|'matchNtFriendlyNew'|'matchNtWorldCupFinals' | 'nationalFriendly' | 'internationalFriendly'} MatchTypeClass */
 
 	// don't randomly rename, parts of this are taken from hattrick using image classnames
 	/** @type {Record<MatchTypeClass, number>} */
@@ -49,6 +49,8 @@ Foxtrick.modules.PlayerStatsExperience = {
 		// assume international friendly as default, considered in min-max,
 		// minimum uses 1/2 of this value
 		friendly: 0.7,
+		nationalFriendly: 0.35,
+		internationalFriendly: 0.7,
 		series: 3.5,
 		cup: 7.0,
 		challenger_cup_1: 1.75,
@@ -107,14 +109,12 @@ Foxtrick.modules.PlayerStatsExperience = {
 	 * @param {document} doc
 	 * @this {typeof Foxtrick.modules.PlayerStatsExperience}
 	 */
-	run: function(doc) {
+	run: async function(doc) {
 		const module = this;
 		const MAX_XP_MIN = 90.0;
 		const PRECISION = 3;
 
 		const WEEK_OF_FINALS = 16;
-		const DAY_OF_FINAL = 0; // Sunday
-		const DAY_OF_SEMIS = 5; // Friday
 		const DAY_OF_FINAL_NEW = 5; // Friday
 		const DAY_OF_SEMIS_NEW = 1; // Monday
 
@@ -129,9 +129,12 @@ Foxtrick.modules.PlayerStatsExperience = {
 
 		// define algorithm
 
-		/** @param {HTMLTableElement} statsTable */
+		/** 
+		 * @param {HTMLTableElement} statsTable
+		 * @param {boolean} isAuthorized
+		 */
 		// eslint-disable-next-line complexity
-		var runStatsTable = function(statsTable) {
+		var runStatsTable = async function(statsTable, isAuthorized) {
 
 			// START ROW UTILS
 
@@ -205,13 +208,15 @@ Foxtrick.modules.PlayerStatsExperience = {
 			 * @param  {HTMLTableRowElement} node
 			 * @param  {string}              isodate
 			 * @param  {boolean}             juniors
-			 * @return {MatchTypeClass}
+			 * @return {Promise<MatchTypeClass>}
 			 */
 			var getGameType = function(node, isodate, juniors) {
 				let date = Foxtrick.util.time.getDateFromText(isodate);
 				var { season, week } = Foxtrick.util.time.gregorianToHT(date);
 				// eslint-disable-next-line no-bitwise
 				var isFinalSeason = season % 2 ^ Number(juniors);
+				var gameIconParent = node.querySelector('td.keyColumn');
+				var gameIconImage = gameIconParent.querySelector('.iconMatchtype img');
 
 				// most games can be identified by the classname directly, NT needs some tricks
 				/**
@@ -219,8 +224,6 @@ Foxtrick.modules.PlayerStatsExperience = {
 				 * @return {GameIconClass}
 				 */
 				var getGameIcon = function(node) {
-					var gameIconParent = node.querySelector('td.keyColumn');
-					var gameIconImage = gameIconParent.querySelector('.iconMatchtype img');
 					var gameIconSrc = gameIconImage.getAttribute('src');
 					const gameIconRegEx = /([\w-]+).svg/g;
 					var gameIcon = gameIconRegEx.exec(gameIconSrc)[1]; // first match is with ".svg", 2nd match is the group match without ".svg"
@@ -310,11 +313,38 @@ Foxtrick.modules.PlayerStatsExperience = {
 
 				var gameIcon = getGameIcon(node);
 				var isNT = isNTMatch(node);
+				const isFriendly = gameIcon === 'friendly';
 
 				if (isNT) {
 					let nt = getNTType(gameIcon);
 					if (nt != null)
-						return nt;
+						return Promise.resolve(nt);
+				}
+
+				if (isFriendly) {
+					const gameIconDataUrl = gameIconImage.getAttribute('data-url');
+					const match = gameIconDataUrl.match(/[?&]matchID=(\d+)/);
+					const matchID = match ? match[1] : null;
+
+					if (!isAuthorized) return Promise.resolve('friendly'); // fallback to generic friendly if not authorized to access CHPP
+					return getMatchDetails(matchID)
+						.then(details => {
+							const matchType = details.num('MatchType');
+							switch (details.num('MatchType')) {
+								case 4:
+								case 5:
+									return 'nationalFriendly';
+								case 8:
+								case 9:
+									return 'internationalFriendly';
+								default:
+									return 'friendly';
+							}
+						})
+						.catch(error => {
+							Foxtrick.log("ERROR: Failed to get match details for friendly with id", matchID, error);
+							return 'friendly'; // fallback to default
+						});
 				}
 
 				var ret = gameIcon in module.XP ? /** @type {MatchTypeClass} */ (gameIcon) : null;
@@ -326,7 +356,7 @@ Foxtrick.modules.PlayerStatsExperience = {
 					`));
 				}
 
-				return ret;
+				return Promise.resolve(ret);
 			};
 
 			/**
@@ -397,8 +427,9 @@ Foxtrick.modules.PlayerStatsExperience = {
 				let tdXP = Foxtrick.insertFeaturedCell(row, module, module.XP_CELL_IDX + 1);
 				Foxtrick.addClass(tdXP, 'stats');
 
-				// current skilllevel
+				// current skill level
 				let xpNow = parseInt(row.cells[module.XP_CELL_IDX].textContent, 10);
+				
 				// Best performance line appears in statsRows, but does not display any XP information
 				if (Number.isNaN(xpNow))
 					continue;
@@ -411,7 +442,7 @@ Foxtrick.modules.PlayerStatsExperience = {
 				let dateSpan = matchDate.querySelector('span.float_left');
 				let ntMatch = isNTMatch(row);
 				let juniors = /U-20|U21/.test(row.querySelector('a').textContent);
-				let gameType = getGameType(row, dateSpan.dataset.dateiso, juniors);
+				let gameType = await getGameType(row, dateSpan.dataset.dateiso, juniors);
 				let minutes = getPlayedMinutes(row);
 				let pseudoPoints = getXpGain(minutes, gameType); // for visualization
 				let walkover = isWalkover(row);
@@ -727,7 +758,8 @@ Foxtrick.modules.PlayerStatsExperience = {
 		if (!statsTable)
 			return;
 
-		runStatsTable(statsTable);
+		const isAuthorized = Foxtrick.util.api.authorized();
+		await runStatsTable(statsTable, isAuthorized);
 
 		var matchListTable = Foxtrick.createFeaturedElement(doc, module, 'div');
 		let table = doc.createElement('table');
@@ -758,5 +790,33 @@ Foxtrick.modules.PlayerStatsExperience = {
 		let tableHeader = doc.createElement('h2');
 		tableHeader.title = Foxtrick.L10n.getString('PlayerStatsExperience.PerformanceHistory');
 		entry.parentNode.insertBefore(tableHeader, entry);
+
+		/**
+		 * 
+		 * @param {string} matchId 
+		 * @returns {Promise<CHPPXML>}
+		 */
+		function getMatchDetails(matchId) {
+			/** @type {CHPPParams} */
+			const orderMatchArgs = [
+				['file', 'matchdetails'],
+				['version', '3.1'],
+				['matchId', matchId],
+				['sourceSystem', 'hattrick'],
+			];
+
+			/** @type {CHPPOpts} */
+			const oCache = { cache: 'session' };
+
+			return new Promise((resolve, reject) => {
+				Foxtrick.util.api.retrieve(doc, orderMatchArgs, oCache, (orderMatchXml, errorText) => {
+					if (errorText) {
+						Foxtrick.log(`Error retrieving match details for matchId ${matchId}: ${errorText}`);
+						reject(new Error(errorText));
+					}
+					resolve(orderMatchXml);
+				});
+			})
+		}
 	},
 };
