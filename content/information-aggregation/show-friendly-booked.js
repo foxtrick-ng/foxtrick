@@ -66,7 +66,7 @@ Foxtrick.modules.ShowFriendlyBooked = {
 					else if (friendly.textContent != '0') {
 						// friendly booked
 						let img = doc.createElement('img');
-						img.src = '/Img/Icons/transparent.gif';
+						img.src = '/Img/Svgs/match-types/friendly.svg?v=1';
 						img.alt = img.title = Foxtrick.L10n.getString('team.status.booked');
 						img.className = 'ft_friendly';
 						try {
