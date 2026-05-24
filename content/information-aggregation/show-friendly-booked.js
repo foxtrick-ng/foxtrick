@@ -165,12 +165,15 @@ Foxtrick.modules.ShowFriendlyBooked = {
 				let matchId = -1;
 				const teamNodes = xml.querySelectorAll('HomeTeamID, AwayTeamID');
 
-				for (const node of teamNodes) {
+				for (let i = teamNodes.length - 1; i >= 0; i--) {
+					const node = teamNodes[i];
 					if (parseInt(node.textContent) !== friendlyTeamId) continue;
 
-					const matchNode = node.closest('Match'); // più robusto di parentNode.parentNode
+					const matchNode = node.closest('Match');
+					const matchType = matchNode.querySelector('MatchType').textContent;
+					if (matchType !== '4' && matchType !== '5') continue; // not friendly
 					matchId = parseInt(matchNode.querySelector('MatchID').textContent);
-					break; // esci appena trovi il match
+					break;
 				}
 				if (matchId === -1) {
 					return reject('No match found for team ' + teamId + ' and friendly team ' + friendlyTeamId);
