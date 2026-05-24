@@ -170,7 +170,7 @@ Foxtrick.modules.ShowFriendlyBooked = {
 
 					const matchNode = node.closest('Match');
 					const matchType = matchNode.querySelector('MatchType').textContent;
-					if (matchType !== '4' && matchType !== '5') continue; // not friendly
+					if (['4', '5', '8', '9'].includes(matchType) === false) continue; // not friendly
 					const matchStatus = matchNode.querySelector('Status').textContent;
 					if (matchStatus === 'FINISHED') continue; // friendly already finished
 					matchId = parseInt(matchNode.querySelector('MatchID').textContent);
