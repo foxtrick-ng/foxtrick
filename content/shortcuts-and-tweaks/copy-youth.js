@@ -9,15 +9,15 @@
 Foxtrick.modules.CopyYouth = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.SHORTCUTS_AND_TWEAKS,
 	PAGES: ['youthTraining', 'youthPlayerDetails', 'youthOverview'],
-	// 'AutoSendRejectedToHY' temporarily removed from OPTIONS to
-	// hide option in prefs until feature is fixed
+	// 'AutoSendRejectedToHY' temporarily removed from OPTIONS
+	// and PERMISSIONS to hide option until feature is fixed
 	OPTIONS: [
 		'TrainingReport', 'AutoSendTrainingReportToHY', 'ScoutComment',
 		'AutoSendTrainingChangesToHY',
 	],
 	PERMISSIONS: {
 		AutoSendTrainingReportToHY: { origins: ['https://*.hattrick-youthclub.org/*'] },
-		AutoSendRejectedToHY: { origins: ['https://*.hattrick-youthclub.org/*'] },
+		// AutoSendRejectedToHY: { origins: ['https://*.hattrick-youthclub.org/*'] },
 		AutoSendTrainingChangesToHY: { origins: ['https://*.hattrick-youthclub.org/*'] },
 	},
 

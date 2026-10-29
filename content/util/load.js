@@ -227,25 +227,33 @@ Foxtrick.fetch = function(url, params) {
 				};
 
 				// temp code to check where all the fetch errors logged in Sentry are coming from
-				let sError = new Error("Foxtrick.fetch error", { cause: e });
-				let sUrl = {};
+				let skipDiagErrorLog = false;
 				try {
-					const u = new URL(pUrl);
-					let search = '[ft-stripped]';
-					if (u.protocol === 'chrome-extension:' || u.protocol === 'moz-extension:')
-						search = u.search;
-					Object.assign(sUrl, {
-						origin: u.origin,
-						pathname: u.pathname,
-						search,
-					});
+					let reqUrl = new URL(pUrl);
+					skipDiagErrorLog = reqUrl.protocol === 'https:' && reqUrl.hostname === 'api.mercattrick.com';
 				} catch {/*ignore*/}
-				Object.assign(sError, {
-					_cls: Foxtrick.FETCH_ERROR,
-					method: type,
-					sUrl,
-				});
-				Foxtrick.log(sError);
+
+				if (!skipDiagErrorLog) {
+					let sError = new Error("Foxtrick.fetch error", { cause: e });
+					let sUrl = {};
+					try {
+						const u = new URL(pUrl);
+						let search = '[ft-stripped]';
+						if (u.protocol === 'chrome-extension:' || u.protocol === 'moz-extension:')
+							search = u.search;
+						Object.assign(sUrl, {
+							origin: u.origin,
+							pathname: u.pathname,
+							search,
+						});
+					} catch {/*ignore*/}
+					Object.assign(sError, {
+						_cls: Foxtrick.FETCH_ERROR,
+						method: type,
+						sUrl,
+					});
+					Foxtrick.log(sError);
+				}
 
 				// Foxtrick.log(error); // uncomment this once code above is removed
 				reject(error);
