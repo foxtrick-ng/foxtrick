@@ -489,5 +489,45 @@
 		},
 		"title": "Team Position Probability Calculator",
 		"img": "https://foxtrick-ng.github.io/foxtrick/linkicons/tppc.ico"
+	},
+	"htalchemy": {
+		"teamlink": {
+			"url": "https://ht-alchemy.app/"
+		},
+		"managerlink": {
+			"url": "https://ht-alchemy.app/"
+		},
+		"playerlink": {
+			"url": "https://ht-alchemy.app/"
+		},
+		"playerslink": {
+			"url": "https://ht-alchemy.app/"
+		},
+		"serieslink": {
+			"url": "https://ht-alchemy.app/"
+		},
+		"clubtransferslink": {
+			"url": "https://ht-alchemy.app/"
+		},
+		"youthlink": {
+			"url": "https://ht-alchemy.app/"
+		},
+		"youthplayerdetaillink": {
+			"url": "https://ht-alchemy.app/"
+		},
+		"youthplayerlistlink": {
+			"url": "https://ht-alchemy.app/"
+		},
+		"youthserieslink": {
+			"url": "https://ht-alchemy.app/"
+		},
+		"youthmatchlistlink": {
+			"url": "https://ht-alchemy.app/"
+		},
+		"youthtraininglink": {
+			"url": "https://ht-alchemy.app/"
+		},
+		"title": "HT Alchemy",
+		"img": "https://foxtrick-ng.github.io/foxtrick/linkicons/htalchemy.png"
 	}
 }
