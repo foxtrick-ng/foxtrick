@@ -839,7 +839,6 @@ Foxtrick.Pages.Match.makeAvatar = function(shirtDiv, avatarXml, scale) {
 
 	/* eslint-disable no-magic-numbers */
 	var sizes = {
-		backgrounds: [0, 0], // don't show
 		kits: [92, 123],
 		bodies: [92, 123],
 		faces: [92, 123],
@@ -848,16 +847,18 @@ Foxtrick.Pages.Match.makeAvatar = function(shirtDiv, avatarXml, scale) {
 		goatees: [70, 70],
 		noses: [70, 70],
 		hair: [92, 123],
-		misc: [0, 0], // don't show (eg cards)
+		necks: [92, 123],
+		// backgrounds: [0, 0], // don't show
+		// misc: [0, 0], // don't show (eg cards)
 	};
 	var sizesOld = {
-		backgrounds: [0, 0], // don't show
 		faces: [47, 49],
 		eyes: [47, 49],
 		mouths: [47, 49],
 		noses: [47, 49],
 		hair: [47, 49],
-		misc: [0, 0], // don't show (eg cards)
+		// backgrounds: [0, 0], // don't show
+		// misc: [0, 0], // don't show (eg cards)
 	};
 	/* eslint-enable no-magic-numbers */
 
@@ -874,23 +875,16 @@ Foxtrick.Pages.Match.makeAvatar = function(shirtDiv, avatarXml, scale) {
 	for (let layer of layers) {
 		let src = xml.text('Image', layer);
 		let bodypart;
+		let foundBodypart = false;
+		
 		for (bodypart in SZ) {
-			if (src.search(bodypart) != -1)
+			if (src.search(bodypart) != -1) {
+				foundBodypart = true;
 				break;
+			}
 		}
-		if (!bodypart)
+		if (!foundBodypart)
 			continue;
-
-		/** @type {number[]} */
-		let sizes = SZ[bodypart];
-		let [width, height] = sizes.map(s => Math.round(s / FACTOR));
-
-		let styleString = '';
-		if (!oldFaces) {
-			let x = Math.round(parseInt(layer.getAttribute('x'), 10) / FACTOR);
-			let y = Math.round(parseInt(layer.getAttribute('y'), 10) / FACTOR);
-			styleString = 'top:' + y + 'px;left:' + x + 'px;position:absolute;';
-		}
 
 		if (Foxtrick.Prefs.isModuleOptionEnabled('OriginalFace', 'ColouredYouth'))
 			src = src.replace(/y_/, '');
@@ -899,8 +893,27 @@ Foxtrick.Pages.Match.makeAvatar = function(shirtDiv, avatarXml, scale) {
 		src = src.replace(/^https?:/, '');
 
 		let img = doc.createElement('img');
-		img.setAttribute('style', styleString);
 		img.src = src;
+
+		/** @type {number[]} */
+		let sizes = SZ[bodypart];
+		let [width, height] = [0, 0];
+		if (oldFaces) {
+			[width, height] = sizes.map(s => Math.round(s / FACTOR));
+		} else {
+			[width, height] = img.naturalWidth != 0 ?
+				[Math.round(img.naturalWidth / FACTOR), Math.round(img.naturalHeight / FACTOR)]
+				: sizes.map(s => Math.round(s / FACTOR));
+		}
+
+		let styleString = '';
+		if (!oldFaces) {
+			let x = Math.round(parseInt(layer.getAttribute('x'), 10) / FACTOR);
+			let y = Math.round(parseInt(layer.getAttribute('y'), 10) / FACTOR);
+			styleString = 'top:' + y + 'px;left:' + x + 'px;position:absolute;';
+		}
+
+		img.setAttribute('style', styleString);
 		img.width = width;
 		img.height = height;
 		shirtDiv.appendChild(img);
