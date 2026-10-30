@@ -94,14 +94,15 @@ Foxtrick.psico = {
 	 * calculate maximum GK level using TSI
 	 * & form with sub {Low Avg High}
 	 * @param  {number}  TSI
+	 * @param  {number}  age
 	 * @param  {number}  form
 	 * @param  {string}	 formSubLevel {Low Avg High}
 	 * @return {number}               GK Level
 	 */
-	calcMaxSkillGK: function(TSI, form, formSubLevel) {
+	calcMaxSkillGK: function(TSI, age, form, formSubLevel) {
 		//tnx to phinetom (8430364)
 		var form_factor = (form * 0.025) + 0.110655;
-		var level = Math.pow(100.5 * TSI / form_factor, 1 / 3.4) / 10 + 1;
+		var level = Math.pow(100.5 * this.getGkRawTsi(TSI, age) / form_factor, 1 / 3.4) / 10 + 1;
 
 		//form sublevel adjustment
 		if (formSubLevel == 'Low') {
@@ -249,6 +250,22 @@ Foxtrick.psico = {
 
 		var numerator = Math.max(1, 35 - age);
 		return rawTsi * numerator / 8;
+	},
+
+	/**
+	 * Displayed TSI has an 1/10, 2/10, 3/10... penalty starting at age 31 for GK.
+	 * The penalty isn't applied immediately on the birthday, but only after the first training at the new age, so this will be invalid during that time.
+	 * @param  {number} actualTsi
+	 * @param  {number} age
+	 * @return {number} rawTsi
+	 */
+	getGkRawTsi: function(actualTsi, age) {
+		if (age <= 30) {
+			return actualTsi;
+		}
+
+		var denominator = Math.max(1, 40 - age);
+		return actualTsi * 10 / denominator;
 	},
 
 	/**
@@ -503,9 +520,9 @@ Foxtrick.psico = {
 			formLow = this.calcMaxSkill(playerskills, currTSI, age, 'Low');
 			formHigh = this.calcMaxSkill(playerskills, currTSI, age, 'High');
 		} else {
-			formAvg = this.calcMaxSkillGK(currTSI, frm, 'Avg');
-			formLow = this.calcMaxSkillGK(currTSI, frm, 'Low');
-			formHigh = this.calcMaxSkillGK(currTSI, frm, 'High');
+			formAvg = this.calcMaxSkillGK(currTSI, age, frm, 'Avg');
+			formLow = this.calcMaxSkillGK(currTSI, age, frm, 'Low');
+			formHigh = this.calcMaxSkillGK(currTSI, age, frm, 'High');
 		}
 		if (currWAGE >= 270 && !isGK) {
 			wageLow = this.simWage(playerskills, currWAGE, age, 'Low');
