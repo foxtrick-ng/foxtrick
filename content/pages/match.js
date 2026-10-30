@@ -389,7 +389,7 @@ Foxtrick.Pages.Match.isNeutral = function(doc) {
  */
 Foxtrick.Pages.Match.isLeague = function(doc) {
 	var mainBody = doc.getElementById('mainBody');
-	var isLeague = mainBody.getElementsByClassName('matchLeague').length > 0;
+	var isLeague = mainBody.getElementsByClassName('match-type-league').length > 0;
 	return isLeague;
 };
 
@@ -400,7 +400,7 @@ Foxtrick.Pages.Match.isLeague = function(doc) {
  */
 Foxtrick.Pages.Match.isQualification = function(doc) {
 	var mainBody = doc.getElementById('mainBody');
-	var isQualification = mainBody.getElementsByClassName('matchQualification').length > 0;
+	var isQualification = mainBody.getElementsByClassName('match-type-qualifications').length > 0;
 	return isQualification;
 };
 
@@ -411,7 +411,7 @@ Foxtrick.Pages.Match.isQualification = function(doc) {
  */
 Foxtrick.Pages.Match.isCup = function(doc) {
 	var mainBody = doc.getElementById('mainBody');
-	var isCup = mainBody.querySelectorAll('*[class^="matchCup"]').length > 0;
+	var isCup = mainBody.getElementsByClassName('match-type-cup').length > 0;
 	return isCup;
 };
 
@@ -422,7 +422,7 @@ Foxtrick.Pages.Match.isCup = function(doc) {
  */
 Foxtrick.Pages.Match.isFriendly = function(doc) {
 	var mainBody = doc.getElementById('mainBody');
-	var isFriendly = mainBody.getElementsByClassName('matchFriendly').length > 0;
+	var isFriendly = mainBody.getElementsByClassName('match-type-friendly').length > 0;
 	return isFriendly;
 };
 

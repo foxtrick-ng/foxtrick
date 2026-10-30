@@ -265,12 +265,12 @@ Foxtrick.modules.MatchIncome = {
 		}
 
 		let isNeutral = Foxtrick.Pages.Match.isNeutral(doc);
-		let isQalification = Foxtrick.Pages.Match.isQualification(doc);
+		let isQualification = Foxtrick.Pages.Match.isQualification(doc);
 		let isCup = Foxtrick.Pages.Match.isCup(doc);
 		let isFriendly = Foxtrick.Pages.Match.isFriendly(doc);
 
 		// eslint-disable-next-line no-nested-ternary, no-magic-numbers
-		const PRICE_Q = isFriendly || isQalification || isNeutral ? 0.5 : isCup ? 0.67 : 1;
+		const PRICE_Q = isFriendly || isQualification || isNeutral ? 0.5 : isCup ? 0.67 : 1;
 
 		Foxtrick.util.currency.detect(doc).then(function(curr) {
 			addIncome(table, 'income', sum, curr);
