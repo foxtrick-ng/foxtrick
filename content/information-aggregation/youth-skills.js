@@ -595,7 +595,7 @@ Foxtrick.modules['YouthSkills'] = {
 
 					let current = skill.current || 0;
 					let pred = skill.current_estimation || 0;
-					let max = Math.max(cap, capMinimal);
+					let max = cap;
 					let maxPred = Math.floor((skill.cap_maximal || 0) * 10) / 10;
 
 					if (top)
