@@ -140,11 +140,12 @@ Foxtrick.psico = {
 	 * using TSI & form {Low Avg High}
 	 * @param  {number[]} playerskills array of integers
 	 * @param  {number}   TSI
+	 * @param  {number}   age
 	 * @param  {string}   formSubLevel {Low Avg High}
 	 * @return {number}                skill Level
 	 */
 	/* eslint-disable complexity */
-	calcMaxSkill: function(playerskills, TSI, formSubLevel) {
+	calcMaxSkill: function(playerskills, TSI, age, formSubLevel) {
 		var pinput = [1, 0, 0, 0, 0, 0, 0, 0];
 		// Neural Network Input values
 		// Form
@@ -186,7 +187,7 @@ Foxtrick.psico = {
 		var level = pinput[pskillMax];
 		var sublevel = 0;
 		var err = 10000;
-		var newTSI = this.sim(pinput);
+		var newTSI = this.sim(pinput, age);
 		var cont = 0;
 		while (err > 1 && cont < 100) {
 			if (newTSI > TSI) {
@@ -196,7 +197,7 @@ Foxtrick.psico = {
 				sublevel = sublevel + Math.pow(0.5, cont);
 			}
 			pinput[pskillMax] = level + sublevel;
-			newTSI = this.sim(pinput);
+			newTSI = this.sim(pinput, age);
 			err = Math.abs(newTSI - TSI);
 			cont++;
 		}
@@ -216,10 +217,11 @@ Foxtrick.psico = {
 	 * Predicts TSI (float) for {PM WG SC PS DF}
 	 * from [1, frm, sta, pm, w, sco, ps, df]
 	 * @param  {number[]} pinput    array of numbers
+	 * @param  {number} age
 	 * @return {number}             TSI
 	 */
-	sim: function(pinput) {
-		return Math.pow(
+	sim: function(pinput, age) {
+		var rawTsi = Math.pow(
 			1.03 * Math.pow(pinput[7] - 1, 3)
 			+ 1.03 * Math.pow(pinput[3] - 1, 3)
 			+ 1.03 * Math.pow(pinput[5] - 1, 3)
@@ -229,6 +231,24 @@ Foxtrick.psico = {
 			* Math.pow((pinput[1]), 0.5)
 			* Math.pow((pinput[2]), 0.5)
 			/ 1000;
+
+		return this.applyTsiAgeDecay(rawTsi, age);
+	},
+
+	/**
+	 * Displayed TSI has an 1/8, 2/8, 3/8... penalty starting at age 28 for non-GK.
+	 * The penalty isn't applied immediately on the birthday, but only after the first training at the new age, so this will be invalid during that time.
+	 * @param  {number} rawTsi
+	 * @param  {number} age
+	 * @return {number} actualTsi
+	 */
+	applyTsiAgeDecay: function(rawTsi, age) {
+		if (age <= 27) {
+			return rawTsi;
+		}
+
+		var numerator = Math.max(1, 35 - age);
+		return rawTsi * numerator / 8;
 	},
 
 	/**
@@ -479,9 +499,9 @@ Foxtrick.psico = {
 		var limit = 'Medium';
 		var isGK = this.isGoalkeeper(maxSkill);
 		if (!isGK) {
-			formAvg = this.calcMaxSkill(playerskills, currTSI, 'Avg');
-			formLow = this.calcMaxSkill(playerskills, currTSI, 'Low');
-			formHigh = this.calcMaxSkill(playerskills, currTSI, 'High');
+			formAvg = this.calcMaxSkill(playerskills, currTSI, age, 'Avg');
+			formLow = this.calcMaxSkill(playerskills, currTSI, age, 'Low');
+			formHigh = this.calcMaxSkill(playerskills, currTSI, age, 'High');
 		} else {
 			formAvg = this.calcMaxSkillGK(currTSI, frm, 'Avg');
 			formLow = this.calcMaxSkillGK(currTSI, frm, 'Low');
