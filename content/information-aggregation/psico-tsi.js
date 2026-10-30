@@ -123,6 +123,7 @@ Foxtrick.modules['PsicoTSI'] = {
 		// assuming player skills is the first mainBox
 		this.drawMessage(doc, entryPoint, pr.isGK, pr.undef, injured, age > 27, pr.maxSkill,
 						 pr.formHigh, pr.formAvg, pr.formLow,
+						 pr.formLegacyHigh, pr.formLegacyAvg, pr.formLegacyLow,
 						 pr.wageHigh, pr.wageAvg, pr.wageLow, pr.limit);
 
 	},
@@ -148,6 +149,7 @@ Foxtrick.modules['PsicoTSI'] = {
 
 				module.drawInPlayerInfo(doc, i, p.playerNode, pr.undef, injured, age > 27,
 				                        pr.maxSkill, pr.formHigh, pr.formAvg, pr.formLow,
+										pr.formLegacyHigh, pr.formLegacyAvg, pr.formLegacyLow,
 				                        pr.wageLow, pr.limit);
 			}
 		}, { teamId: Foxtrick.Pages.All.getTeamId(doc) });
@@ -184,8 +186,9 @@ Foxtrick.modules['PsicoTSI'] = {
 				Foxtrick.addClass(div, 'ft-clear-both');
 				entry.appendChild(div);
 
-				module.drawInPlayerInfo(doc, i, entry, pr.undef, injured, age > 27,
-				                        pr.maxSkill, pr.formHigh, pr.formAvg, pr.formLow,
+				module.drawInPlayerInfo(doc, i, entry, pr.undef, injured, age > 27, pr.maxSkill,
+				                        pr.formHigh, pr.formAvg, pr.formLow,
+				                        pr.formLegacyHigh, pr.formLegacyAvg, pr.formLegacyLow,
 				                        pr.wageLow, pr.limit, useLinks);
 
 				// move the ruler below psico
@@ -251,7 +254,9 @@ Foxtrick.modules['PsicoTSI'] = {
 	 * @param	{string}	limit					'High', 'Medium' or 'Low'
 	 */
 	drawMessage: function(doc, entryPoint, isGK, isUndefinedMainskill, isInjured, isOld, maxSkill,
-	                      formHigh, formAvg, formLow, wageHigh, wageAvg, wageLow, limit) {
+	                      formHigh, formAvg, formLow,
+	                      formLegacyHigh, formLegacyAvg, formLegacyLow,
+						  wageHigh, wageAvg, wageLow, limit) {
 		var module = this;
 
 		var table = doc.createElement('table');
@@ -309,11 +314,13 @@ Foxtrick.modules['PsicoTSI'] = {
 				addImage('HIGH_SUBLEVELS');
 			}
 
+			var legacyFormEvaluationDiffers = formHigh != formLegacyHigh && formAvg != formLegacyAvg && formLow != formLegacyLow;
+
 			var tbody = doc.createElement('tbody');
 			table.appendChild(tbody);
 			var tr = doc.createElement('tr');
 			var td = doc.createElement('th');
-			td.colSpan = 4;
+			td.colSpan = legacyFormEvaluationDiffers ? 5 : 4;
 			Foxtrick.addClass(td, 'center');
 			td.textContent = mainSkillText.toUpperCase();
 			tr.appendChild(td);
@@ -321,7 +328,7 @@ Foxtrick.modules['PsicoTSI'] = {
 
 			tr = doc.createElement('tr');
 			td = doc.createElement('th');
-			td.colSpan = 2;
+			td.colSpan = legacyFormEvaluationDiffers ? 3 : 2;
 			Foxtrick.addClass(td, 'center');
 			td.textContent = Foxtrick.L10n.getString('PsicoTSI.TSI_PREDICTION');
 			tr.appendChild(td);
@@ -340,6 +347,11 @@ Foxtrick.modules['PsicoTSI'] = {
 			td = doc.createElement('th');
 			td.textContent = Foxtrick.L10n.getString('PsicoTSI.PREDICTION');
 			tr.appendChild(td);
+			if (legacyFormEvaluationDiffers) {
+				td = doc.createElement('th');
+				td.textContent = Foxtrick.L10n.getString('PsicoTSI.PREDICTION_LEGACY');
+				tr.appendChild(td);
+			}
 			td = doc.createElement('th');
 			Foxtrick.addClass(td, 'endColumn1');
 			td.textContent = Foxtrick.L10n.getString('PsicoTSI.SECONDARIES_SUBLEVELS');
@@ -356,6 +368,11 @@ Foxtrick.modules['PsicoTSI'] = {
 			td = doc.createElement('td');
 			td.textContent = formHigh;
 			tr.appendChild(td);
+			if (legacyFormEvaluationDiffers) {
+				td = doc.createElement('td');
+				td.textContent = formLegacyHigh;
+				tr.appendChild(td);
+			}
 			td = doc.createElement('td');
 			Foxtrick.addClass(td, 'endColumn1');
 			td.textContent = Foxtrick.L10n.getString('PsicoTSI.DECIMALS_HIGH');
@@ -374,6 +391,11 @@ Foxtrick.modules['PsicoTSI'] = {
 			td = doc.createElement('td');
 			td.textContent = formAvg;
 			tr.appendChild(td);
+			if (legacyFormEvaluationDiffers) {
+				td = doc.createElement('td');
+				td.textContent = formLegacyAvg;
+				tr.appendChild(td);
+			}
 			td = doc.createElement('td');
 			Foxtrick.addClass(td, 'endColumn1');
 			td.textContent = Foxtrick.L10n.getString('PsicoTSI.DECIMALS_AVG');
@@ -392,6 +414,11 @@ Foxtrick.modules['PsicoTSI'] = {
 			td = doc.createElement('td');
 			td.textContent = formLow;
 			tr.appendChild(td);
+			if (legacyFormEvaluationDiffers) {
+				td = doc.createElement('td');
+				td.textContent = formLegacyLow;
+				tr.appendChild(td);
+			}
 			td = doc.createElement('td');
 			Foxtrick.addClass(td, 'endColumn1');
 			td.textContent = Foxtrick.L10n.getString('PsicoTSI.DECIMALS_LOW');
@@ -427,6 +454,7 @@ Foxtrick.modules['PsicoTSI'] = {
 			if (typeof maxSkill != 'undefined') {
 				// skills available
 				var STR_FORM = Foxtrick.L10n.getString('PsicoTSI.FORM');
+				var STR_FORM_LEGACY = Foxtrick.L10n.getString('PsicoTSI.FORM_LEGACY');
 				var CurrencyName = Foxtrick.util.currency.getSymbol();
 
 				var head = doc.createElement('p');
@@ -443,6 +471,17 @@ Foxtrick.modules['PsicoTSI'] = {
 				var formL = doc.createElement('p');
 				sidebar.appendChild(formL);
 				formL.textContent = '[' + STR_FORM + '-]=' + formLow + '';
+				if (legacyFormEvaluationDiffers) {
+					var formH = doc.createElement('p');
+					sidebar.appendChild(formH);
+					formH.textContent = '[' + STR_FORM_LEGACY + '+]=' + formLegacyHigh + '';
+					var formA = doc.createElement('p');
+					sidebar.appendChild(formA);
+					formA.textContent = '[' + STR_FORM_LEGACY + '~]=' + formLegacyAvg + '';
+					var formL = doc.createElement('p');
+					sidebar.appendChild(formL);
+					formL.textContent = '[' + STR_FORM_LEGACY + '-]=' + formLegacyLow + '';
+				}
 				var wageH = doc.createElement('p');
 				sidebar.appendChild(wageH);
 				wageH.textContent = '[' + CurrencyName + '+]=' + wageHigh + '';
@@ -472,12 +511,15 @@ Foxtrick.modules['PsicoTSI'] = {
 	 * @param	{number}	formHigh				skill level when form sub is high
 	 * @param	{number}	formAvg					average
 	 * @param	{number}	formLow					low
+	 * @param	{number}	formLegacyHigh
+	 * @param	{number}	formLegacyAvg
+	 * @param	{number}	formLegacyLow
 	 * @param	{number}	wageLow					skill level when secondary subs are low or 'N/A'
 	 * @param	{string}	limit					'High', 'Medium' or 'Low'
 	 * @param	{boolean}	displayAsLink
 	 */
-	drawInPlayerInfo: function(doc, id, entryPoint, isUndefinedMainskill, isInjured, isOld,
-	                           maxSkill, formHigh, formAvg, formLow, wageLow,
+	drawInPlayerInfo: function(doc, id, entryPoint, isUndefinedMainskill, isInjured, isOld, maxSkill,
+	                           formHigh, formAvg, formLow, formLegacyHigh, formLegacyAvg, formLegacyLow, wageLow,
 	                           limit, displayAsLink) {
 		var module = this;
 
@@ -557,6 +599,22 @@ Foxtrick.modules['PsicoTSI'] = {
 		paragraph = doc.createElement('p');
 		paragraph.textContent = pre + Foxtrick.L10n.getString('PsicoTSI.FORM_LOW') + ']=' + formLow;
 		psicotsiInfo.appendChild(paragraph);
+
+		var legacyFormEvaluationDiffers = formHigh != formLegacyHigh && formAvg != formLegacyAvg && formLow != formLegacyLow;
+
+		if (legacyFormEvaluationDiffers) {
+			paragraph = doc.createElement('p');
+			paragraph.textContent = pre + Foxtrick.L10n.getString('PsicoTSI.FORM_LEGACY_HIGH') + ']=' + formLegacyHigh;
+			psicotsiInfo.appendChild(paragraph);
+
+			paragraph = doc.createElement('p');
+			paragraph.textContent = pre + Foxtrick.L10n.getString('PsicoTSI.FORM_LEGACY_AVG') + ']=' + formLegacyAvg;
+			psicotsiInfo.appendChild(paragraph);
+
+			paragraph = doc.createElement('p');
+			paragraph.textContent = pre + Foxtrick.L10n.getString('PsicoTSI.FORM_LEGACY_LOW') + ']=' + formLegacyLow;
+			psicotsiInfo.appendChild(paragraph);
+		}
 
 		if (wageLow && wageLow != 'N/A') {
 			paragraph = doc.createElement('p');

@@ -141,10 +141,11 @@ Foxtrick.psico = {
 	 * @param  {number[]} playerskills array of integers
 	 * @param  {number}   TSI
 	 * @param  {string}   formSubLevel {Low Avg High}
-	 * @return {number}                skill Level
+	 * @param  {boolean}  useLegacyTsi
+	 * @return {number}   skill Level
 	 */
 	/* eslint-disable complexity */
-	calcMaxSkill: function(playerskills, TSI, formSubLevel) {
+	calcMaxSkill: function(playerskills, TSI, formSubLevel, useLegacyTsi) {
 		var pinput = [1, 0, 0, 0, 0, 0, 0, 0];
 		// Neural Network Input values
 		// Form
@@ -205,7 +206,7 @@ Foxtrick.psico = {
 		var level = pinput[pskillMax];
 		var sublevel = 0;
 		var err = 10000;
-		var newTSI = this.sim(pinput, mainSkill);
+		var newTSI = useLegacyTsi ? this.simLegacy(pinput, mainSkill) : this.sim(pinput);
 		var cont = 0;
 		while (err > 1 && cont < 100) {
 			if (newTSI > TSI) {
@@ -215,7 +216,7 @@ Foxtrick.psico = {
 				sublevel = sublevel + Math.pow(0.5, cont);
 			}
 			pinput[pskillMax] = level + sublevel;
-			newTSI = this.sim(pinput, mainSkill);
+			newTSI = useLegacyTsi ? this.simLegacy(pinput, mainSkill) : this.sim(pinput);
 			err = Math.abs(newTSI - TSI);
 			cont++;
 		}
@@ -239,7 +240,7 @@ Foxtrick.psico = {
 	 * @param  {string}   mainSkill {PM WG SC PS DF}
 	 * @return {number}             TSI
 	 */
-	sim: function(pinput, mainSkill) {
+	simLegacy: function(pinput, mainSkill) {
 		// PlayMaking
 		if (mainSkill == 'PM') {
 			var meanp = [0, 6.37560321715818, 6.8295799821269, 9.18572832886573, 3.82265415549598, 3.80478105451296, 3.97028596961573, 3.7316800714924];
@@ -335,6 +336,25 @@ Foxtrick.psico = {
 			poutput = poutput + phidden[k] * LW[k];
 		}
 		return Math.pow(10, poutput * stdt + meant);
+	},
+
+	/**
+	 * Predicts TSI (float) for {PM WG SC PS DF}
+	 * from [1, frm, sta, pm, w, sco, ps, df]
+	 * @param  {number[]} pinput    array of numbers
+	 * @return {number}             TSI
+	 */
+	sim: function(pinput) {
+		return Math.pow(
+			1.03 * Math.pow(pinput[7] - .99, 3)
+			+ 1.03 * Math.pow(pinput[3] - .99, 3)
+			+ 1.03 * Math.pow(pinput[5] - .99, 3)
+			+ 1.03 * Math.pow(pinput[6] - .99, 3)
+			+ 0.825 * Math.pow(pinput[4] - .99, 3),
+			2)
+			* Math.pow((pinput[1]), 0.5)
+			* Math.pow((pinput[2]), 0.5)
+			/ 1000;
 	},
 
 	/**
@@ -550,6 +570,9 @@ Foxtrick.psico = {
 	 * @prop {number} formLow
 	 * @prop {number} formAvg
 	 * @prop {number} formHigh
+	 * @prop {number} formLegacyLow
+	 * @prop {number} formLegacyAvg
+	 * @prop {number} formLegacyHigh
 	 * @prop {string} wageLow
 	 * @prop {string} wageAvg
 	 * @prop {string} wageHigh
@@ -577,6 +600,10 @@ Foxtrick.psico = {
 		var formLow = 0;
 		var formHigh = 0;
 
+		var formLegacyAvg = 0;
+		var formLegacyLow = 0;
+		var formLegacyHigh = 0;
+
 		var wageLow = 'N/A';
 		var wageAvg = 'N/A';
 		var wageHigh = 'N/A';
@@ -585,13 +612,16 @@ Foxtrick.psico = {
 		var limit = 'Medium';
 		var isGK = this.isGoalkeeper(maxSkill);
 		if (!isGK) {
-			formAvg = this.calcMaxSkill(playerskills, currTSI, 'Avg');
-			formLow = this.calcMaxSkill(playerskills, currTSI, 'Low');
-			formHigh = this.calcMaxSkill(playerskills, currTSI, 'High');
+			formAvg = this.calcMaxSkill(playerskills, currTSI, 'Avg', false);
+			formLow = this.calcMaxSkill(playerskills, currTSI, 'Low', false);
+			formHigh = this.calcMaxSkill(playerskills, currTSI, 'High', false);
+			formLegacyAvg = this.calcMaxSkill(playerskills, currTSI, 'Avg', true);
+			formLegacyLow = this.calcMaxSkill(playerskills, currTSI, 'Low', true);
+			formLegacyHigh = this.calcMaxSkill(playerskills, currTSI, 'High', true);
 		} else {
-			formAvg = this.calcMaxSkillGK(currTSI, frm, 'Avg');
-			formLow = this.calcMaxSkillGK(currTSI, frm, 'Low');
-			formHigh = this.calcMaxSkillGK(currTSI, frm, 'High');
+			formAvg = formLegacyAvg = this.calcMaxSkillGK(currTSI, frm, 'Avg');
+			formLow = formLegacyLow = this.calcMaxSkillGK(currTSI, frm, 'Low');
+			formHigh = formLegacyHigh = this.calcMaxSkillGK(currTSI, frm, 'High');
 		}
 		if (currWAGE >= 270 && !isGK) {
 			wageLow = this.simWage(playerskills, currWAGE, age, 'Low');
@@ -609,6 +639,7 @@ Foxtrick.psico = {
 		var pr = {
 			maxSkill: maxSkill, isGK: isGK, undef: undef, limit: limit,
 			formLow: formLow, formAvg: formAvg, formHigh: formHigh,
+			formLegacyLow: formLegacyLow, formLegacyAvg: formLegacyAvg, formLegacyHigh: formLegacyHigh,
 			wageLow: wageLow, wageAvg: wageAvg, wageHigh: wageHigh
 		};
 
