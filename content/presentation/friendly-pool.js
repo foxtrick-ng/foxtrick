@@ -34,7 +34,7 @@ Foxtrick.modules.FriendlyPool = {
 		/** @type {CHPPParams} */
 		var parameters = [
 			['file', 'teamdetails'],
-			['version', '2.6'],
+			['version', '3.8'],
 			['teamId', ownTeamId],
 			['includeFlags', 'true'],
 		];

@@ -61,7 +61,7 @@ Foxtrick.util.currency.detect = function(doc) {
 		}
 
 		/** @type {CHPPParams} */
-		let teamargs = [['file', 'teamdetails'], ['version', '2.9'], ['teamId', ownTeamId]];
+		let teamargs = [['file', 'teamdetails'], ['version', '3.8'], ['teamId', ownTeamId]];
 		Foxtrick.util.api.retrieve(doc, teamargs, { cache: 'session' }, (teamXml, errorText) => {
 			if (!teamXml || errorText) {
 				Foxtrick.log('[ERROR] Currency detection failed:', errorText);

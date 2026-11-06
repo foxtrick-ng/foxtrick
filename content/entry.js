@@ -45,6 +45,9 @@ Foxtrick.entry.docLoad = function(doc) {
 	// init html debug just in case
 	Foxtrick.log.flush(doc);
 
+	// set HFI state for gendered localisations
+	Foxtrick.L10n.setHFI(doc);
+
 	// run Foxtrick modules
 	let begin = new Date().getTime();
 
