@@ -94,14 +94,15 @@ Foxtrick.psico = {
 	 * calculate maximum GK level using TSI
 	 * & form with sub {Low Avg High}
 	 * @param  {number}  TSI
+	 * @param  {number}  age
 	 * @param  {number}  form
 	 * @param  {string}	 formSubLevel {Low Avg High}
 	 * @return {number}               GK Level
 	 */
-	calcMaxSkillGK: function(TSI, form, formSubLevel) {
+	calcMaxSkillGK: function(TSI, age, form, formSubLevel) {
 		//tnx to phinetom (8430364)
 		var form_factor = (form * 0.025) + 0.110655;
-		var level = Math.pow(100.5 * TSI / form_factor, 1 / 3.4) / 10 + 1;
+		var level = Math.pow(100.5 * this.getGkRawTsi(TSI, age) / form_factor, 1 / 3.4) / 10 + 1;
 
 		//form sublevel adjustment
 		if (formSubLevel == 'Low') {
@@ -140,11 +141,13 @@ Foxtrick.psico = {
 	 * using TSI & form {Low Avg High}
 	 * @param  {number[]} playerskills array of integers
 	 * @param  {number}   TSI
+	 * @param  {number}   age
 	 * @param  {string}   formSubLevel {Low Avg High}
-	 * @return {number}                skill Level
+	 * @param  {boolean}  useLegacyTsi
+	 * @return {number}   skill Level
 	 */
 	/* eslint-disable complexity */
-	calcMaxSkill: function(playerskills, TSI, formSubLevel) {
+	calcMaxSkill: function(playerskills, TSI, age, formSubLevel, useLegacyTsi) {
 		var pinput = [1, 0, 0, 0, 0, 0, 0, 0];
 		// Neural Network Input values
 		// Form
@@ -205,7 +208,7 @@ Foxtrick.psico = {
 		var level = pinput[pskillMax];
 		var sublevel = 0;
 		var err = 10000;
-		var newTSI = this.sim(pinput, mainSkill);
+		var newTSI = useLegacyTsi ? this.simLegacy(pinput, mainSkill) : this.sim(pinput, age);
 		var cont = 0;
 		while (err > 1 && cont < 100) {
 			if (newTSI > TSI) {
@@ -215,7 +218,7 @@ Foxtrick.psico = {
 				sublevel = sublevel + Math.pow(0.5, cont);
 			}
 			pinput[pskillMax] = level + sublevel;
-			newTSI = this.sim(pinput, mainSkill);
+			newTSI = useLegacyTsi ? this.simLegacy(pinput, mainSkill) : this.sim(pinput, age);
 			err = Math.abs(newTSI - TSI);
 			cont++;
 		}
@@ -239,7 +242,7 @@ Foxtrick.psico = {
 	 * @param  {string}   mainSkill {PM WG SC PS DF}
 	 * @return {number}             TSI
 	 */
-	sim: function(pinput, mainSkill) {
+	simLegacy: function(pinput, mainSkill) {
 		// PlayMaking
 		if (mainSkill == 'PM') {
 			var meanp = [0, 6.37560321715818, 6.8295799821269, 9.18572832886573, 3.82265415549598, 3.80478105451296, 3.97028596961573, 3.7316800714924];
@@ -335,6 +338,60 @@ Foxtrick.psico = {
 			poutput = poutput + phidden[k] * LW[k];
 		}
 		return Math.pow(10, poutput * stdt + meant);
+	},
+
+	/**
+	 * Predicts TSI (float) for {PM WG SC PS DF}
+	 * from [1, frm, sta, pm, w, sco, ps, df]
+	 * @param  {number[]} pinput    array of numbers
+	 * @param  {number} age
+	 * @return {number}             TSI
+	 */
+	sim: function(pinput, age) {
+		var rawTsi = Math.pow(
+			1.03 * Math.pow(pinput[7] - .99, 3)
+			+ 1.03 * Math.pow(pinput[3] - .99, 3)
+			+ 1.03 * Math.pow(pinput[5] - .99, 3)
+			+ 1.03 * Math.pow(pinput[6] - .99, 3)
+			+ 0.825 * Math.pow(pinput[4] - .99, 3),
+			2)
+			* Math.pow((pinput[1]), 0.5)
+			* Math.pow((pinput[2]), 0.5)
+			/ 1000;
+
+		return this.applyTsiAgeDecay(rawTsi, age);
+	},
+
+	/**
+	 * Displayed TSI has an 1/8, 2/8, 3/8... penalty starting at age 28 for non-GK.
+	 * The penalty isn't applied immediately on the birthday, but only after the first training at the new age, so this will be invalid during that time.
+	 * @param  {number} rawTsi
+	 * @param  {number} age
+	 * @return {number} actualTsi
+	 */
+	applyTsiAgeDecay: function(rawTsi, age) {
+		if (age <= 27) {
+			return rawTsi;
+		}
+
+		var numerator = Math.max(1, 35 - age);
+		return rawTsi * numerator / 8;
+	},
+
+	/**
+	 * Displayed TSI has an 1/10, 2/10, 3/10... penalty starting at age 31 for GK.
+	 * The penalty isn't applied immediately on the birthday, but only after the first training at the new age, so this will be invalid during that time.
+	 * @param  {number} actualTsi
+	 * @param  {number} age
+	 * @return {number} rawTsi
+	 */
+	getGkRawTsi: function(actualTsi, age) {
+		if (age <= 30) {
+			return actualTsi;
+		}
+
+		var denominator = Math.max(1, 40 - age);
+		return actualTsi * 10 / denominator;
 	},
 
 	/**
@@ -550,6 +607,9 @@ Foxtrick.psico = {
 	 * @prop {number} formLow
 	 * @prop {number} formAvg
 	 * @prop {number} formHigh
+	 * @prop {number} formLegacyLow
+	 * @prop {number} formLegacyAvg
+	 * @prop {number} formLegacyHigh
 	 * @prop {string} wageLow
 	 * @prop {string} wageAvg
 	 * @prop {string} wageHigh
@@ -577,6 +637,10 @@ Foxtrick.psico = {
 		var formLow = 0;
 		var formHigh = 0;
 
+		var formLegacyAvg = 0;
+		var formLegacyLow = 0;
+		var formLegacyHigh = 0;
+
 		var wageLow = 'N/A';
 		var wageAvg = 'N/A';
 		var wageHigh = 'N/A';
@@ -585,13 +649,16 @@ Foxtrick.psico = {
 		var limit = 'Medium';
 		var isGK = this.isGoalkeeper(maxSkill);
 		if (!isGK) {
-			formAvg = this.calcMaxSkill(playerskills, currTSI, 'Avg');
-			formLow = this.calcMaxSkill(playerskills, currTSI, 'Low');
-			formHigh = this.calcMaxSkill(playerskills, currTSI, 'High');
+			formAvg = this.calcMaxSkill(playerskills, currTSI, age, 'Avg', false);
+			formLow = this.calcMaxSkill(playerskills, currTSI, age, 'Low', false);
+			formHigh = this.calcMaxSkill(playerskills, currTSI, age, 'High', false);
+			formLegacyAvg = this.calcMaxSkill(playerskills, currTSI, age, 'Avg', true);
+			formLegacyLow = this.calcMaxSkill(playerskills, currTSI, age, 'Low', true);
+			formLegacyHigh = this.calcMaxSkill(playerskills, currTSI, age, 'High', true);
 		} else {
-			formAvg = this.calcMaxSkillGK(currTSI, frm, 'Avg');
-			formLow = this.calcMaxSkillGK(currTSI, frm, 'Low');
-			formHigh = this.calcMaxSkillGK(currTSI, frm, 'High');
+			formAvg = formLegacyAvg = this.calcMaxSkillGK(currTSI, age, frm, 'Avg');
+			formLow = formLegacyLow = this.calcMaxSkillGK(currTSI, age, frm, 'Low');
+			formHigh = formLegacyHigh = this.calcMaxSkillGK(currTSI, age, frm, 'High');
 		}
 		if (currWAGE >= 270 && !isGK) {
 			wageLow = this.simWage(playerskills, currWAGE, age, 'Low');
@@ -609,6 +676,7 @@ Foxtrick.psico = {
 		var pr = {
 			maxSkill: maxSkill, isGK: isGK, undef: undef, limit: limit,
 			formLow: formLow, formAvg: formAvg, formHigh: formHigh,
+			formLegacyLow: formLegacyLow, formLegacyAvg: formLegacyAvg, formLegacyHigh: formLegacyHigh,
 			wageLow: wageLow, wageAvg: wageAvg, wageHigh: wageHigh
 		};
 
