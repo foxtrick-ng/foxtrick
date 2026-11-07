@@ -249,9 +249,14 @@ Foxtrick.modules.FixLinks = {
 		/** @type {NodeListOf<HTMLImageElement>} */
 		let icons = table.querySelectorAll('.iconMatchtype img');
 
-		let links = table.querySelectorAll('a');
-		Foxtrick.forEach(function(icon, i) {
-			let link = links[i];
+		Foxtrick.forEach(function(icon) {
+			let row = icon.closest('tr');
+			/** @type {HTMLAnchorElement} */
+			let link = row.querySelector('a[href*="Match.aspx"]');
+			if (!link) {
+				Foxtrick.log(new Error('FixLinks: Missing match link for player stats icon'), row);
+				return;
+			}
 
 			module.fixLineupLink(link, id);
 			module.addPlayerHighlight(link, pid);
