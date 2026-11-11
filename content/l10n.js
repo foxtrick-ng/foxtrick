@@ -565,6 +565,12 @@ Foxtrick.L10n.getShortPosition = function(pos) {
 		};
 		var type = this.getHTLangProperty(query);
 
+		// Temporary fallback until CHPP translations are updated for HFI
+		if (type === null) {
+			Foxtrick.log(`Unable to determine abbreviation for position ${pos}`);
+			return pos;
+		}
+
 		shortPos = Foxtrick.L10n.getString('match.pos.' + type + '.abbr');
 	}
 	catch (e) {
