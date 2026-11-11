@@ -164,6 +164,10 @@ Foxtrick.modules.U21LastMatch = {
 	run: function(doc) {
 		const module = this;
 
+		// No U21 teams in HFI (yet)
+		if (Foxtrick.Pages.All.isHFI(doc))
+			return;
+
 		var isYouthPlayerDetailsPage = Foxtrick.isPage(doc, 'youthPlayerDetails');
 		var isSeniorPlayerDetailsPage = Foxtrick.isPage(doc, 'playerDetails');
 		var isPlayersPage = Foxtrick.isPage(doc, 'allPlayers');
