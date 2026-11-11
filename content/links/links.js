@@ -231,6 +231,8 @@ Foxtrick.modules.Links = {
 
 		let { info: args, type, module, className } = opts;
 		let isTracker = /^tracker/.test(type);
+		if (isTracker && Foxtrick.Pages.All.isHFI(doc))
+			return []; // no U21 or NT in HFI
 
 		/**
 		 * @param  {LinkDefinitionProps} link
