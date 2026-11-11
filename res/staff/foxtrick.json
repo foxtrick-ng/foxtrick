@@ -20,11 +20,6 @@
 	"internal": "true",
 	"list": [
 		{
-			"duty": "supporter",
-			"id": "13869102",
-			"name": "wiscoke"
-		},
-		{
 			"duty": "translator",
 			"id": "10038631",
 			"name": "Mohammad-SE"
@@ -773,6 +768,11 @@
 			"duty": "supporter",
 			"id": "13827209",
 			"name": "Justin_Yang"
+		},
+		{
+			"duty": "supporter",
+			"id": "13869102",
+			"name": "wiscoke"
 		},
 		{
 			"duty": "supporter",
