@@ -230,6 +230,25 @@ Foxtrick.L10n.plForm = 0;
 Foxtrick.L10n.plFormDefault = 0;
 
 /**
+ * When true, getString will prefer keys with a '.f' suffix
+ * for gender-specific localization, falling back to the base key.
+ *
+ * @type {boolean}
+ */
+Foxtrick.L10n._isHFI = false;
+
+/**
+ * Set the HFI flag based on the current page.
+ *
+ * Must be called before modules execute.
+ *
+ * @param {document} doc
+ */
+Foxtrick.L10n.setHFI = function(doc) {
+	this._isHFI = Foxtrick.Pages.All.isHFI(doc);
+};
+
+/**
  * Generate a link from a l10n key with a link tag,
  * append it to parent and return it
  *
@@ -545,6 +564,12 @@ Foxtrick.L10n.getShortPosition = function(pos) {
 			value: pos,
 		};
 		var type = this.getHTLangProperty(query);
+
+		// Temporary fallback until CHPP translations are updated for HFI
+		if (type === null) {
+			Foxtrick.log(`Unable to determine abbreviation for position ${pos}`);
+			return pos;
+		}
 
 		shortPos = Foxtrick.L10n.getString('match.pos.' + type + '.abbr');
 	}
@@ -1073,6 +1098,12 @@ Foxtrick.L10n.getLocaleByLeagueId = async function(leagueId) {
 			},
 
 			_getString: function(properties, str) {
+				if (this._isHFI) {
+					let fKey = str + '.f';
+					if (fKey in properties)
+						return properties[fKey];
+				}
+
 				if (str in properties)
 					return properties[str];
 
@@ -1200,11 +1231,17 @@ Foxtrick.L10n.getLocaleByLeagueId = async function(leagueId) {
 			},
 
 			isStringAvailable: function(str) {
-				return str in Foxtrick.L10n.properties || str in Foxtrick.L10n.propertiesDefault;
+				let key = this._isHFI ? str + '.f' : str;
+				return key in Foxtrick.L10n.properties ||
+					key in Foxtrick.L10n.propertiesDefault ||
+					str in Foxtrick.L10n.properties ||
+					str in Foxtrick.L10n.propertiesDefault;
 			},
 
 			isStringAvailableLocal: function(str) {
-				return str in Foxtrick.L10n.properties;
+				let key = this._isHFI ? str + '.f' : str;
+				return key in Foxtrick.L10n.properties ||
+					str in Foxtrick.L10n.properties;
 			},
 
 			getScreenshot: function(str) {

@@ -342,7 +342,9 @@ Foxtrick.Pages.Players.getPlayerNodes = function(doc, include) {
 
 /**
  * @typedef PlayerXMLProps
- * @prop {number} [category]
+ * @prop {number} [genderId]
+ 
+* @prop {number} [category]
  * @prop {number} [countryId]
  *
  * @prop {number} [agreeability]
@@ -482,7 +484,7 @@ Foxtrick.Pages.Players.getPlayerList = function(doc, callback, options) {
 		}
 		else {
 			args.push(['file', 'players']);
-			args.push(['version', '2.4']);
+			args.push(['version', '2.8']);
 			args.push(['teamId', teamId]);
 
 			if (!options || !options.currentSquad) {
@@ -885,6 +887,7 @@ Foxtrick.Pages.Players.getPlayerList = function(doc, callback, options) {
 					'Experience',
 					'FriendliesGoals',
 					['friendliesGoals', 'FriendlyGoals'], // youth
+					['genderId', 'GenderID'],
 					'GoalsCurrentTeam',
 					'Honesty',
 					'IsAbroad', // no longer exclusive

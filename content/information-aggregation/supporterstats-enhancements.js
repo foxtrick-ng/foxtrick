@@ -30,7 +30,7 @@ Foxtrick.modules['SupporterStatsEnhancements'] = {
 		/** @type {CHPPParams} */
 		let args = [
 			['file', 'players'],
-			['version', '2.2'],
+			['version', '2.8'],
 			['teamId', teamId],
 		];
 		Foxtrick.util.api.retrieve(doc, args, { cache: 'session' }, (xml, errorText) => {

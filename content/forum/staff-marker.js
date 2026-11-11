@@ -305,7 +305,7 @@ Foxtrick.modules.StaffMarker = {
 				/** @type {CHPPParams} */
 				let args = [
 					['file', 'teamdetails'],
-					['version', '3.1'],
+					['version', '3.8'],
 					['teamId', teamId],
 					['includeSupporters', 'true'],
 				];
