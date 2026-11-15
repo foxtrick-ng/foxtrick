@@ -300,8 +300,13 @@ Foxtrick.modules.U21LastMatch = {
 			container.dataset.value = String(dateWhen22.getTime());
 			container.dataset.valueString = `${wcNum}:${matchNumber}`;
 
-			let element = player.playerNode.querySelector('.flex') || player.playerNode.lastChild;
-			Foxtrick.insertAfter(container, element);
+			let element = player.playerNode.querySelector('.flex'); // only used in non-legacy pages
+			if (element) {
+				Foxtrick.insertAfter(container, element);
+			} else {
+				let element = player.playerNode.querySelector('.borderSeparator') || player.playerNode.lastChild;
+				Foxtrick.insertBefore(container, element);
+			}
 		}
 	},
 };
