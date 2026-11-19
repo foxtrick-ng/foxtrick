@@ -6,7 +6,7 @@
  */
 (function() {
 	var types = {
-		'welcome': /\/MyHattrick\/Dashboard\.aspx$/i,
+		'welcome': /\/MyHattrick\/Office\/$/i,
 		'supporter': /\/Club\/Manager\/\?teamId=/i,
 		'forum': /\/Forum/i,
 		'transfer': /\/Players/i,
