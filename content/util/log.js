@@ -1057,6 +1057,11 @@ Foxtrick.reportError = function(err, options) {
 		if (!Foxtrick.Prefs.isModuleOptionEnabled('Reporter', 'reportError'))
 			return;
 
+		// Temporarily sample rate limit error messages at 10%
+		// TODO: remove this once message filtering is in place
+		if (Math.random() >= 0.1)
+			return null;
+
 		const reporter = Foxtrick.log.Reporter;
 		if (!reporter)
 			return;
