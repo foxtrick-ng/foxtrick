@@ -74,6 +74,7 @@ Foxtrick.Pages.All.isLegacy = function (doc) {
 		var CLASSIC_PAGES = [
 			'allPlayers',
 			'playerDetails',
+			'transferSearchResult',
 			'youthPlayers',
 			'youthPlayerDetails'
 		];
