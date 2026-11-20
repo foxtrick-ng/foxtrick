@@ -48,6 +48,7 @@ Foxtrick.modules['MercattrickStats'] = {
 		if (!data)
 			return;
 
+		const isLegacy = Foxtrick.Pages.All.isLegacy(doc);
 		Foxtrick.forEach((p) => {
 			const statObj = data.find(obj => obj.id === p.id);
 			const filters = statObj ? statObj.filters_count : 0;
@@ -85,8 +86,13 @@ Foxtrick.modules['MercattrickStats'] = {
 			container.dataset.filters = filters;
 			container.dataset.bookmarks = bookmarks;
 
-			let entity = p.playerNode.querySelector('.transferPlayerInfo');
-			entity.appendChild(container);
+			if (isLegacy) {
+				const insertPoint = p.playerNode.querySelector('.borderSeparator') || p.playerNode.lastChild;
+				Foxtrick.insertBefore(container, insertPoint);
+			} else {
+				let entity = p.playerNode.querySelector('.transferPlayerInfo');
+				entity.appendChild(container);
+			}
 		}, playerNodes);
 	},
 };
