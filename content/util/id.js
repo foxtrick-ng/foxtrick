@@ -346,7 +346,7 @@ Foxtrick.util.id.parseSeries = function(seriesName, leagueId) {
 		return null;
 
 	var level, number;
-	var m = seriesName.match(/^([IVX])+\.(\d+)$/);
+	var m = seriesName.match(/^([IVX]+)\.(\d+)$/);
 	if (m) {
 		let [_, roman, num] = m;
 		var dec = Foxtrick.util.id.romantodecimal(roman);
