@@ -9,12 +9,17 @@
 
 Foxtrick.modules['SupportershipExpirationDate'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.SHORTCUTS_AND_TWEAKS,
-	PAGES: ['dashboard', 'office'],
+	PAGES: ['dashboard', 'office', 'arenaHub'],
 
 	/** @param {document} doc */
 	run: function(doc) {
 		if (!Foxtrick.util.layout.isSupporter(doc))
 			return;
+
+		if (Foxtrick.isPage(doc, 'arenaHub')) {
+			this.runArenaHub(doc);
+			return;
+		}
 
 		// get the content, translate days to date
 		let packageType;
@@ -92,5 +97,60 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 
 		Foxtrick.onClick(prevContainer, toggle);
 		Foxtrick.onClick(newContainer, toggle);
+	},
+
+	/**
+	 * ArenaHub is an Angular page: the My Account box has no ids.
+	 * Structure: div.myAccountCounter > … div.flex-grow > img + span('xyz days left').
+	 * The span is owned by Angular, so we leave it in place and add a sibling.
+	 * @param {document} doc
+	 */
+	runArenaHub: function(doc) {
+		const DATE_ID = 'ft-supportershipexpirationdate-date';
+		if (doc.getElementById(DATE_ID))
+			return;
+
+		let counter = doc.querySelector('.myAccountCounter .flex-grow');
+		if (!counter)
+			return;
+
+		/** @type {HTMLElement} */
+		let daysEl = counter.querySelector('img + span');
+		if (!daysEl)
+			return;
+
+		let dMatch = daysEl.textContent.match(/\d+/);
+		if (!dMatch)
+			return;
+
+		let days = parseInt(dMatch[0], 10);
+		let now = Foxtrick.util.time.getDate(doc);
+		if (!now) {
+			Foxtrick.log('User time missing');
+			return;
+		}
+
+		let endDate = Foxtrick.util.time.addDaysToDate(now, days);
+		let printDate = Foxtrick.util.time.buildDate(endDate, { showTime: false });
+
+		let dateEl = Foxtrick.createFeaturedElement(doc, this, 'span');
+		dateEl.id = DATE_ID;
+		dateEl.textContent = printDate;
+		dateEl.title = Foxtrick.L10n.getString('SupportershipExpirationDate.showRemainingDayCount');
+		dateEl.style.cursor = 'pointer';
+		Foxtrick.addClass(dateEl, 'hidden');
+
+		daysEl.title = Foxtrick.L10n.getString('SupportershipExpirationDate.showExpirationDate');
+		daysEl.style.cursor = 'pointer';
+
+		daysEl.parentNode.insertBefore(dateEl, daysEl.nextSibling);
+
+		let toggle = () => {
+			Foxtrick.toggleClass(daysEl, 'hidden');
+			Foxtrick.toggleClass(dateEl, 'hidden');
+		};
+
+		Foxtrick.onClick(daysEl, toggle);
+		Foxtrick.onClick(dateEl, toggle);
 	},
 };
