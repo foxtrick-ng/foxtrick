@@ -29,6 +29,8 @@ Foxtrick.modules['ForumModeratorPopup'] = {
 		let lnk = doc.createTextNode(Foxtrick.L10n.getString('ForumModeratorPopup.toModerate'));
 		popupDiv.appendChild(lnk);
 		header.appendChild(popupDiv);
+		// HT sets overflow: hidden on .boxHead, which clips the pop-up list
+		Foxtrick.addClass(header, 'ft-moderator-popup-header');
 
 		let clear = doc.createElement('div');
 		Foxtrick.addClass(clear, 'ft-clear-both');
