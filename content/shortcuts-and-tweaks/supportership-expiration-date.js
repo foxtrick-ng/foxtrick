@@ -18,7 +18,7 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 	 * @param {document}    doc
 	 * @param {HTMLElement} dateEl .tier-expiration
 	 */
-	handleWidget: function(doc, dateEl) {
+	handleWidget: async function(doc, dateEl) {
 		const MSECS_IN_DAY = 24 * 60 * 60 * 1000;
 
 		let endDate = Foxtrick.util.time.getDateFromText(dateEl.textContent, undefined, true);
@@ -35,15 +35,51 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 		Foxtrick.util.time.setMidnight(now);
 		let days = Math.round((endDate.getTime() - now.getTime()) / MSECS_IN_DAY) - 1;
 
+		// use the language HT renders this page in: after switching language
+		// (e.g. Language Switcher widget) content l10n still holds the previous one
+		let metaLang = Foxtrick.modules.ReadHtPrefs.readLanguageFromMetaTag(doc);
+		let locale = metaLang && Foxtrick.L10n.htMapping[metaLang] ||
+			Foxtrick.Prefs.getString('htLanguage');
+
+		// getStringInLocale would reuse the stale content l10n once ReadHtPrefs
+		// has saved the new language, so cache the page language from background first
+		let L10n = Foxtrick.L10n;
+		if (!L10n.propertiesByLocale)
+			L10n.propertiesByLocale = {};
+		if (!L10n.plFormByLocale)
+			L10n.plFormByLocale = {};
+
+		if (!L10n.propertiesByLocale[locale]) {
+			try {
+				let res = await new Promise((resolve, reject) => {
+					Foxtrick.SB.ext.sendRequest({ req: 'getLocaleProperties', locale }, (r) => {
+						if (!r || 'error' in r)
+							reject(new Error(r ? r.error : 'Empty response'));
+						else
+							resolve(r);
+					});
+				});
+				L10n.propertiesByLocale[locale] = res.properties;
+				L10n.plFormByLocale[locale] = res.plForm;
+			}
+			catch (e) {
+				Foxtrick.log('SupportershipExpirationDate: locale load failed', locale, e);
+			}
+		}
+
+		let [daysWord, showDays, showDate] = await Promise.all([
+			Foxtrick.L10n.getStringInLocale('datetimestrings.days', locale, days),
+			Foxtrick.L10n.getStringInLocale('SupportershipExpirationDate.showRemainingDayCount', locale),
+			Foxtrick.L10n.getStringInLocale('SupportershipExpirationDate.showExpirationDate', locale),
+		]);
+
 		// shallow clone keeps Angular's scoped-style attribute and classes
 		let daysEl = /** @type {HTMLElement} */ (dateEl.cloneNode(false));
-		daysEl.textContent = days + ' ' + Foxtrick.L10n.getString('datetimestrings.days', days);
+		daysEl.textContent = days + ' ' + daysWord;
 		Foxtrick.addClass(daysEl, 'hidden');
 
-		dateEl.title =
-			Foxtrick.L10n.getString('SupportershipExpirationDate.showRemainingDayCount');
-		daysEl.title =
-			Foxtrick.L10n.getString('SupportershipExpirationDate.showExpirationDate');
+		dateEl.title = showDays;
+		daysEl.title = showDate;
 		dateEl.style.cursor = 'pointer';
 		daysEl.style.cursor = 'pointer';
 
