@@ -73,7 +73,7 @@ Foxtrick.modules.CurrencyConverter = {
 			var nodes = candidates.filter(c => !c.querySelector(types));
 
 			// filter out nodes without currency symbols
-			nodes = nodes.filter(n => RE.test(n.textContent));
+			nodes = nodes.filter(n => { RE.lastIndex = 0; return RE.test(n.textContent); });
 
 			/** @param {Node} node */
 			var parseLeaf = function(node) {
