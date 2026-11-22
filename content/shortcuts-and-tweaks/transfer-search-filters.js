@@ -179,6 +179,66 @@ Foxtrick.modules.TransferSearchFilters = {
 		};
 
 		/**
+		 * Serialize current form state to filter XML
+		 * @return {Promise<string>}
+		 */
+		var serializeForm = async function() {
+			var formString = '<root>';
+			for (let i in backwardCompatibleCodes) {
+				// eslint-disable-next-line no-await-in-loop
+				let [el] = await findFormElements(i);
+				if (!el) {
+					formString += '<elem>';
+					formString += '<name>' + i + '</name>';
+					formString += '<value></value>';
+					formString += '</elem>';
+					continue;
+				}
+
+				if (el.type != 'radio' && el.type != 'checkbox') {
+					if (/\{/.test(el.value)) {
+						// don't save hidden imputs
+						continue;
+					}
+
+					formString += '<elem>';
+					formString += '<name>' + i + '</name>';
+					formString += '<value>' + el.value + '</value>';
+					formString += '</elem>';
+				}
+
+				if (el.type == 'checkbox') {
+					formString += '<elem>';
+					formString += '<name>' + i + '</name>';
+					formString += '<value>' + el.checked + '</value>';
+					formString += '</elem>';
+				}
+			}
+			formString += '</root>';
+			return formString;
+		};
+
+		/**
+		 * name of the currently selected (loaded) filter
+		 * @type {string}
+		 */
+		var activeFilter = null;
+
+		/**
+		 * Mark filter as active: bold name + save button
+		 * @param {string} name
+		 */
+		var setActiveFilter = function(name) {
+			activeFilter = name;
+			let table = doc.getElementById('ft-transfer-search-filter-table');
+			if (!table)
+				return;
+
+			for (let row of table.querySelectorAll('tr'))
+				row.classList.toggle('ft-filter-active', row.id === `filter_${name}`);
+		};
+
+		/**
 		 * @param {HTMLElement} table
 		 * @param {string} name
 		 */
@@ -196,6 +256,7 @@ Foxtrick.modules.TransferSearchFilters = {
 					var target = this;
 
 					filter = target.dataset.filter;
+					setActiveFilter(name);
 
 					// parse it
 					var dp = new target.ownerDocument.defaultView.DOMParser();
@@ -270,25 +331,48 @@ Foxtrick.modules.TransferSearchFilters = {
 					let el = doc.getElementById('filter_' + target.dataset.msg);
 					if (el)
 						el.remove();
+					if (activeFilter === target.dataset.msg)
+						activeFilter = null;
 				}
 			};
 
 			let fName = `transferfilter.${name}`;
 			var filter = Foxtrick.Prefs.getString(fName);
 			if (!filter) {
-				filter = Foxtrick.Prefs.getString(encodeURI(fName));
+				fName = encodeURI(fName);
+				filter = Foxtrick.Prefs.getString(fName);
 				if (!filter)
 					return;
 			}
+
+			/** @type {Listener<HTMLElement,MouseEvent>} */
+			var saveFilter = async function() {
+				try {
+					let xml = await serializeForm();
+					Foxtrick.Prefs.setString(fName, xml);
+					link.dataset.filter = xml;
+				}
+				catch (e) {
+					Foxtrick.log(e);
+				}
+			};
 
 			var tr = doc.createElement('tr');
 			tr.id = `filter_${name}`;
 			table.appendChild(tr);
 
 			var tdName = doc.createElement('td');
+			var tdSave = doc.createElement('td');
 			var tdRemove = doc.createElement('td');
 			tr.appendChild(tdName);
+			tr.appendChild(tdSave);
 			tr.appendChild(tdRemove);
+
+			var saver = doc.createElement('div');
+			saver.className = 'ft-filter-save';
+			saver.title = Foxtrick.L10n.getString('button.save');
+			Foxtrick.onClick(saver, saveFilter);
+			tdSave.appendChild(saver);
 
 			var link = doc.createElement('a');
 			link.className = 'ft-link';
@@ -312,38 +396,7 @@ Foxtrick.modules.TransferSearchFilters = {
 				if (filtername === '')
 					return;
 
-				var formString = '<root>';
-				for (let i in backwardCompatibleCodes) {
-					// eslint-disable-next-line no-await-in-loop
-					let [el] = await findFormElements(i);
-					if (!el) {
-						formString += '<elem>';
-						formString += '<name>' + i + '</name>';
-						formString += '<value></value>';
-						formString += '</elem>';
-						continue;
-					}
-
-					if (el.type != 'radio' && el.type != 'checkbox') {
-						if (/\{/.test(el.value)) {
-							// don't save hidden imputs
-							continue;
-						}
-
-						formString += '<elem>';
-						formString += '<name>' + i + '</name>';
-						formString += '<value>' + el.value + '</value>';
-						formString += '</elem>';
-					}
-
-					if (el.type == 'checkbox') {
-						formString += '<elem>';
-						formString += '<name>' + i + '</name>';
-						formString += '<value>' + el.checked + '</value>';
-						formString += '</elem>';
-					}
-				}
-				formString += '</root>';
+				var formString = await serializeForm();
 
 				var bExists = false;
 				for (let name of Foxtrick.Prefs.getList('transferfilterlist')) {
@@ -363,6 +416,9 @@ Foxtrick.modules.TransferSearchFilters = {
 				let table = doc.getElementById('ft-transfer-search-filter-table');
 				if (table)
 					addFilter(table, filtername);
+
+				// the form now matches the new filter
+				setActiveFilter(filtername);
 			}
 			catch (e) {
 				Foxtrick.log(e);
@@ -389,6 +445,6 @@ Foxtrick.modules.TransferSearchFilters = {
 			addFilter(table, filter);
 
 		ownBoxBody.appendChild(table);
-		Foxtrick.addBoxToSidebar(doc, header, ownBoxBody, 1);
+		Foxtrick.addBoxToSidebar(doc, header, ownBoxBody, -1);
 	},
 };
