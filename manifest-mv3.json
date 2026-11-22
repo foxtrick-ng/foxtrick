@@ -141,6 +141,7 @@
 			"content/information-aggregation/cross-table.js",
 			"content/information-aggregation/current-transfers.js",
 			"content/information-aggregation/election-table.js",
+			"content/information-aggregation/extended-club-details.js",
 			"content/information-aggregation/extended-player-details.js",
 			"content/information-aggregation/extra-player-info.js",
 			"content/information-aggregation/history-stats.js",

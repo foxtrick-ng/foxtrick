@@ -145,6 +145,7 @@ a good reason to. They are for version bumps in Makefile.
 				<string>content/information-aggregation/cross-table.js</string>
 				<string>content/information-aggregation/current-transfers.js</string>
 				<string>content/information-aggregation/election-table.js</string>
+				<string>content/information-aggregation/extended-club-details.js</string>
 				<string>content/information-aggregation/extended-player-details.js</string>
 				<string>content/information-aggregation/extra-player-info.js</string>
 				<string>content/information-aggregation/history-stats.js</string>
