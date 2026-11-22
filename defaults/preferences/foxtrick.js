@@ -84,7 +84,7 @@ pref("extensions.foxtrick.prefs.module.EmbedMedia.EmbedSoundCloud.enabled", fals
 pref("extensions.foxtrick.prefs.module.EmbedMedia.EmbedFlickrImages.enabled", false);
 pref("extensions.foxtrick.prefs.module.EmbedMedia.EmbedDeviantArtImages.enabled", false);
 pref("extensions.foxtrick.prefs.module.ExtendedClubDetails.enabled", true);
-pref("extensions.foxtrick.prefs.module.ExtendedClubDetails.ShortTeamName.enabled", true);
+pref("extensions.foxtrick.prefs.module.ExtendedClubDetails.ShortTeamName.enabled", false);
 pref("extensions.foxtrick.prefs.module.ExtendedPlayerDetails.enabled", true);
 pref("extensions.foxtrick.prefs.module.ExtendedPlayerDetails.value", 0);
 pref("extensions.foxtrick.prefs.module.ExtendedPlayerDetailsWage.enabled", true);
