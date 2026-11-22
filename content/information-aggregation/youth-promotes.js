@@ -99,6 +99,27 @@ Foxtrick.modules.YouthPromotes = {
 
 		birthdayCell.appendChild(promotion);
 
+		module.hideHTPromotionInfo(doc);
+	},
+
+	/**
+	 * Hide HT's own promotion sentence, redundant with ours
+	 * @param {document} doc
+	 */
+	hideHTPromotionInfo: function(doc) {
+		let playerTable = doc.querySelector('#mainBody table');
+		if (!playerTable)
+			return;
+
+		let cells = playerTable.querySelectorAll('td.left[colspan="2"]');
+		for (let cell of cells) {
+			// keep anything interactive just in case
+			if (cell.querySelector('a, input, button'))
+				continue;
+
+			let row = /** @type {HTMLTableRowElement} */ (cell.parentElement);
+			Foxtrick.addClass(row, 'hidden');
+		}
 	},
 };
 
