@@ -350,6 +350,21 @@ Foxtrick.modules.PlayerPositionsEvaluations = {
 				label.setAttribute('for', 'ft-ppe-' + s);
 				label.textContent = strMap[s];
 
+				var notApplicable = false;
+				if (s == 'loyalty' && attrs.transferListed) {
+					// the bonus is not applied to transfer-listed players
+					input.checked = false;
+					notApplicable = true;
+				}
+				else if (s == 'bruised' && !attrs.bruised) {
+					// stays checked: the setting is still valid, there is just no penalty to apply
+					notApplicable = true;
+				}
+				if (notApplicable) {
+					input.disabled = true;
+					Foxtrick.addClass(label, 'ft-ppe-na');
+				}
+
 				simple.appendChild(input);
 				simple.appendChild(label);
 			}, inputs);
