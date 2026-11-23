@@ -221,6 +221,11 @@ Foxtrick.Pages.Match.getResult = function(doc) {
 	}
 	else {
 		score = doc.querySelector('#mainBody h1 [class="notByLine"]');
+		if (!score) {
+			// non-classic (Angular) match report: scoreboard above the pitch
+			// is shown in all pitch views (overlay score is not)
+			score = this.getNgScore(doc);
+		}
 	}
 	var match = score.textContent.trim().match(/^(\d+) - (\d+)$/);
 	var goals = Foxtrick.toArray(match).slice(1);
@@ -556,6 +561,179 @@ Foxtrick.Pages.Match.getTacticsByTeam = function(ratingstable) {
 		parseInt(ratingstable.rows[levelRow].cells[3].textContent, 10) || 0,
 		parseInt(ratingstable.rows[levelRow].cells[4].textContent, 10) || 0,
 	];
+	return { tactics, level };
+};
+
+/**
+ * Get score element of the (non-classic) Angular match report, e. g. ' 3 - 2 '
+ * @param  {document} doc
+ * @return {Element}
+ */
+Foxtrick.Pages.Match.getNgScore = function(doc) {
+	return doc.querySelector('.live-scoreboard-score:not([hidden])') ||
+		doc.querySelector('.match-overlay-score p');
+};
+
+/**
+ * Get ratings table of the (non-classic) Angular match report.
+ * Sectors are in the first tbody; columns:
+ * [label, -, home bar, home value, -, away bar, away value]
+ * @param  {document} doc
+ * @return {HTMLTableElement}
+ */
+Foxtrick.Pages.Match.getNgRatingsTable = function(doc) {
+	return doc.querySelector('.postmatch-ratings table.htbox-table');
+};
+
+/**
+ * Get a 0-based float rating from a ng ratings table row.
+ * Values are 1-based denominations (e.g. 5.5), so 1 is subtracted
+ * to match the output of getRatingsByTeam.
+ * @param  {HTMLTableRowElement} row
+ * @param  {number}              barIdx  cell index of the rating bar
+ * @return {number}
+ */
+Foxtrick.Pages.Match.getNgRatingFromRow = function(row, barIdx) {
+	let bar = row.cells[barIdx] && row.cells[barIdx].querySelector('ht-bar[level]');
+	let value = bar ? parseFloat(bar.getAttribute('level')) : NaN;
+	if (isNaN(value)) {
+		let valueCell = row.cells[barIdx + 1];
+		value = valueCell ? parseFloat(valueCell.textContent.trim().replace(',', '.')) : NaN;
+	}
+	return isNaN(value) || value <= 0 ? 0 : value - 1;
+};
+
+/**
+ * Get ratings in floats for both teams from ng ratings table.
+ * Same format as getRatingsByTeam: {mf, rd, cd, ld, ra, ca, la}
+ * @param  {HTMLTableElement} table
+ * @return {object}                  Object.<string, Array.<number>>
+ */
+Foxtrick.Pages.Match.getNgRatingsByTeam = function(table) {
+	const HOME_BAR = 2, AWAY_BAR = 5;
+	let order = ['mf', 'rd', 'cd', 'ld', 'ra', 'ca', 'la'];
+	let rows = table.tBodies[0].rows;
+	let ratings = {};
+	order.forEach((key, i) => {
+		ratings[key] = [
+			this.getNgRatingFromRow(rows[i], HOME_BAR),
+			this.getNgRatingFromRow(rows[i], AWAY_BAR),
+		];
+	});
+	return ratings;
+};
+
+/**
+ * Get ratings of the minute selected on the ng pitch timeline.
+ * The ratings table shows match averages; the pitch (sector ratings view)
+ * shows ratings for the selected minute as 7 duels (home vs away sector):
+ * idx 0: rd vs la, 1: cd vs ca, 2: ld vs ra, 3: mf vs mf,
+ * idx 4: ra vs ld, 5: ca vs cd, 6: la vs rd.
+ * Returns null when not available.
+ * Same format as getRatingsByTeam: {mf, rd, cd, ld, ra, ca, la}
+ * @param  {document} doc
+ * @return {object}       Object.<string, Array.<number>>
+ */
+Foxtrick.Pages.Match.getNgMinuteRatingsByTeam = function(doc) {
+	const HOME = ['rd', 'cd', 'ld', 'mf', 'ra', 'ca', 'la'];
+	const AWAY = ['la', 'ca', 'ra', 'mf', 'ld', 'cd', 'rd'];
+
+	if (!doc.querySelector('ht-extended-timeline .timeline-item-main.active'))
+		return null;
+
+	let holder = doc.querySelector('.sectorRatings-values');
+	if (!holder)
+		return null;
+
+	/**
+	 * @param  {Element} el
+	 * @return {number}
+	 */
+	let getValue = function(el) {
+		let p = el && el.querySelector('.sectorRating-value');
+		let value = p ? parseFloat(p.textContent.replace(/[()\s]/g, '').replace(',', '.')) : NaN;
+		return isNaN(value) ? NaN : Math.max(value - 1, 0);
+	};
+
+	let ratings = { mf: [0, 0], rd: [0, 0], cd: [0, 0], ld: [0, 0], ra: [0, 0], ca: [0, 0], la: [0, 0] };
+	for (let idx = 0; idx < HOME.length; idx++) {
+		let sector = holder.querySelector(`[idx="${idx}"]`);
+		if (!sector)
+			return null;
+		let home = getValue(sector.querySelector('.sectorRatings-home-value'));
+		let away = getValue(sector.querySelector('.sectorRatings-away-value'));
+		if (isNaN(home) || isNaN(away))
+			return null;
+		ratings[HOME[idx]][0] = home;
+		ratings[AWAY[idx]][1] = away;
+	}
+	return ratings;
+};
+
+/**
+ * Get ratings currently shown on ng match report:
+ * selected minute from the pitch if available, match averages from table otherwise.
+ * @param  {document}         doc
+ * @param  {HTMLTableElement} table
+ * @return {object}                  Object.<string, Array.<number>>
+ */
+Foxtrick.Pages.Match.getNgCurrentRatingsByTeam = function(doc, table) {
+	return this.getNgMinuteRatingsByTeam(doc) || this.getNgRatingsByTeam(table);
+};
+
+/**
+ * Get tactics data for home and away teams from ng ratings table.
+ * Same format as getTacticsByTeam: { tactics: ['aow', 'normal'], level: [15, 0] }
+ * Tactics row is found by tactics name, tactics level row follows it.
+ * @param  {HTMLTableElement} table
+ * @return {object}                  {tactics: Array.<string>, level: Array.<number>}
+ */
+Foxtrick.Pages.Match.getNgTacticsByTeam = function(table) {
+	// Find tactics row by matching its home value against HT tactics names.
+	// Note: tactics level row has no ht-skill bar when neither team used a tactic,
+	// so it cannot be used as an anchor.
+	let lang = Foxtrick.Prefs.getString('htLanguage');
+	let names = [];
+	try {
+		names = Foxtrick.L10n.htLanguagesJSON[lang].language.tactics.map(t => t.value);
+	}
+	catch (e) {
+		Foxtrick.log('getNgTacticsByTeam', e);
+	}
+
+	let tacticRow = Foxtrick.nth(function(row) {
+		let cell = row.cells[2];
+		return !!cell && row.cells.length > 2 && names.indexOf(cell.textContent.trim()) !== -1;
+	}, Foxtrick.toArray(table.rows));
+
+	let levelRow = tacticRow ? tacticRow.nextElementSibling : null;
+	if (!tacticRow || !levelRow)
+		return { tactics: [null, null], level: [0, 0] };
+
+	/** @param {number} idx */
+	let getCell = function(idx) {
+		// cells: [label, -, home(colspan 2), -, away(colspan 2)] or with bar+value
+		// home is always cells[2], away is the cell after the next spacer
+		let cells = Foxtrick.toArray(tacticRow.cells);
+		return idx === 0 ? cells[2] : cells[cells.length - 1];
+	};
+
+	/** @param {boolean} away */
+	let getLevel = function(away) {
+		let cells = Foxtrick.toArray(levelRow.cells);
+		let cell;
+		if (away)
+			cell = cells[cells.length - 1];
+		else
+			cell = cells[2] && cells[2].getAttribute('colspan') ? cells[2] : cells[3];
+		return cell ? parseInt(cell.textContent, 10) || 0 : 0;
+	};
+
+	let tactics = [
+		this.getTacticsFromCell(getCell(0)),
+		this.getTacticsFromCell(getCell(1)),
+	];
+	let level = [getLevel(false), getLevel(true)];
 	return { tactics, level };
 };
 

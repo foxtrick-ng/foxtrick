@@ -48,8 +48,11 @@ Foxtrick.modules['HTMSPrediction'] = {
 		var loading = Foxtrick.util.note.createLoading(doc);
 		targetNode.appendChild(loading);
 
+		// non-classic (Angular) report has no ratings tabs, only the score overlay
 		const mimimiActive = Foxtrick.Prefs.isModuleOptionEnabled(module, 'Mimimi') &&
-			Foxtrick.Pages.Match.hasRatingsTabs(doc);
+			(Foxtrick.Pages.Match.isNewLive(doc) ?
+				!!Foxtrick.Pages.Match.getNgScore(doc) :
+				Foxtrick.Pages.Match.hasRatingsTabs(doc));
 
 		midfieldLevel[0] = midfieldLevel[0] * 4 + 1;
 		midfieldLevel[1] = midfieldLevel[1] * 4 + 1;
@@ -183,8 +186,12 @@ Foxtrick.modules['HTMSPrediction'] = {
 			if (loading && loading.parentNode)
 				loading.parentNode.removeChild(loading);
 
+			// look up within own box: on ng report the box may have been rebuilt
+			// meanwhile (stale response is then ignored)
 			var htmstable =
-				/** @type {HTMLTableElement} */ (doc.getElementById('ft-htmstable'));
+				/** @type {HTMLTableElement} */ (targetNode.querySelector('#ft-htmstable'));
+			if (!htmstable || !targetNode.isConnected)
+				return;
 			let row = htmstable.rows[htmstable.rows.length - 1];
 			let cell;
 
@@ -266,7 +273,7 @@ Foxtrick.modules['HTMSPrediction'] = {
 			cell.className = 'right';
 
 			if (mimimiActive)
-				module.minimi(doc, winprob, drawprob); // set actual value
+				module.minimi(doc, winprob, drawprob, targetNode); // set actual value
 
 			/* End of Mimimi add-on (part 2) */
 		}, (er) => {
@@ -275,8 +282,8 @@ Foxtrick.modules['HTMSPrediction'] = {
 			if (loading)
 				loading.remove();
 
-			let htmsTable = doc.getElementById('ft-htmstable');
-			if (!htmsTable)
+			let htmsTable = targetNode.querySelector('#ft-htmstable');
+			if (!htmsTable || !targetNode.isConnected)
 				return;
 
 			let div = doc.createElement('div');
@@ -319,10 +326,73 @@ Foxtrick.modules['HTMSPrediction'] = {
 		htmstable.parentNode.insertBefore(p, htmstable.nextSibling);
 	},
 
+	/**
+	 * Non-classic (Angular) match report.
+	 * Prediction is added as a separate box below HT's ratings box.
+	 * The page renders asynchronously and HT updates ratings in place when
+	 * a match minute is selected (classic reloads the page instead),
+	 * hence the observer: the box is rebuilt whenever ratings change.
+	 * @param {document} doc
+	 */
+	runNg: function(doc) {
+		const module = this;
+
+		var add = function() {
+			let table = Foxtrick.Pages.Match.getNgRatingsTable(doc);
+			let ratingsBox = table ? table.closest('.postmatch-ratings') : null;
+			if (!ratingsBox || !table.tBodies.length)
+				return;
+
+			let r = Foxtrick.Pages.Match.getNgCurrentRatingsByTeam(doc, table);
+			let tacticsData = Foxtrick.Pages.Match.getNgTacticsByTeam(table);
+
+			// skip if already rendered for the same ratings
+			let key = JSON.stringify([r, tacticsData]);
+			let old = doc.getElementById('htmsMatchDivId');
+			if (old) {
+				if (old.dataset.ftKey === key)
+					return;
+				old.remove();
+			}
+
+			let isWalkOver = Object.keys(r).every(k => !r[k][0] && !r[k][1]);
+			if (isWalkOver)
+				return;
+
+			let htmsDiv = Foxtrick.createFeaturedElement(doc, module, 'div');
+			htmsDiv.id = 'htmsMatchDivId';
+			htmsDiv.dataset.ftKey = key;
+			Foxtrick.addClass(htmsDiv, 'box');
+			let body = htmsDiv.appendChild(doc.createElement('div'));
+			body.className = 'boxBody';
+			ratingsBox.parentNode.insertBefore(htmsDiv, ratingsBox.nextSibling);
+
+			// insertPrediction modifies arrays in place: pass copies
+			module.insertPrediction(doc, body, r.mf.slice(), r.rd.slice(), r.cd.slice(),
+			                        r.ld.slice(), r.ra.slice(), r.ca.slice(), r.la.slice(),
+			                        tacticsData.tactics.slice(), tacticsData.level.slice());
+		};
+
+		add();
+		let container = doc.getElementById('ngLive');
+		if (container) {
+			// HT changes values in place: watch text and bar levels too
+			Foxtrick.onChange(container, add, {
+				characterData: true,
+				attributes: true,
+				attributeFilter: ['level'],
+			});
+		}
+	},
+
 	run: function(doc) {
-		if (Foxtrick.Pages.Match.isPrematch(doc) || Foxtrick.Pages.Match.inProgress(doc) ||
-		    Foxtrick.Pages.Match.isNewLive(doc))
+		if (Foxtrick.Pages.Match.isPrematch(doc) || Foxtrick.Pages.Match.inProgress(doc))
 			return;
+
+		if (Foxtrick.Pages.Match.isNewLive(doc)) {
+			this.runNg(doc);
+			return;
+		}
 
 		var ratingstable = Foxtrick.Pages.Match.getRatingsTable(doc);
 		if (!ratingstable || Foxtrick.Pages.Match.isWalkOver(ratingstable))
@@ -374,8 +444,9 @@ Foxtrick.modules['HTMSPrediction'] = {
 	 * @param {document} doc
 	 * @param {string} winprob
 	 * @param {string} drawprob
+	 * @param {Element} [container] element containing the canvas
 	 */
-	minimi(doc, winprob, drawprob) {
+	minimi(doc, winprob, drawprob, container) {
 		const WIN_PTS = 3;
 
 		var goals = Foxtrick.Pages.Match.getResult(doc);
@@ -425,7 +496,9 @@ Foxtrick.modules['HTMSPrediction'] = {
 			zones.push({ strokeStyle: hsl, min: pctg, max });
 			zones.unshift({ strokeStyle: hsl, min: -max, max: -pctg });
 		}
-		var target = doc.getElementById('ft-mimimicanvas'); // your canvas element
+		var target = container ? // your canvas element
+			container.querySelector('#ft-mimimicanvas') :
+			doc.getElementById('ft-mimimicanvas');
 		var gauge = new Foxtrick.Gauge(target).setOptions(opts); // create sexy gauge!
 		gauge.maxValue = 100; // set max gauge value
 		gauge.setMinValue(-100); // Prefer setter over gauge.minValue = 0
