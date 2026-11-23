@@ -1019,6 +1019,8 @@ Foxtrick.L10n.getLocaleByLeagueId = async function(leagueId) {
 				} catch { /* ignore */ }
 
 				const localeCode = Foxtrick.Prefs.getString('htLanguage');
+				// locale this.properties are loaded in (htLanguage pref may change later)
+				this.propertiesLocale = localeCode;
 
 				const l10nBundlePath = L10N_PATH + localeCode + '/foxtrick.properties';
 				try {
@@ -1139,8 +1141,10 @@ Foxtrick.L10n.getLocaleByLeagueId = async function(leagueId) {
 						this.plFormByLocale = {};
 
 					if (!this.propertiesByLocale[localeCode]) {
-						const currentLocale = Foxtrick.Prefs.getString('htLanguage');
-						if (this.properties && localeCode === currentLocale) {
+						// compare with the locale properties were loaded in, not the current
+						// htLanguage pref: after a language switch ReadHtPrefs saves the new
+						// language while this.properties still hold the previous one
+						if (this.properties && localeCode === this.propertiesLocale) {
 							this.propertiesByLocale[localeCode] = this.properties;
 							this.plFormByLocale[localeCode] = this.plForm;
 						} else if (Foxtrick.context === 'content') {

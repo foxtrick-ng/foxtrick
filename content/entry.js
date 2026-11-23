@@ -101,6 +101,7 @@ Foxtrick.entry.contentScriptInit = function(data) {
 		Foxtrick.L10n.plForm = data.plForm;
 
 		let localeCode = Foxtrick.Prefs.getString('htLanguage');
+		Foxtrick.L10n.propertiesLocale = localeCode;
 		Foxtrick.L10n.propertiesByLocale = {};
 		Foxtrick.L10n.plFormByLocale = {};
 		if (localeCode) {

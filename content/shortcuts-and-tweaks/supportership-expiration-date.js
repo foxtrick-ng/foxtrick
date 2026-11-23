@@ -19,7 +19,7 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 	 * @param {HTMLElement} dateEl .tier-expiration
 	 */
 	handleWidget: async function(doc, dateEl) {
-		const MSECS_IN_DAY = 24 * 60 * 60 * 1000;
+		const { MSECS_IN_DAY } = Foxtrick.util.time;
 
 		let endDate = Foxtrick.util.time.getDateFromText(dateEl.textContent, undefined, true);
 		if (!endDate)
@@ -33,7 +33,7 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 
 		// count like HT's 'xyz days left' (old box, ArenaHub): without the expiration day
 		Foxtrick.util.time.setMidnight(now);
-		let days = Math.round((endDate.getTime() - now.getTime()) / MSECS_IN_DAY) - 1;
+		let days = Math.max(Math.round((endDate.getTime() - now.getTime()) / MSECS_IN_DAY) - 1, 0);
 
 		// use the language HT renders this page in: after switching language
 		// (e.g. Language Switcher widget) content l10n still holds the previous one
@@ -41,37 +41,15 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 		let locale = metaLang && Foxtrick.L10n.htMapping[metaLang] ||
 			Foxtrick.Prefs.getString('htLanguage');
 
-		// getStringInLocale would reuse the stale content l10n once ReadHtPrefs
-		// has saved the new language, so cache the page language from background first
-		let L10n = Foxtrick.L10n;
-		if (!L10n.propertiesByLocale)
-			L10n.propertiesByLocale = {};
-		if (!L10n.plFormByLocale)
-			L10n.plFormByLocale = {};
-
-		if (!L10n.propertiesByLocale[locale]) {
-			try {
-				let res = await new Promise((resolve, reject) => {
-					Foxtrick.SB.ext.sendRequest({ req: 'getLocaleProperties', locale }, (r) => {
-						if (!r || 'error' in r)
-							reject(new Error(r ? r.error : 'Empty response'));
-						else
-							resolve(r);
-					});
-				});
-				L10n.propertiesByLocale[locale] = res.properties;
-				L10n.plFormByLocale[locale] = res.plForm;
-			}
-			catch (e) {
-				Foxtrick.log('SupportershipExpirationDate: locale load failed', locale, e);
-			}
-		}
-
 		let [daysWord, showDays, showDate] = await Promise.all([
 			Foxtrick.L10n.getStringInLocale('datetimestrings.days', locale, days),
 			Foxtrick.L10n.getStringInLocale('SupportershipExpirationDate.showRemainingDayCount', locale),
 			Foxtrick.L10n.getStringInLocale('SupportershipExpirationDate.showExpirationDate', locale),
 		]);
+
+		// Angular may have re-rendered the widget while waiting for l10n
+		if (!dateEl.isConnected)
+			return;
 
 		// shallow clone keeps Angular's scoped-style attribute and classes
 		let daysEl = /** @type {HTMLElement} */ (dateEl.cloneNode(false));
@@ -111,7 +89,8 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 
 		if (Foxtrick.isPage(doc, 'office')) {
 			Foxtrick.util.officeWidgets.onWidget(doc, 'ht-widget-myaccount .tier-expiration',
-				el => this.handleWidget(doc, el));
+				// async: errors are not caught by onWidget
+				el => this.handleWidget(doc, el).catch(e => Foxtrick.log(e)));
 		}
 
 		if (!packageType)
