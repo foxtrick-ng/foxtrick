@@ -105,21 +105,22 @@ Foxtrick.modules['ExtendedPlayerDetails'] = {
 		const DAYS_IN_YEAR = 112;
 
 		let table = /** @type {HTMLTableElement} */ (doc.getElementById('injuryHistory'));
-		Foxtrick.log('[InjuryAge] run, table:', !!table, 'url:', doc.URL);
-		if (!table || table.querySelector('.ft-injury-age'))
+		// change() fires on every DOM mutation: handle the table only once,
+		// so that no duplicate CHPP requests are sent while waiting for the response
+		if (!table || table.dataset.ftInjuryAge)
 			return;
 
 		let id = parseInt(Foxtrick.getUrlParam(doc.URL, 'playerId'), 10);
 		let htDate = Foxtrick.util.time.getDate(doc);
-		Foxtrick.log('[InjuryAge] id:', id, 'htDate:', htDate);
 		if (!id || !htDate)
 			return;
 
-		// Pages.Player.getPlayer bails out here: no .playerInfo on PlayerHistory
+		table.dataset.ftInjuryAge = '1';
+
+		// exact age (years + days) is needed to compute the age at injury date
 		/** @type {CHPPParams} */
 		let args = [['file', 'playerdetails'], ['version', '2.1'], ['playerId', id]];
 		Foxtrick.util.api.retrieve(doc, args, { cache: 'session' }, (xml, errorText) => {
-			Foxtrick.log('[InjuryAge] CHPP xml:', !!xml, 'error:', errorText);
 			if (!xml || errorText) {
 				Foxtrick.log(errorText);
 				return;
@@ -130,7 +131,6 @@ Foxtrick.modules['ExtendedPlayerDetails'] = {
 			let { MSECS_IN_DAY } = Foxtrick.util.time;
 			let now = new Date(htDate.getFullYear(), htDate.getMonth(), htDate.getDate());
 			let ageDays = xml.num('Age') * DAYS_IN_YEAR + xml.num('AgeDays');
-			Foxtrick.log('[InjuryAge] ageDays:', ageDays);
 
 			let headRow = table.tHead && table.tHead.rows[0];
 			if (headRow && headRow.cells.length > 1) {
@@ -147,7 +147,8 @@ Foxtrick.modules['ExtendedPlayerDetails'] = {
 				Foxtrick.addClass(td, 'left ft-injury-age');
 				Foxtrick.makeFeaturedElement(td, module);
 
-				let date = Foxtrick.util.time.getDateFromText(dateCell.firstChild.textContent.trim());
+				let dateText = dateCell && dateCell.firstChild ? dateCell.firstChild.textContent.trim() : '';
+				let date = dateText ? Foxtrick.util.time.getDateFromText(dateText) : null;
 				if (date) {
 					let daysAgo = Math.round((now.getTime() - date.getTime()) / MSECS_IN_DAY);
 					td.textContent = String(Math.floor((ageDays - daysAgo) / DAYS_IN_YEAR));
