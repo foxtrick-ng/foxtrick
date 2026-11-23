@@ -14,6 +14,8 @@ Foxtrick.modules['ExtendedPlayerDetails'] = {
 
 	run: function(doc) {
 		var module = this;
+		module.injuryAge(doc);
+
 		if (Foxtrick.Pages.Player.wasFired(doc))
 			return;
 
@@ -87,6 +89,72 @@ Foxtrick.modules['ExtendedPlayerDetails'] = {
 		joinedEl.appendChild(doc.createTextNode(')'));
 
 		Foxtrick.makeFeaturedElement(joinedEl, module);
+	},
+
+	/** @param {document} doc */
+	change: function(doc) {
+		this.injuryAge(doc);
+	},
+
+	/**
+	 * Add player age column to injury history table
+	 * @param {document} doc
+	 */
+	injuryAge: function(doc) {
+		const module = this;
+		const DAYS_IN_YEAR = 112;
+
+		let table = /** @type {HTMLTableElement} */ (doc.getElementById('injuryHistory'));
+		Foxtrick.log('[InjuryAge] run, table:', !!table, 'url:', doc.URL);
+		if (!table || table.querySelector('.ft-injury-age'))
+			return;
+
+		let id = parseInt(Foxtrick.getUrlParam(doc.URL, 'playerId'), 10);
+		let htDate = Foxtrick.util.time.getDate(doc);
+		Foxtrick.log('[InjuryAge] id:', id, 'htDate:', htDate);
+		if (!id || !htDate)
+			return;
+
+		// Pages.Player.getPlayer bails out here: no .playerInfo on PlayerHistory
+		/** @type {CHPPParams} */
+		let args = [['file', 'playerdetails'], ['version', '2.1'], ['playerId', id]];
+		Foxtrick.util.api.retrieve(doc, args, { cache: 'session' }, (xml, errorText) => {
+			Foxtrick.log('[InjuryAge] CHPP xml:', !!xml, 'error:', errorText);
+			if (!xml || errorText) {
+				Foxtrick.log(errorText);
+				return;
+			}
+			if (table.querySelector('.ft-injury-age'))
+				return;
+
+			let { MSECS_IN_DAY } = Foxtrick.util.time;
+			let now = new Date(htDate.getFullYear(), htDate.getMonth(), htDate.getDate());
+			let ageDays = xml.num('Age') * DAYS_IN_YEAR + xml.num('AgeDays');
+			Foxtrick.log('[InjuryAge] ageDays:', ageDays);
+
+			let headRow = table.tHead && table.tHead.rows[0];
+			if (headRow && headRow.cells.length > 1) {
+				let th = doc.createElement('th');
+				th.textContent = Foxtrick.L10n.getString('Age');
+				Foxtrick.makeFeaturedElement(th, module);
+				Foxtrick.addClass(th, 'ft-injury-age');
+				headRow.insertBefore(th, headRow.cells[1]);
+			}
+
+			for (let row of table.tBodies[0].rows) {
+				let dateCell = row.cells[0];
+				let td = doc.createElement('td');
+				Foxtrick.addClass(td, 'left ft-injury-age');
+				Foxtrick.makeFeaturedElement(td, module);
+
+				let date = Foxtrick.util.time.getDateFromText(dateCell.firstChild.textContent.trim());
+				if (date) {
+					let daysAgo = Math.round((now.getTime() - date.getTime()) / MSECS_IN_DAY);
+					td.textContent = String(Math.floor((ageDays - daysAgo) / DAYS_IN_YEAR));
+				}
+				row.insertBefore(td, row.cells[1]);
+			}
+		});
 	},
 };
 
