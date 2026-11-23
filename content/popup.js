@@ -44,23 +44,44 @@ function visitLink() {
 	shutDown();
 }
 
+/**
+ * Reload the active Hattrick tab so that the changed option takes effect,
+ * then close the popup.
+ */
+function reloadHattrickAndClose() {
+	const RELOAD_DELAY = 150; // ms, let the pref write settle
+
+	chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+		let tab = tabs && tabs[0];
+		let isHT = tab && (!tab.url || /^https?:\/\/[^/]*\.hattrick\.org\//.test(tab.url));
+		if (!isHT) {
+			window.close();
+			return;
+		}
+		setTimeout(() => {
+			chrome.tabs.reload(tab.id);
+			window.close();
+		}, RELOAD_DELAY);
+	});
+}
+
 function toggleEnabled() {
 	var checked = document.getElementById('foxtrick-toolbar-deactivate').checked;
 	Foxtrick.Prefs.setBool('disableTemporary', checked);
 	Foxtrick.Prefs.setBool('preferences.updated', true);
-	window.close();
+	reloadHattrickAndClose();
 }
 function toggleHighlight() {
 	var checked = document.getElementById('foxtrick-toolbar-highlight').checked;
 	Foxtrick.Prefs.setBool('featureHighlight', checked);
 	Foxtrick.Prefs.setBool('preferences.updated', true);
-	window.close();
+	reloadHattrickAndClose();
 }
 function toggleTranslationKeys() {
 	var checked = document.getElementById('foxtrick-toolbar-translationKeys').checked;
 	Foxtrick.Prefs.setBool('translationKeys', checked);
 	Foxtrick.Prefs.setBool('preferences.updated', true);
-	window.close();
+	reloadHattrickAndClose();
 }
 
 function clearCache() {
