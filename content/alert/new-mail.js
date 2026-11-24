@@ -19,11 +19,15 @@ Foxtrick.modules['NewMail'] = {
 	CSS: Foxtrick.InternalPath + 'resources/css/new-mail.css',
 
 	// eslint-disable-next-line complexity
-	exec: function(doc, mailCount, forumCount, tickerForumNotified) {
+	exec: function(doc, mailCount, forumCount, wasLoggedIn) {
 		const MODULE = this;
 
-		// the flag only covers forum replies notified by TickerAlert since the previous page load
-		Foxtrick.sessionSet('tickerForumNotified', false);
+		// remember logouts, so the first page after login can catch up on forum replies
+		if (!Foxtrick.Pages.All.isLoggedIn(doc)) {
+			Foxtrick.sessionSet('newMailLoggedIn', false);
+			return;
+		}
+		Foxtrick.sessionSet('newMailLoggedIn', true);
 
 		const MAIL_URL = doc.location.origin + '/MyHattrick/Inbox/';
 		const FORUM_URL = doc.location.origin + '/Forum/?actionType=refresh';
@@ -83,28 +87,16 @@ Foxtrick.modules['NewMail'] = {
 			newForumCount = count ? parseInt(count[0], 10) : 0;
 		}
 
-		// TickerAlert notifies supporters about forum replies shown as new in the ticker
-		let hasNewForumTicker = function() {
-			if (!Foxtrick.util.layout.isSupporter(doc)
-				|| !Foxtrick.Prefs.isModuleEnabled('TickerAlert')
-				|| !Foxtrick.Prefs.getBool('module.TickerAlert.forum.enabled'))
-				return false;
-
-			let ticker = doc.getElementById('ticker');
-			if (!ticker)
-				return false;
-
-			return Foxtrick.any(function(entry) {
-				let link = entry.querySelector('a');
-				return !!link && !!entry.querySelector('strong') && /\/Forum/i.test(link.href);
-			}, ticker.getElementsByTagName('div'));
-		};
+		// supporters get live forum reply notifications from TickerAlert;
+		// NewMail only catches up on replies received while logged out
+		let isForumInTickerAlert = Foxtrick.util.layout.isSupporter(doc)
+			&& Foxtrick.Prefs.isModuleEnabled('TickerAlert')
+			&& Foxtrick.Prefs.getBool('module.TickerAlert.forum.enabled');
 
 		Foxtrick.sessionSet('forumCount', newForumCount);
 		if (Foxtrick.Prefs.isModuleOptionEnabled('NewMail', 'NotifyForum')
 			&& newForumCount > oldForumCount
-			&& !tickerForumNotified
-			&& !hasNewForumTicker()) {
+			&& (!isForumInTickerAlert || !wasLoggedIn)) {
 
 			let forumL10n = Foxtrick.L10n.getString('notify.newMail', newForumCount);
 			let forumMsg = forumL10n.replace(/%s/, newForumCount);
@@ -129,7 +121,7 @@ Foxtrick.modules['NewMail'] = {
 		Promise.all([
 			Foxtrick.session.get('mailCount'),
 			Foxtrick.session.get('forumCount'),
-			Foxtrick.session.get('tickerForumNotified'),
+			Foxtrick.session.get('newMailLoggedIn'),
 		])
 			.then(function(args) {
 				args.unshift(doc);

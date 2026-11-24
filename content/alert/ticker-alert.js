@@ -179,11 +179,6 @@
 								id: 'ticker-' + type + '-' + n.time,
 								buttons: [{ title: open }],
 							});
-
-							// tell NewMail this forum reply has already been notified
-							if (type == 'forum')
-								Foxtrick.sessionSet('tickerForumNotified', true);
-
 							var sound = Foxtrick.Prefs.getString('module.TickerAlert.' + type + '.sound');
 							if (sound) {
 								Foxtrick.playSound(sound);
