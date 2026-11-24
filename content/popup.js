@@ -47,10 +47,10 @@ function visitLink() {
 /**
  * Reload the active Hattrick tab so that the changed option takes effect,
  * then close the popup.
+ * Prefs are written synchronously (localStorage) before this is called,
+ * so the reloaded page gets the new value.
  */
 function reloadHattrickAndClose() {
-	const RELOAD_DELAY = 150; // ms, let the pref write settle
-
 	chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 		let tab = tabs && tabs[0];
 		let isHT = tab && (!tab.url || /^https?:\/\/[^/]*\.hattrick\.org\//.test(tab.url));
@@ -58,10 +58,7 @@ function reloadHattrickAndClose() {
 			window.close();
 			return;
 		}
-		setTimeout(() => {
-			chrome.tabs.reload(tab.id);
-			window.close();
-		}, RELOAD_DELAY);
+		chrome.tabs.reload(tab.id, {}, () => window.close());
 	});
 }
 
