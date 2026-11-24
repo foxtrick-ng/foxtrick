@@ -10,7 +10,7 @@ Foxtrick.modules.ReLiveLinks = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.SHORTCUTS_AND_TWEAKS,
 	PAGES: [
 		'matchesLive', // export live
-		'series', // combo link
+		'series', 'youthSeries', // combo link
 		'fans',
 		'fixtures', 'youthFixtures', // table mess
 		'cupMatches', 'worldCup', // insertCells, insertHeader
@@ -26,10 +26,71 @@ Foxtrick.modules.ReLiveLinks = {
 		if (Foxtrick.isPage(doc, 'matchesLive')) {
 			if (Foxtrick.Prefs.isModuleOptionEnabled('ReLiveLinks', 'Live'))
 				module.live(doc);
+
+			return;
 		}
-		else if (Foxtrick.Prefs.isModuleOptionEnabled('ReLiveLinks', 'ReLive')) {
+
+		if (Foxtrick.isPage(doc, 'youthSeries'))
+			module.addRoundToLive(doc);
+
+		if (Foxtrick.Prefs.isModuleOptionEnabled('ReLiveLinks', 'ReLive'))
 			module.reLive(doc);
+	},
+
+	/**
+	 * add a link to add all upcoming round matches to HT-Live
+	 * (HT provides it natively for senior series only)
+	 *
+	 * @param {document} doc
+	 */
+	addRoundToLive: function(doc) {
+		const module = this;
+		const LIVE_SELECTOR = 'a[href^="/Club/Matches/Live.aspx"]';
+
+		let table = doc.querySelector('#mainBody table.indent.right.thin');
+		if (!table)
+			return;
+
+		let header = table.querySelector('th');
+		if (!header || header.querySelector(LIVE_SELECTOR))
+			return; // no header or HT already provides the link
+
+		/** @type {NodeListOf<HTMLAnchorElement>} */
+		let liveLinks = table.querySelectorAll(LIVE_SELECTOR);
+		if (!liveLinks.length)
+			return;
+
+		/** @type {number[]} */
+		let ids = [];
+		let source = '';
+		for (let liveLink of liveLinks) {
+			let id = Foxtrick.util.id.getMatchIdFromUrl(liveLink.href);
+			if (!id)
+				continue;
+
+			ids.push(id);
+			source = source || Foxtrick.getUrlParam(liveLink.href, 'SourceSystem');
 		}
+		if (!ids.length || !source)
+			return;
+
+		let link = doc.createElement('a');
+		link.href = '/Club/Matches/Live.aspx?matchID=' + ids.join(',') +
+			'&actionType=addMatch&SourceSystem=' + source;
+
+		let img = doc.createElement('img');
+		img.src = '/Img/Svgs/matches/addToLive.svg';
+		img.className = 'svg-icon';
+		let matchImg = liveLinks[0].querySelector('img');
+		if (matchImg && matchImg.title)
+			img.alt = img.title = matchImg.title;
+
+		link.appendChild(img);
+
+		let span = Foxtrick.createFeaturedElement(doc, module, 'span');
+		Foxtrick.addClass(span, 'float_right');
+		span.appendChild(link);
+		header.appendChild(span);
 	},
 
 	/** @param {document} doc */
@@ -176,7 +237,7 @@ Foxtrick.modules.ReLiveLinks = {
 		var liveTdIdx = NaN;
 
 		var reLiveSrc = Foxtrick.InternalPath + 'resources/img/relive-small.png';
-		if (Foxtrick.isPage(doc, 'series')) {
+		if (Foxtrick.isPage(doc, ['series', 'youthSeries'])) {
 
 			matches = [];
 
