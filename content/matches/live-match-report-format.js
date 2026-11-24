@@ -11,6 +11,23 @@ Foxtrick.modules['LiveMatchReportFormat'] = {
 	NICE: 1,
 
 	run: function(doc) {
+		var fixInjuries = function(doc) {
+			var livereports = doc.getElementsByClassName('liveReport');
+			for (let report of livereports)
+				Foxtrick.util.matchEvent.fixInjuryIcons(report);
+		};
+
+		// highlights live outside of the live report container
+		var watchedHighlights = null;
+		var watchHighlights = function(doc) {
+			var highlights = doc.querySelector('.liveTabsContainer');
+			if (!highlights || highlights === watchedHighlights)
+				return;
+
+			watchedHighlights = highlights;
+			Foxtrick.onChange(highlights, fixInjuries);
+		};
+
 		var react = function(liveReport, indicators) {
 			var events = liveReport.getElementsByTagName('tr');
 			Foxtrick.forEach(function(evnt) {
@@ -30,6 +47,9 @@ Foxtrick.modules['LiveMatchReportFormat'] = {
 			Foxtrick.forEach(function(report) {
 				react(report, true);
 			}, livereports);
+
+			fixInjuries(doc);
+			watchHighlights(doc);
 		};
 
 		// firstload
