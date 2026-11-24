@@ -216,7 +216,10 @@ Foxtrick.modules.PlayerPositionsEvaluations = {
 		var updateSkills = function(doc) {
 			// option change
 			for (var pref in opts) {
-				opts[pref] = doc.getElementById('ft-ppe-' + pref).checked;
+				var prefInput = doc.getElementById('ft-ppe-' + pref);
+				// disabled inputs are not applicable here: keep the saved setting
+				if (!prefInput.disabled)
+					opts[pref] = prefInput.checked;
 			}
 			for (var param in params) {
 				var input = doc.getElementById('ft-ppe-' + param);
@@ -433,7 +436,9 @@ Foxtrick.modules.PlayerPositionsEvaluations = {
 
 				let o = Object.assign(opts, presetPrefs);
 				for (var pref in o) {
-					doc.getElementById('ft-ppe-' + pref).checked = o[pref];
+					var prefInput = doc.getElementById('ft-ppe-' + pref);
+					if (!prefInput.disabled)
+						prefInput.checked = o[pref];
 				}
 
 				let p = Object.assign(params, presetParams);
@@ -686,7 +691,9 @@ Foxtrick.modules.PlayerPositionsEvaluations = {
 
 			var attrs = Foxtrick.Pages.Player.getAttributes(doc);
 			attrs.bruised = Foxtrick.Pages.Player.isBruised(doc);
-			attrs.transferListed = Foxtrick.Pages.Player.isTransferListed(doc);
+			// own players keep their loyalty until sold
+			attrs.transferListed = Foxtrick.Pages.Player.isTransferListed(doc) &&
+				!Foxtrick.Pages.All.isOwn(doc);
 			attrs.specialtyNumber = Foxtrick.Pages.Player.getSpecialtyNumber(doc);
 
 			var contributions = Foxtrick.Pages.Player.getContributions(skills, attrs);
