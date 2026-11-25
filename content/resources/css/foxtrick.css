@@ -349,6 +349,38 @@ span.flag img {
 	padding: 0px 0px 0px 11px;
 }
 
+/* league table: Foxtrick icons grouped after the team name, name truncated if needed */
+.ft-team-wrapper > .ft-popup-span,
+.ft-team-wrapper > .league-table-team-name {
+	flex-shrink: 1; /* HT sets flex-shrink: 0 on wrapper children */
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.ft-team-wrapper .ft-ownerless {
+	background-image: none;
+	padding: 0;
+}
+.ft-team-icons {
+	flex: none;
+	display: inline-flex;
+	align-items: center;
+	margin-inline-start: 3px;
+}
+.ft-team-icons .ft-ownerless-icon {
+	order: 1;
+	width: 11px;
+	height: 13px;
+	background: url("chrome://foxtrick/content/resources/img/ownerless.png") no-repeat 50% 50%;
+}
+.ft-team-icons .ft-staff-supporter {
+	order: 2;
+}
+.ft-team-icons .ft-staff-supported {
+	order: 3;
+}
+
 
 /* pop lists that are displayed when hovering */
 .ft-pop-up-container {
