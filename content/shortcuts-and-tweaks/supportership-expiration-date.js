@@ -50,6 +50,7 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 		dateEl.parentNode.insertBefore(daysEl, dateEl.nextSibling);
 
 		// feature highlight
+		Foxtrick.makeFeaturedElement(dateEl, this);
 		Foxtrick.makeFeaturedElement(daysEl, this);
 
 		let toggle = () => {
