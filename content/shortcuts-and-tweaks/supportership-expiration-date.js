@@ -133,7 +133,7 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 		let endDate = Foxtrick.util.time.addDaysToDate(now, days);
 		let printDate = Foxtrick.util.time.buildDate(endDate, { showTime: false });
 
-		let dateEl = Foxtrick.createFeaturedElement(doc, this, 'span');
+		let dateEl = doc.createElement('span');
 		dateEl.id = DATE_ID;
 		dateEl.textContent = printDate;
 		dateEl.title = Foxtrick.L10n.getString('SupportershipExpirationDate.showRemainingDayCount');
@@ -142,6 +142,10 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 
 		daysEl.title = Foxtrick.L10n.getString('SupportershipExpirationDate.showExpirationDate');
 		daysEl.style.cursor = 'pointer';
+
+		// feature highlight (after titles, so they are kept in the tooltip)
+		Foxtrick.makeFeaturedElement(dateEl, this);
+		Foxtrick.makeFeaturedElement(daysEl, this);
 
 		daysEl.parentNode.insertBefore(dateEl, daysEl.nextSibling);
 
