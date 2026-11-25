@@ -33,11 +33,18 @@ Foxtrick.modules.ShowFriendlyBooked = {
 
 			// see whether friendly booked
 			for (let row of rows) {
-				let teamCell = row.cells[3];
-				let teamLink = teamCell.querySelector('a').href;
-				let teamId = Foxtrick.util.id.getTeamIdFromUrl(teamLink);
+				/** @type {HTMLAnchorElement} */
+				let teamLink = row.querySelector('a.league-table-team-name');
+				// cup column is the first fixed column in both standard and simple layouts
+				/** @type {HTMLTableCellElement} */
+				let destCell = row.querySelector('td.league-table-fixed-column');
+				if (!teamLink || !destCell)
+					continue;
 
-				let destCell = row.cells[5];
+				let teamId = Foxtrick.util.id.getTeamIdFromUrl(teamLink.href);
+				if (!teamId)
+					continue;
+
 				destCell.textContent = Foxtrick.L10n.getString('status.loading.abbr');
 				destCell.title = Foxtrick.L10n.getString('status.loading');
 
