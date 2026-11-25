@@ -349,8 +349,9 @@ span.flag img {
 	padding: 0px 0px 0px 11px;
 }
 
-/* league table: Foxtrick icons grouped after the team name, name truncated if needed */
-.ft-team-wrapper > .ft-popup-span,
+/* league table: team name truncated if needed (also when wrapped by TeamPopupLinks),
+   Foxtrick icons grouped after it */
+.league-table-team-wrapper > .ft-popup-span,
 .ft-team-wrapper > .league-table-team-name {
 	flex-shrink: 1; /* HT sets flex-shrink: 0 on wrapper children */
 	min-width: 0;
