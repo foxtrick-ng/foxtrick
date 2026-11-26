@@ -987,6 +987,8 @@ Foxtrick.L10n.getLocaleByLeagueId = async function(leagueId) {
 			// string collection of localizations and screen-shot links
 			propertiesDefault: null,
 			properties: null,
+			// locale this.properties are loaded in (htLanguage pref may change later)
+			propertiesLocale: null,
 			propertiesByLocale: null,
 			screenshotsDefault: null,
 			screenshots: null,
@@ -1019,8 +1021,6 @@ Foxtrick.L10n.getLocaleByLeagueId = async function(leagueId) {
 				} catch { /* ignore */ }
 
 				const localeCode = Foxtrick.Prefs.getString('htLanguage');
-				// locale this.properties are loaded in (htLanguage pref may change later)
-				this.propertiesLocale = localeCode;
 
 				const l10nBundlePath = L10N_PATH + localeCode + '/foxtrick.properties';
 				try {
@@ -1036,6 +1036,10 @@ Foxtrick.L10n.getLocaleByLeagueId = async function(leagueId) {
 					Foxtrick.log('Use default properties for locale', localeCode);
 					this.properties = this.propertiesDefault;
 				}
+
+				// set only once this.properties are loaded: while loading they still
+				// hold the previous locale
+				this.propertiesLocale = localeCode;
 
 				try {
 					const localRule = this._getString(this.properties, 'pluralFormRuleID');
