@@ -71,7 +71,7 @@ Foxtrick.modules['SeasonStats'] = {
 		}, false);
 
 		var s = season;
-		for (var ls = local_season; ls > 0; --ls) {
+		for (var ls = local_season; ls >= 0 && s > 0; --ls) {
 			var option = doc.createElement('option');
 			option.setAttribute('value', s);
 			option.textContent = ls;
