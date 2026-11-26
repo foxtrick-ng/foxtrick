@@ -159,12 +159,15 @@ Foxtrick.modules.SupportersList = {
 				continue;
 
 			Foxtrick.addClass(link, cls);
-			let node = findParent(link);
+
+			// league table: group icons after the team name
+			let box = Foxtrick.Pages.Series.getTeamIconBox(link, module);
+			let node = box || findParent(link);
 			Foxtrick.addImage(doc, node, {
 				src: '/Img/Icons/transparent.gif',
 				title: title,
 				alt: title,
-			}, node.firstChild, imgCb);
+			}, box ? null : node.firstChild, imgCb);
 		}
 	},
 
