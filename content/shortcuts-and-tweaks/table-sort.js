@@ -230,7 +230,13 @@ Foxtrick.modules.TableSort = {
 				}
 
 				// insert sorted rows
-				rows[0].parentNode.append(...rows);
+				// keep non-sortable trailing rows (eg league message) at the bottom
+				let parent = rows[0].parentNode;
+				let after = table.rows[sortEnd] || null;
+				if (after && after.parentNode != parent)
+					after = null;
+				for (let row of rows)
+					parent.insertBefore(row, after);
 			}
 			catch (e) {
 				Foxtrick.log(e);
