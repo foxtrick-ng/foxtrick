@@ -163,13 +163,32 @@ Foxtrick.modules.MatchLineupTweaks = {
 
 		module.restoreBoxStates(doc);
 
-		let ngLive = doc.getElementById('ngLive');
-		if (Foxtrick.isPage(doc, 'matchesLive') && ngLive) {
+		if (Foxtrick.isPage(doc, 'matchesLive')) {
 			// entry.change skips Live, so we watch the Live app ourselves
 			// to catch tab switches; the callback is cheap and must not return true
-			Foxtrick.onChange(ngLive, function(doc) {
-				module.restoreBoxStates(doc);
-			});
+			let watchLive = function(ngLive) {
+				Foxtrick.onChange(ngLive, function(doc) {
+					module.restoreBoxStates(doc);
+				});
+			};
+
+			let ngLive = doc.getElementById('ngLive');
+			if (ngLive) {
+				watchLive(ngLive);
+			}
+			else {
+				// Angular renders #ngLive after modules run: wait for it, then stop waiting
+				let root = doc.getElementById('mainBody') || doc.body;
+				Foxtrick.onChange(root, function(doc) {
+					let ngLive = doc.getElementById('ngLive');
+					if (!ngLive)
+						return false;
+
+					module.restoreBoxStates(doc);
+					watchLive(ngLive);
+					return true;
+				});
+			}
 		}
 	},
 
