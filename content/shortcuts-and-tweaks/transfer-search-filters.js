@@ -102,6 +102,13 @@ Foxtrick.modules.TransferSearchFilters = {
 			_57: { $: `#${FTPRE}_Skills_form_min` },
 			_58: { $: `#${FTPRE}_Skills_form_max` },
 			_59: { $: `#${FTPRE}_hideOrdinary_check` }, // deprecated
+
+			_60: { $: `#${MAIN}ddlSkillSearchType` },
+			_61: { $: `#${MAIN}ddlContinent` },
+			_62: { $: `#${MAIN}txtSalaryMin` },
+			_63: { $: `#${MAIN}txtSalaryMax` },
+			_64: { $: `#${MAIN}txtTransferCompareAvgMin` },
+			_65: { $: `#${MAIN}txtTransferCompareAvgMax` },
 		};
 		var NAME_PROMPT = Foxtrick.L10n.getString('TransferSearchFilters.enterName');
 		var DELETE_PROMPT = Foxtrick.L10n.getString('TransferSearchFilters.deleteFilter.ask');
