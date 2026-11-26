@@ -11,6 +11,57 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.SHORTCUTS_AND_TWEAKS,
 	PAGES: ['dashboard', 'office'],
 
+	/**
+	 * Office widget (Angular): HT shows the expiration date ('expires: <date>'),
+	 * add a sibling with the remaining day count and toggle between them.
+	 * The original element is owned by Angular, so it is left in place.
+	 * @param {document}    doc
+	 * @param {HTMLElement} dateEl .tier-expiration
+	 */
+	handleWidget: function(doc, dateEl) {
+		const MSECS_IN_DAY = 24 * 60 * 60 * 1000;
+
+		let endDate = Foxtrick.util.time.getDateFromText(dateEl.textContent, undefined, true);
+		if (!endDate)
+			return;
+
+		let now = Foxtrick.util.time.getDate(doc);
+		if (!now) {
+			Foxtrick.log('User time missing');
+			return;
+		}
+
+		// count like HT's 'xyz days left' (old box, ArenaHub): without the expiration day
+		Foxtrick.util.time.setMidnight(now);
+		let days = Math.round((endDate.getTime() - now.getTime()) / MSECS_IN_DAY) - 1;
+
+		// shallow clone keeps Angular's scoped-style attribute and classes
+		let daysEl = /** @type {HTMLElement} */ (dateEl.cloneNode(false));
+		daysEl.textContent = days + ' ' + Foxtrick.L10n.getString('datetimestrings.days', days);
+		Foxtrick.addClass(daysEl, 'hidden');
+
+		dateEl.title =
+			Foxtrick.L10n.getString('SupportershipExpirationDate.showRemainingDayCount');
+		daysEl.title =
+			Foxtrick.L10n.getString('SupportershipExpirationDate.showExpirationDate');
+		dateEl.style.cursor = 'pointer';
+		daysEl.style.cursor = 'pointer';
+
+		dateEl.parentNode.insertBefore(daysEl, dateEl.nextSibling);
+
+		// feature highlight
+		Foxtrick.makeFeaturedElement(dateEl, this);
+		Foxtrick.makeFeaturedElement(daysEl, this);
+
+		let toggle = () => {
+			Foxtrick.toggleClass(dateEl, 'hidden');
+			Foxtrick.toggleClass(daysEl, 'hidden');
+		};
+
+		Foxtrick.onClick(dateEl, toggle);
+		Foxtrick.onClick(daysEl, toggle);
+	},
+
 	/** @param {document} doc */
 	run: function(doc) {
 		if (!Foxtrick.util.layout.isSupporter(doc))
@@ -22,6 +73,11 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 			packageType = doc.getElementById('ctl00_ctl00_CPContent_CPSidebar_ucMyAccount_pnlSubscriptionPackageType');
 		else
 			packageType = doc.getElementById('ctl00_ctl00_CPContent_CPMain_ucMyOfficeCalendar_ucMyAccount_pnlSubscriptionPackageType');
+
+		if (Foxtrick.isPage(doc, 'office')) {
+			Foxtrick.util.officeWidgets.onWidget(doc, 'ht-widget-myaccount .tier-expiration',
+				el => this.handleWidget(doc, el));
+		}
 
 		if (!packageType)
 			return;
