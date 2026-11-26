@@ -28,6 +28,7 @@ forum/staff-marker.js
 information-aggregation/cross-table.js
 information-aggregation/current-transfers.js
 information-aggregation/election-table.js
+information-aggregation/extended-club-details.js
 information-aggregation/extended-player-details.js
 information-aggregation/extra-player-info.js
 information-aggregation/history-stats.js
