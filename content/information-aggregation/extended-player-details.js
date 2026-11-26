@@ -119,7 +119,7 @@ Foxtrick.modules['ExtendedPlayerDetails'] = {
 
 		// exact age (years + days) is needed to compute the age at injury date
 		/** @type {CHPPParams} */
-		let args = [['file', 'playerdetails'], ['version', '2.1'], ['playerId', id]];
+		let args = [['file', 'playerdetails'], ['version', '3.2'], ['playerId', id]];
 		Foxtrick.util.api.retrieve(doc, args, { cache: 'session' }, (xml, errorText) => {
 			if (!xml || errorText) {
 				Foxtrick.log(errorText);
