@@ -1,6 +1,7 @@
 /**
  * extended-club-details.js
- * Adds extra club information (short team names) to the manager, club and match pages
+ * Adds extra club information (short team names as text or tooltip)
+ * to the manager, club, match and live pages
  * @author LA-maczek
  */
 
@@ -10,6 +11,10 @@ Foxtrick.modules.ExtendedClubDetails = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.INFORMATION_AGGREGATION,
 	PAGES: ['managerPage', 'teamPage', 'match', 'matchesLive'],
 	OPTIONS: ['ShortTeamName'],
+	CSS: Foxtrick.InternalPath + 'resources/css/extended-club-details.css',
+
+	/** links to senior club pages (both URL forms used by HT) */
+	TEAM_LINK_SELECTOR: 'a[href*="/Club/?TeamID="], a[href*="/Club/Default.aspx?TeamID="]',
 
 	/** @param {document} doc */
 	run: function(doc) {
@@ -70,11 +75,18 @@ Foxtrick.modules.ExtendedClubDetails = {
 			let teamNames = new Map();
 			for (let team of Foxtrick.toArray(xml.getElementsByTagName('Team'))) {
 				let id = xml.num('TeamID', team);
-				let shortName = xml.text('ShortTeamName', team);
-				if (id && shortName) {
+				let shortName = (xml.text('ShortTeamName', team) || '').trim();
+				let teamName = xml.text('TeamName', team) || '';
+				if (!id)
+					continue;
+
+				// keep all team names: the manager page header is matched by name
+				// and must not fall back to a shorter name of another team
+				teamNames.set(id, teamName);
+
+				// show the short name only if it differs from the full team name
+				if (shortName && shortName.toLowerCase() !== teamName.trim().toLowerCase())
 					shortNames.set(id, shortName);
-					teamNames.set(id, xml.text('TeamName', team));
-				}
 			}
 			if (shortNames.size)
 				callback(shortNames, teamNames);
@@ -82,7 +94,8 @@ Foxtrick.modules.ExtendedClubDetails = {
 	},
 
 	/**
-	 * Club page: append "(ShortTeamName)" after the team name in the page header and in div.teamNameTitle.
+	 * Club page: show ShortTeamName as a tooltip on the team name in the page header
+	 * (breadcrumbs) and in div.teamNameTitle (long names must not get any longer).
 	 * @param {document} doc
 	 */
 	addShortTeamNameHeader: function(doc) {
@@ -97,79 +110,91 @@ Foxtrick.modules.ExtendedClubDetails = {
 			if (!shortName)
 				return;
 
-			let createSpan = () => {
-				let span = Foxtrick.createFeaturedElement(doc, module, 'span');
-				span.className = 'ft-short-team-name';
-				span.textContent = ` (${shortName})`;
-				return span;
-			};
-
 			let teamName = Foxtrick.Pages.All.getTeamNameFromBC(doc);
+
+			Foxtrick.stopObserver(doc);
 
 			// 1) team name link in the page header (breadcrumbs)
 			let links = Foxtrick.Pages.All.getBreadCrumbs(doc) || [];
-			let link = Foxtrick.nth(a => Foxtrick.util.id.getTeamIdFromUrl(a.href) === teamId, links);
-			if (link && !link.dataset.ftShortName) {
-				link.dataset.ftShortName = '1';
-				Foxtrick.insertAfter(createSpan(), link);
-			}
+			let link = Foxtrick.nth(a => Foxtrick.util.id.getTeamIdFromUrl(a.href) === teamId,
+				links);
+			if (link)
+				module.addTooltip(link, shortName);
 
 			// 2) team name in div.teamNameTitle
 			let title = doc.querySelector('#mainBody div.teamNameTitle');
 			if (title)
-				module.addToTeamNameTitle(doc, title, teamName, shortName);
+				module.addTooltipToTeamName(doc, title, teamName, shortName);
+
+			Foxtrick.startObserver(doc);
 		});
 	},
 
 	/**
-	 * Append a smaller "(ShortTeamName)" right after the team name inside an element
-	 * (div.teamNameTitle on the club page, header div.boxHead on the manager page).
-	 * @param {document} doc
-	 * @param {Element}  title    element containing the team name
-	 * @param {string}   teamName
-	 * @param {string}   shortName
-	 * @param {boolean}  [compact=true] smaller font + gap before the following country flag
-	 *                   (club page); false = same font, no gap (manager page header)
+	 * Add ShortTeamName to the tooltip (title) of an element and mark it as featured.
+	 * An existing title is kept.
+	 * @param {HTMLElement} el
+	 * @param {string}      shortName
 	 */
-	addToTeamNameTitle: function(doc, title, teamName, shortName, compact = true) {
+	addTooltip: function(el, shortName) {
 		const module = this;
 
-		if (title.dataset.ftShortName)
+		if (el.dataset.ftShortName)
 			return;
-		title.dataset.ftShortName = '1';
+		el.dataset.ftShortName = '1';
 
-		// HT styles <span>s inside .teamNameTitle (they changed size/position of our
-		// span and of a wrapper span), so use an unstyled <small> right after the name
-		let walker = doc.createTreeWalker(title, NodeFilter.SHOW_TEXT);
-		let nameNode = null;
-		for (let n = walker.nextNode(); n; n = walker.nextNode()) {
-			if (teamName ? n.textContent.includes(teamName) : n.textContent.trim()) {
-				nameNode = n;
-				break;
+		el.title = el.title ? `${el.title} (${shortName})` : shortName;
+		Foxtrick.makeFeaturedElement(el, module);
+	},
+
+	/**
+	 * Show ShortTeamName as a tooltip on the team name text inside an element
+	 * (div.teamNameTitle on the club page, header div.boxHead on the manager page).
+	 * The name text is wrapped in a span so that the tooltip covers only the name;
+	 * if the name cannot be found, the tooltip is set on the whole element.
+	 * @param {document}    doc
+	 * @param {HTMLElement} container element containing the team name
+	 * @param {string}      teamName
+	 * @param {string}      shortName
+	 */
+	addTooltipToTeamName: function(doc, container, teamName, shortName) {
+		const module = this;
+
+		if (container.dataset.ftShortName)
+			return;
+
+		let textNode = null;
+		if (teamName) {
+			let walker = doc.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+			for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+				if (n.textContent.includes(teamName)) {
+					textNode = n;
+					break;
+				}
 			}
 		}
 
-		let small = Foxtrick.createFeaturedElement(doc, module, 'small');
-		small.className = 'ft-short-team-name';
-		small.textContent = ` (${shortName})`;
-		Object.assign(small.style, {
-			fontSize: compact ? '0.75em' : 'inherit',
-			display: 'inline',
-			verticalAlign: 'baseline',
-			position: 'static',
-			float: 'none',
-			// keep distance from the country flag that follows the name
-			marginRight: compact ? '0.5em' : '0',
-		});
-		if (nameNode)
-			Foxtrick.insertAfter(small, nameNode);
-		else
-			title.appendChild(small);
+		if (!textNode) {
+			module.addTooltip(container, shortName);
+			return;
+		}
+		container.dataset.ftShortName = '1';
+
+		// isolate the team name in its own text node
+		let nameNode = textNode.splitText(textNode.textContent.indexOf(teamName));
+		nameNode.splitText(teamName.length);
+
+		// HT styles <span>s inside .teamNameTitle; extended-club-details.css resets that
+		let span = doc.createElement('span');
+		span.className = 'ft-short-team-name-title';
+		nameNode.parentNode.replaceChild(span, nameNode);
+		span.appendChild(nameNode);
+		module.addTooltip(span, shortName);
 	},
 
 	/**
-	 * Manager page: append "(ShortTeamName)" after each team name owned by the manager
-	 * (team links and the page header box "TeamName » ManagerName").
+	 * Manager page: append "(ShortTeamName)" after each team link owned by the manager;
+	 * the page header box "TeamName » ManagerName" gets a tooltip instead.
 	 * One request returns all teams of the user.
 	 * @param {document} doc
 	 */
@@ -188,8 +213,8 @@ Foxtrick.modules.ExtendedClubDetails = {
 		module.fetchShortNames(doc, idParam, (shortNames, teamNames) => {
 			Foxtrick.stopObserver(doc);
 
-			// main page header box "TeamName » ManagerName" (div.boxHead outside #mainBody),
-			// same presentation as on the club page. Sidebar boxes (team menu) are skipped:
+			// main page header box "TeamName » ManagerName" (div.boxHead outside #mainBody):
+			// tooltip as on the club page. Sidebar boxes (team menu) are skipped:
 			// only the header with the "»" separator is used.
 			// Match by team name, longest first (one name may contain another).
 			let byLength = [...teamNames.entries()].sort((a, b) => b[1].length - a[1].length);
@@ -198,11 +223,11 @@ Foxtrick.modules.ExtendedClubDetails = {
 			if (header) {
 				let text = header.textContent.split('»')[0];
 				let match = byLength.find(([, name]) => name && text.includes(name));
-				if (match)
-					module.addToTeamNameTitle(doc, header, match[1], shortNames.get(match[0]), false);
+				if (match && shortNames.has(match[0]))
+					module.addTooltipToTeamName(doc, header, match[1], shortNames.get(match[0]));
 			}
 
-			let links = main.querySelectorAll('a[href*="/Club/?TeamID="], a[href*="/Club/Default.aspx?TeamID="]');
+			let links = main.querySelectorAll(module.TEAM_LINK_SELECTOR);
 			for (let link of Foxtrick.toArray(links)) {
 				// skip already processed and links inside box headers (handled above)
 				if (link.dataset.ftShortName || link.closest('div.boxHead'))
@@ -218,9 +243,7 @@ Foxtrick.modules.ExtendedClubDetails = {
 				let span = Foxtrick.createFeaturedElement(doc, module, 'span');
 				span.className = 'ft-short-team-name';
 				span.textContent = ` (${shortName})`;
-				Foxtrick.stopObserver(doc);
 				Foxtrick.insertAfter(span, link);
-				Foxtrick.startObserver(doc);
 			}
 
 			Foxtrick.startObserver(doc);
@@ -228,7 +251,8 @@ Foxtrick.modules.ExtendedClubDetails = {
 	},
 
 	/**
-	 * Match / Live page: show "(ShortTeamName)" on its own line under each team name in div.box.matchinfo.
+	 * Match / Live page: show "(ShortTeamName)" on its own line under each team name
+	 * in div.box.matchinfo.
 	 * Senior teams only (links /Club/?TeamID=); one teamdetails request per team (session cache).
 	 * @param {document} doc
 	 */
@@ -241,7 +265,8 @@ Foxtrick.modules.ExtendedClubDetails = {
 		if (!boxes.length)
 			return;
 
-		let links = Foxtrick.toArray(boxes).flatMap(box => Foxtrick.toArray(box.querySelectorAll('a[href*="/Club/?TeamID="], a[href*="/Club/Default.aspx?TeamID="]')))
+		let links = Foxtrick.toArray(boxes)
+			.flatMap(box => Foxtrick.toArray(box.querySelectorAll(module.TEAM_LINK_SELECTOR)))
 			.filter(a => a.textContent.trim() && !a.dataset.ftShortName);
 
 		for (let link of links) {

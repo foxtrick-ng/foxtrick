@@ -90,6 +90,8 @@ module.EmbedMedia.EmbedVimeoVideos.enabled
 module.EmbedMedia.EmbedYoutubeVideos.enabled
 module.EmbedMedia.ReplaceLinksByTitles.enabled
 module.EmbedMedia.enabled
+module.ExtendedClubDetails.ShortTeamName.enabled
+module.ExtendedClubDetails.enabled
 module.ExtendedPlayerDetails.Language.enabled
 module.ExtendedPlayerDetails.enabled
 module.ExtendedPlayerDetails.value

@@ -1,0 +1,14 @@
+/* team name wrapped for the short name tooltip: HT styles <span>s inside .teamNameTitle /
+   .boxHead, so make the wrapper look exactly like the surrounding text */
+span.ft-short-team-name-title.ft-dummy {
+	display: inline;
+	position: static;
+	float: none;
+	vertical-align: baseline;
+	font: inherit;
+	color: inherit;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+}
