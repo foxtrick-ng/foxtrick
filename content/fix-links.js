@@ -141,6 +141,10 @@ Foxtrick.modules.FixLinks = {
 
 		/** @param {HTMLAnchorElement} link */
 		var saveParams = function(link) {
+			// skip non-navigational links, e.g. HT's javascript:void(0) toggles
+			if (!/^https?:$/.test(link.protocol))
+				return;
+
 			let url = link.href;
 			for (let p in PARAMS_TO_SAVE) {
 				if (PARAMS_TO_SAVE[p])
