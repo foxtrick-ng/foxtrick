@@ -17,6 +17,8 @@ Foxtrick.modules.MatchLineupTweaks = {
 		'AddSubstiutionInfo',
 		'HighlightMissing',
 		'GatherStaminaData',
+		'RememberPitchState',
+		'RememberKeyEventsState',
 	],
 	OPTIONS_CSS: [
 		null, null,
@@ -38,11 +40,176 @@ Foxtrick.modules.MatchLineupTweaks = {
 		// causing display to be broken on first load
 		this.registerListener(doc);
 
+		this.initBoxStates(doc);
+
 		if (!Foxtrick.Pages.Match.hasRatingsTabs(doc))
 			return;
 
 		if (Foxtrick.Prefs.isModuleOptionEnabled('MatchLineupTweaks', 'GatherStaminaData'))
 			this.gatherStaminaData(doc);
+	},
+
+	/** @param {document} doc */
+	change: function(doc) {
+		// HT renders its boxes asynchronously on the match page
+		this.restoreBoxStates(doc);
+	},
+
+	/**
+	 * Native HT box toggles whose state can be remembered in Foxtrick prefs,
+	 * so that it is shared across all HT servers (www, wwwNN, stage)
+	 * and survives browser restarts (HT keeps it in a session cookie only).
+	 *
+	 * Match and Live share the same HT controls and the same HT session state,
+	 * so each toggle covers both pages.
+	 *
+	 * find(doc) returns the toggle icon; its class is the toggle state.
+	 *
+	 * @type {{name: string, pages: string[], option: string, states: string[],
+	 *         find: function(document):Element}[]}
+	 */
+	BOX_TOGGLES: [
+		{
+			name: 'pitch',
+			pages: ['match', 'matchesLive'],
+			option: 'RememberPitchState',
+			states: ['icon-caret-up', 'icon-caret-down'],
+			find: function(doc) {
+				// pitch box header holds the view controls next to the toggle
+				let controls = doc.querySelector('.header-right > .htbox-content-controls');
+				if (!controls)
+					return null;
+
+				return controls.parentElement.querySelector(
+					':scope > a > i.icon-caret-up, :scope > a > i.icon-caret-down');
+			},
+		},
+		{
+			name: 'keyEvents',
+			pages: ['match', 'matchesLive'],
+			option: 'RememberKeyEventsState',
+			states: ['icon-expand', 'icon-shrink'],
+			find: doc => Foxtrick.modules.MatchLineupTweaks.findKeyEventsToggle(doc),
+		},
+	],
+
+	/**
+	 * Find the icon of the extended/compact key events toggle (match and live)
+	 * @param  {document} doc
+	 * @return {Element}
+	 */
+	findKeyEventsToggle: function(doc) {
+		return doc.querySelector('.live-highlights > .boxHead .header-right > a > i.icon-expand, ' +
+			'.live-highlights > .boxHead .header-right > a > i.icon-shrink');
+	},
+
+	/**
+	 * Get box toggles enabled for the current page
+	 * @param  {document} doc
+	 * @return {object[]}
+	 */
+	getActiveBoxToggles: function(doc) {
+		const module = this;
+		return module.BOX_TOGGLES.filter(t => Foxtrick.isPage(doc, t.pages) &&
+			Foxtrick.Prefs.isModuleOptionEnabled(module, t.option));
+	},
+
+	/**
+	 * Get current state (icon class) of a box toggle icon
+	 * @param  {Element}  icon
+	 * @param  {string[]} states
+	 * @return {string}
+	 */
+	getBoxToggleState: function(icon, states) {
+		return states.find(s => icon.classList.contains(s)) || null;
+	},
+
+	/**
+	 * Save toggle states on user clicks and restore saved states
+	 * @param {document} doc
+	 */
+	initBoxStates: function(doc) {
+		const module = this;
+
+		let toggles = module.getActiveBoxToggles(doc);
+		if (!toggles.length || module.boxStatesDoc === doc)
+			return;
+
+		module.boxStatesDoc = doc;
+
+		// capture phase: read the state before HT handles the click
+		doc.addEventListener('click', function(ev) {
+			if (module.restoringBoxState)
+				return;
+
+			let target = /** @type {Element} */ (ev.target);
+			if (!target || typeof target.closest !== 'function')
+				return;
+
+			for (let toggle of toggles) {
+				let icon = toggle.find(doc);
+				if (!icon || !icon.parentElement.contains(target))
+					continue;
+
+				let current = module.getBoxToggleState(icon, toggle.states);
+				if (!current)
+					return;
+
+				let next = toggle.states.find(s => s != current);
+				Foxtrick.Prefs.setString('MatchLineupTweaks.boxState.' + toggle.name, next);
+				return;
+			}
+		}, true);
+
+		module.restoreBoxStates(doc);
+
+		let ngLive = doc.getElementById('ngLive');
+		if (Foxtrick.isPage(doc, 'matchesLive') && ngLive) {
+			// entry.change skips Live, so we watch the Live app ourselves
+			// to catch tab switches; the callback is cheap and must not return true
+			Foxtrick.onChange(ngLive, function(doc) {
+				module.restoreBoxStates(doc);
+			});
+		}
+	},
+
+	/**
+	 * Click native HT toggles whose state differs from the saved one.
+	 * Each toggle link is clicked at most once to prevent loops.
+	 * @param {document} doc
+	 */
+	restoreBoxStates: function(doc) {
+		const module = this;
+
+		if (!module.restoredBoxToggles)
+			module.restoredBoxToggles = new WeakSet();
+
+		for (let toggle of module.getActiveBoxToggles(doc)) {
+			let saved = Foxtrick.Prefs.getString('MatchLineupTweaks.boxState.' + toggle.name);
+			if (!saved || toggle.states.indexOf(saved) == -1)
+				continue;
+
+			let icon = toggle.find(doc);
+			if (!icon)
+				continue;
+
+			let link = /** @type {HTMLAnchorElement} */ (icon.parentElement);
+			if (module.restoredBoxToggles.has(link))
+				continue;
+
+			module.restoredBoxToggles.add(link);
+
+			let current = module.getBoxToggleState(icon, toggle.states);
+			if (current && current != saved) {
+				module.restoringBoxState = true;
+				try {
+					link.click();
+				}
+				finally {
+					module.restoringBoxState = false;
+				}
+			}
+		}
 	},
 
 	/**

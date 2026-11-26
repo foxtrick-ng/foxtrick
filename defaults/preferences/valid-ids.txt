@@ -3,6 +3,7 @@ CopyPostingStyle
 Currency.Code
 DisplayHTMLDebugOutput
 HeaderToggle
+MatchLineupTweaks.boxState
 MatchSimulator.attVsDefOn
 MatchSimulator.realProbabilitiesOn
 MatchSimulator.staminaDiscountOn
@@ -377,6 +378,8 @@ module.MatchLineupTweaks.GatherStaminaData.enabled
 module.MatchLineupTweaks.HighlighEventPlayers.enabled
 module.MatchLineupTweaks.HighlightMissing.enabled
 module.MatchLineupTweaks.InvertSplit.enabled
+module.MatchLineupTweaks.RememberKeyEventsState.enabled
+module.MatchLineupTweaks.RememberPitchState.enabled
 module.MatchLineupTweaks.ShowFaces.enabled
 module.MatchLineupTweaks.ShowSpecialties.enabled
 module.MatchLineupTweaks.SplitLineup.enabled

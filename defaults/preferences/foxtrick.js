@@ -257,6 +257,8 @@ pref("extensions.foxtrick.prefs.module.MatchLineupTweaks.GatherStaminaData.enabl
 pref("extensions.foxtrick.prefs.module.MatchLineupTweaks.HighlighEventPlayers.enabled", true);
 pref("extensions.foxtrick.prefs.module.MatchLineupTweaks.HighlightMissing.enabled", true);
 pref("extensions.foxtrick.prefs.module.MatchLineupTweaks.InvertSplit.enabled",true);
+pref("extensions.foxtrick.prefs.module.MatchLineupTweaks.RememberKeyEventsState.enabled", false);
+pref("extensions.foxtrick.prefs.module.MatchLineupTweaks.RememberPitchState.enabled", false);
 pref("extensions.foxtrick.prefs.module.MatchLineupTweaks.ShowFaces.enabled", true);
 pref("extensions.foxtrick.prefs.module.MatchLineupTweaks.ShowSpecialties.enabled", true);
 pref("extensions.foxtrick.prefs.module.MatchLineupTweaks.SplitLineup.enabled", true);
