@@ -421,7 +421,10 @@ Foxtrick.Predict.effectiveSkills = function(skills, attrs, options) {
 
 	let loyalty = attrs.loyalty;
 	let mcb = !!attrs.motherClubBonus;
-	let tl = attrs.transferListed; // loyalty can be undefined in transfer pages
+	// transferListed means someone else's listed player: the buyer won't get the bonus
+	// (own listed players keep their loyalty until sold, callers pass false for them)
+	// loyalty can be undefined in transfer pages
+	let tl = attrs.transferListed;
 	if (opts.loyalty && typeof loyalty !== 'undefined' && !tl) {
 		let bonus = Foxtrick.Predict.loyaltyBonus(loyalty, mcb);
 		for (let skill in ret) {

@@ -1636,7 +1636,9 @@ Foxtrick.Pages.Players.getPlayerList = function(doc, callback, options) {
 			return;
 
 		for (let player of playerList) {
-			let contributions = Foxtrick.Pages.Player.getContributions(player.skills, player);
+			// own players keep their loyalty until sold, even when transfer-listed
+			let attrs = Object.assign({}, player, { transferListed: false });
+			let contributions = Foxtrick.Pages.Player.getContributions(player.skills, attrs);
 			if (!contributions)
 				continue;
 
