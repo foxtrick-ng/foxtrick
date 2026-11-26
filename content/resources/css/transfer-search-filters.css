@@ -1,3 +1,24 @@
 #ft-transfer-search-filter-new {
 	margin-bottom: 1em;
 }
+
+#ft-transfer-search-filter-table .ft-filter-active .ft-link {
+	font-weight: bold;
+}
+
+#ft-transfer-search-filter-table .ft-filter-save {
+	display: none;
+	width: 12px;
+	height: 12px;
+	margin-top: 2px;
+	cursor: pointer;
+	background-image: url('chrome://foxtrick/content/resources/img/tick_small.png');
+}
+
+#ft-transfer-search-filter-table .ft-filter-active .ft-filter-save {
+	display: block;
+}
+
+#ft-transfer-search-filter-table .ft-filter-save:hover {
+	background-image: url('chrome://foxtrick/content/resources/img/tickRed_small.png');
+}
