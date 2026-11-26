@@ -66,6 +66,7 @@ Most utilities are arranged in folders in `content`:
 	* [math.js](/content/util/math.js) for various calculations and predictions
 	* [misc.js](/content/util/misc.js) contains a mixed bag of helpers
 	* [note.js](/content/util/note.js) to add inline notification messages
+	* [office-widgets.js](/content/util/office-widgets.js) to handle Angular widgets on the office page
 	* [session-store.js](/content/util/session-store.js) to store temporary data
 	* [time.js](/content/util/time.js) for working with time
 * Additionally some core features are defined in:

@@ -160,6 +160,7 @@ Foxtrick.loader.background.browserLoad = async function() {
 
 					propertiesDefault: Foxtrick.L10n.propertiesDefault,
 					properties: Foxtrick.L10n.properties,
+					propertiesLocale: Foxtrick.L10n.propertiesLocale,
 					screenshotsDefault: Foxtrick.L10n.screenshotsDefault,
 					screenshots: Foxtrick.L10n.screenshots,
 
@@ -525,6 +526,7 @@ if (Foxtrick.arch == 'Sandboxed')
  * @prop {Record<string, *>} prefsChromeDefault
  * @prop {Record<string, string>} propertiesDefault
  * @prop {Record<string, string>} properties
+ * @prop {string} propertiesLocale locale properties are loaded in
  * @prop {string} screenshotsDefault
  * @prop {string} screenshots
  * @prop {number} plForm

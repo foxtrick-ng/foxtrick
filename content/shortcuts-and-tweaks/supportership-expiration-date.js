@@ -11,6 +11,71 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 	MODULE_CATEGORY: Foxtrick.moduleCategories.SHORTCUTS_AND_TWEAKS,
 	PAGES: ['dashboard', 'office'],
 
+	/**
+	 * Office widget (Angular): HT shows the expiration date ('expires: <date>'),
+	 * add a sibling with the remaining day count and toggle between them.
+	 * The original element is owned by Angular, so it is left in place.
+	 * @param {document}    doc
+	 * @param {HTMLElement} dateEl .tier-expiration
+	 */
+	handleWidget: async function(doc, dateEl) {
+		const { MSECS_IN_DAY } = Foxtrick.util.time;
+
+		let endDate = Foxtrick.util.time.getDateFromText(dateEl.textContent, undefined, true);
+		if (!endDate)
+			return;
+
+		let now = Foxtrick.util.time.getDate(doc);
+		if (!now) {
+			Foxtrick.log('User time missing');
+			return;
+		}
+
+		// count like HT's 'xyz days left' (old box, ArenaHub): without the expiration day
+		Foxtrick.util.time.setMidnight(now);
+		let days = Math.max(Math.round((endDate.getTime() - now.getTime()) / MSECS_IN_DAY) - 1, 0);
+
+		// use the language HT renders this page in: after switching language
+		// (e.g. Language Switcher widget) content l10n still holds the previous one
+		let metaLang = Foxtrick.modules.ReadHtPrefs.readLanguageFromMetaTag(doc);
+		let locale = metaLang && Foxtrick.L10n.htMapping[metaLang] ||
+			Foxtrick.Prefs.getString('htLanguage');
+
+		let [daysWord, showDays, showDate] = await Promise.all([
+			Foxtrick.L10n.getStringInLocale('datetimestrings.days', locale, days),
+			Foxtrick.L10n.getStringInLocale('SupportershipExpirationDate.showRemainingDayCount', locale),
+			Foxtrick.L10n.getStringInLocale('SupportershipExpirationDate.showExpirationDate', locale),
+		]);
+
+		// Angular may have re-rendered the widget while waiting for l10n
+		if (!dateEl.isConnected)
+			return;
+
+		// shallow clone keeps Angular's scoped-style attribute and classes
+		let daysEl = /** @type {HTMLElement} */ (dateEl.cloneNode(false));
+		daysEl.textContent = days + ' ' + daysWord;
+		Foxtrick.addClass(daysEl, 'hidden');
+
+		dateEl.title = showDays;
+		daysEl.title = showDate;
+		dateEl.style.cursor = 'pointer';
+		daysEl.style.cursor = 'pointer';
+
+		dateEl.parentNode.insertBefore(daysEl, dateEl.nextSibling);
+
+		// feature highlight
+		Foxtrick.makeFeaturedElement(dateEl, this);
+		Foxtrick.makeFeaturedElement(daysEl, this);
+
+		let toggle = () => {
+			Foxtrick.toggleClass(dateEl, 'hidden');
+			Foxtrick.toggleClass(daysEl, 'hidden');
+		};
+
+		Foxtrick.onClick(dateEl, toggle);
+		Foxtrick.onClick(daysEl, toggle);
+	},
+
 	/** @param {document} doc */
 	run: function(doc) {
 		if (!Foxtrick.util.layout.isSupporter(doc))
@@ -22,6 +87,12 @@ Foxtrick.modules['SupportershipExpirationDate'] = {
 			packageType = doc.getElementById('ctl00_ctl00_CPContent_CPSidebar_ucMyAccount_pnlSubscriptionPackageType');
 		else
 			packageType = doc.getElementById('ctl00_ctl00_CPContent_CPMain_ucMyOfficeCalendar_ucMyAccount_pnlSubscriptionPackageType');
+
+		if (Foxtrick.isPage(doc, 'office')) {
+			Foxtrick.util.officeWidgets.onWidget(doc, 'ht-widget-myaccount .tier-expiration',
+				// async: errors are not caught by onWidget
+				el => this.handleWidget(doc, el).catch(e => Foxtrick.log(e)));
+		}
 
 		if (!packageType)
 			return;

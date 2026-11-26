@@ -987,6 +987,8 @@ Foxtrick.L10n.getLocaleByLeagueId = async function(leagueId) {
 			// string collection of localizations and screen-shot links
 			propertiesDefault: null,
 			properties: null,
+			// locale this.properties are loaded in (htLanguage pref may change later)
+			propertiesLocale: null,
 			propertiesByLocale: null,
 			screenshotsDefault: null,
 			screenshots: null,
@@ -1034,6 +1036,10 @@ Foxtrick.L10n.getLocaleByLeagueId = async function(leagueId) {
 					Foxtrick.log('Use default properties for locale', localeCode);
 					this.properties = this.propertiesDefault;
 				}
+
+				// set only once this.properties are loaded: while loading they still
+				// hold the previous locale
+				this.propertiesLocale = localeCode;
 
 				try {
 					const localRule = this._getString(this.properties, 'pluralFormRuleID');
@@ -1139,8 +1145,10 @@ Foxtrick.L10n.getLocaleByLeagueId = async function(leagueId) {
 						this.plFormByLocale = {};
 
 					if (!this.propertiesByLocale[localeCode]) {
-						const currentLocale = Foxtrick.Prefs.getString('htLanguage');
-						if (this.properties && localeCode === currentLocale) {
+						// compare with the locale properties were loaded in, not the current
+						// htLanguage pref: after a language switch ReadHtPrefs saves the new
+						// language while this.properties still hold the previous one
+						if (this.properties && localeCode === this.propertiesLocale) {
 							this.propertiesByLocale[localeCode] = this.properties;
 							this.plFormByLocale[localeCode] = this.plForm;
 						} else if (Foxtrick.context === 'content') {

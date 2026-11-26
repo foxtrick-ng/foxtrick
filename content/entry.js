@@ -100,7 +100,11 @@ Foxtrick.entry.contentScriptInit = function(data) {
 		Foxtrick.L10n.plFormDefault = data.plFormDefault;
 		Foxtrick.L10n.plForm = data.plForm;
 
-		let localeCode = Foxtrick.Prefs.getString('htLanguage');
+		// locale of data.properties as loaded by the background, not the htLanguage
+		// pref: right after a language switch the pref is already new while
+		// the background may still be loading the new properties
+		let localeCode = data.propertiesLocale;
+		Foxtrick.L10n.propertiesLocale = localeCode;
 		Foxtrick.L10n.propertiesByLocale = {};
 		Foxtrick.L10n.plFormByLocale = {};
 		if (localeCode) {
