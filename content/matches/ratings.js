@@ -20,9 +20,13 @@ Foxtrick.modules['Ratings'] = {
 	},
 	run: function(doc) {
 
-		if (Foxtrick.Pages.Match.isPrematch(doc) || Foxtrick.Pages.Match.inProgress(doc) ||
-		    Foxtrick.Pages.Match.isNewLive(doc))
+		if (Foxtrick.Pages.Match.isPrematch(doc) || Foxtrick.Pages.Match.inProgress(doc))
 			return;
+
+		if (Foxtrick.Pages.Match.isNewLive(doc)) {
+			this.runNg(doc);
+			return;
+		}
 
 		var ratingstable = Foxtrick.Pages.Match.getRatingsTable(doc);
 		if (!ratingstable || Foxtrick.Pages.Match.isWalkOver(ratingstable))
@@ -70,54 +74,146 @@ Foxtrick.modules['Ratings'] = {
 
 			for (var i = 0; i <= twoTeams; i++) {
 				var cell = row.insertCell(i + 1);
+				this.fillRatingCell(doc, cell, selectedRating, i, mf, rd, cd, ld, ra, ca, la,
+				                    ta, tl, defenceLevel, attackLevel);
+			}
+		}
+	},
+	/**
+	 * Fill one team's cell with the selected rating.
+	 * Shared by classic table and ng (non-classic) match report.
+	 */
+	fillRatingCell: function(doc, cell, selectedRating, i, mf, rd, cd, ld, ra, ca, la, ta, tl,
+	                         defenceLevel, attackLevel) {
+		this.insertRatingsDet(doc, cell, this.ratingDefs[selectedRating], 'defence',
+				 Foxtrick.L10n.getString('match.ratings.defence'), defenceLevel[i]);
+		this.insertRatingsDet(doc, cell, this.ratingDefs[selectedRating], 'special',
+				 Foxtrick.L10n.getString('match.ratings.defence'),  rd[i], cd[i], ld[i]);
 
-				this.insertRatingsDet(doc, cell, this.ratingDefs[selectedRating], 'defence',
-						 Foxtrick.L10n.getString('match.ratings.defence'), defenceLevel[i]);
-				this.insertRatingsDet(doc, cell, this.ratingDefs[selectedRating], 'special',
-						 Foxtrick.L10n.getString('match.ratings.defence'),  rd[i], cd[i], ld[i]);
+		this.insertRatingsDet(doc, cell, this.ratingDefs[selectedRating], 'midfield',
+				 Foxtrick.L10n.getString('match.ratings.midfield'), mf[i]);
+		this.insertRatingsDet(doc, cell, this.ratingDefs[selectedRating], 'mystyle',
+				 Foxtrick.L10n.getString('match.ratings.midfield'), mf[i]);
 
-				this.insertRatingsDet(doc, cell, this.ratingDefs[selectedRating], 'midfield',
-						 Foxtrick.L10n.getString('match.ratings.midfield'), mf[i]);
-				this.insertRatingsDet(doc, cell, this.ratingDefs[selectedRating], 'mystyle',
-						 Foxtrick.L10n.getString('match.ratings.midfield'), mf[i]);
+		this.insertRatingsDet(doc, cell, this.ratingDefs[selectedRating], 'attack',
+				 Foxtrick.L10n.getString('match.ratings.attack'),  attackLevel[i]);
+		this.insertRatingsDet(doc, cell, this.ratingDefs[selectedRating], 'special',
+				 Foxtrick.L10n.getString('match.ratings.attack'),  ra[i], ca[i], la[i]);
 
-				this.insertRatingsDet(doc, cell, this.ratingDefs[selectedRating], 'attack',
-						 Foxtrick.L10n.getString('match.ratings.attack'),  attackLevel[i]);
-				this.insertRatingsDet(doc, cell, this.ratingDefs[selectedRating], 'special',
-						 Foxtrick.L10n.getString('match.ratings.attack'),  ra[i], ca[i], la[i]);
+		try {
+			var mrt = Foxtrick.L10n.getString('match.ratings.total');
 
-				try {
-					var mrt = Foxtrick.L10n.getString('match.ratings.total');
-
-					if (typeof(this.ratingDefs[selectedRating]['total2']) == 'function') {
-						if (ta[i] == null) {
-							ta[i] = -1;
-						}
-						if (ta[i] != null) {
-							if (cell.textContent.length > 2) {
-								cell.appendChild(doc.createElement('br'));
-								cell.appendChild(doc.createTextNode('\n' + mrt + ': '));
-							}
-							var b = cell.appendChild(doc.createElement('b'));
-							b.appendChild(this.ratingDefs[selectedRating]['total2'](doc, mf[i],
-							              la[i], ca[i], ra[i], ld[i], cd[i], rd[i], ta[i], tl[i]));
-						}
-					}
-					else if (typeof(this.ratingDefs[selectedRating]['total']) == 'function') {
-						if (cell.textContent.length > 2) {
-							cell.appendChild(doc.createElement('br'));
-							cell.appendChild(doc.createTextNode('\n' + mrt + ': '));
-						}
-						var b = cell.appendChild(doc.createElement('b'));
-						b.textContent =
-							this.ratingDefs[selectedRating]['total'](mf[i], attackLevel[i],
-							                                         defenceLevel[i]);
-					}
+			if (typeof(this.ratingDefs[selectedRating]['total2']) == 'function') {
+				if (ta[i] == null) {
+					ta[i] = -1;
 				}
-				catch (e) {
-					Foxtrick.log('ratings.js error in rating print (' + selectedRating + '): ', e);
+				if (ta[i] != null) {
+					if (cell.textContent.length > 2) {
+						cell.appendChild(doc.createElement('br'));
+						cell.appendChild(doc.createTextNode('\n' + mrt + ': '));
+					}
+					var b = cell.appendChild(doc.createElement('b'));
+					b.appendChild(this.ratingDefs[selectedRating]['total2'](doc, mf[i],
+					              la[i], ca[i], ra[i], ld[i], cd[i], rd[i], ta[i], tl[i]));
 				}
 			}
+			else if (typeof(this.ratingDefs[selectedRating]['total']) == 'function') {
+				if (cell.textContent.length > 2) {
+					cell.appendChild(doc.createElement('br'));
+					cell.appendChild(doc.createTextNode('\n' + mrt + ': '));
+				}
+				var b = cell.appendChild(doc.createElement('b'));
+				b.textContent =
+					this.ratingDefs[selectedRating]['total'](mf[i], attackLevel[i],
+					                                         defenceLevel[i]);
+			}
+		}
+		catch (e) {
+			Foxtrick.log('ratings.js error in rating print (' + selectedRating + '): ', e);
+		}
+	},
+	/**
+	 * Non-classic (Angular) match report.
+	 * HatStats and HatStatsDetailed are shown natively by HT there,
+	 * so only the remaining ratings are added as plain rows (no own header,
+	 * as in classic) directly below HT's HatStats block, laid out like it.
+	 * The table is rendered asynchronously and HT updates its values in place
+	 * when a match minute is selected on the timeline (classic reloads the page
+	 * instead), hence the observer: rows are rebuilt whenever ratings change.
+	 * @param {document} doc
+	 */
+	runNg: function(doc) {
+		const module = this;
+		const NG_SKIP = ['HideAverages', 'HatStats', 'HatStatsDetailed'];
+
+		var add = function() {
+			let table = Foxtrick.Pages.Match.getNgRatingsTable(doc);
+			if (!table || !table.tBodies.length)
+				return;
+
+			let enabled = module.OPTIONS.filter(function(opt) {
+				return NG_SKIP.indexOf(opt) === -1 &&
+					Foxtrick.Prefs.isModuleOptionEnabled('Ratings', opt);
+			});
+			if (!enabled.length)
+				return;
+
+			let r = Foxtrick.Pages.Match.getNgCurrentRatingsByTeam(doc, table);
+			let tacticsData = Foxtrick.Pages.Match.getNgTacticsByTeam(table);
+
+			// skip if already rendered for the same ratings
+			let key = JSON.stringify([r, tacticsData]);
+			let old = table.querySelector('.ft-ratings-ng');
+			if (old) {
+				if (old.dataset.ftKey === key)
+					return;
+				old.remove();
+			}
+
+			let isWalkOver = Object.keys(r).every(k => !r[k][0] && !r[k][1]);
+			if (isWalkOver)
+				return;
+
+			let ta = tacticsData.tactics;
+			let tl = tacticsData.level;
+
+			let defenceLevel = [0, 1].map(i => r.ld[i] + r.cd[i] + r.rd[i]);
+			let attackLevel = [0, 1].map(i => r.ra[i] + r.ca[i] + r.la[i]);
+
+			module.initHtRatings();
+
+			let tbody = doc.createElement('tbody');
+			Foxtrick.makeFeaturedElement(tbody, module);
+			Foxtrick.addClass(tbody, 'ft-ratings-ng');
+			tbody.dataset.ftKey = key;
+
+			for (let opt of enabled) {
+				let row = tbody.insertRow(-1);
+				row.className = 'ft_rating_table_row';
+				row.insertCell(-1).textContent = module.ratingDefs[opt].label();
+				for (let i = 0; i <= 1; i++) {
+					// one wide cell instead of spacer + narrow value column,
+					// so multi-part values (e.g. VnukStats) fit in one line
+					let cell = row.insertCell(-1);
+					cell.setAttribute('colspan', '3');
+					cell.className = 'right nowrap';
+					module.fillRatingCell(doc, cell, opt, i, r.mf, r.rd, r.cd, r.ld,
+					                      r.ra, r.ca, r.la, ta, tl, defenceLevel, attackLevel);
+				}
+			}
+
+			table.appendChild(tbody);
+		};
+
+		add();
+		let container = doc.getElementById('ngLive');
+		if (container) {
+			// HT changes values in place: watch text and bar levels too
+			Foxtrick.onChange(container, add, {
+				characterData: true,
+				attributes: true,
+				attributeFilter: ['level'],
+			});
 		}
 	},
 	insertRatingsDet: function(doc, cell, rating, ratingType, label, midfieldLevel, attackLevel,
