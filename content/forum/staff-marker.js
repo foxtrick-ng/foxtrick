@@ -63,7 +63,8 @@ Foxtrick.modules.StaffMarker = {
 		['chpp-contributors', 'htls', 'hy', 'ho'],
 		'chpp-holder',
 		['supporters', 'supporter', 'supported'],
-		'nt', 'u20'
+		['nt', 'nt', 'nt-assistant'],
+		['u20', 'u20', 'u20-assistant'],
 	],
 
 	/**
@@ -90,6 +91,7 @@ Foxtrick.modules.StaffMarker = {
 
 		// supporters use custom scheme
 		'nt', 'u20', // NOTE: remains != U21
+		'nt-assistant', 'u20-assistant',
 	],
 
 	/**
@@ -114,6 +116,12 @@ Foxtrick.modules.StaffMarker = {
 		u20: function(data) {
 			this._coach(data, 'u20');
 		},
+		'nt-assistant': function(data) {
+			this._coach(data, 'nt-assistant');
+		},
+		'u20-assistant': function(data) {
+			this._coach(data, 'u20-assistant');
+		},
 	},
 
 	/**
@@ -130,18 +138,29 @@ Foxtrick.modules.StaffMarker = {
 			data['chpp-holder']['apps'][user.id] = user.appNames;
 		},
 		_coach: function(data, user, type) {
-			data[type]['nts'][user.id] = {
+			// a user may have several teams of one type (e.g. assistant of many NTs)
+			var nts = data[type]['nts'];
+			if (!nts[user.id])
+				nts[user.id] = [];
+
+			nts[user.id].push({
 				leagueId: user.LeagueId,
 				name: user.TeamName,
 				teamId: user.TeamId,
-			};
+			});
 		},
 		nt: function (data, user) {
 			this._coach(data, user, 'nt')
 		},
 		u20: function (data, user) {
 			this._coach(data, user, 'u20')
-		}
+		},
+		'nt-assistant': function(data, user) {
+			this._coach(data, user, 'nt-assistant');
+		},
+		'u20-assistant': function(data, user) {
+			this._coach(data, user, 'u20-assistant');
+		},
 	},
 
 	/**
@@ -171,21 +190,34 @@ Foxtrick.modules.StaffMarker = {
 		},
 		_coach: function(elements, data, userId, type) {
 			var doc = elements.target.ownerDocument;
-			var nt = data[type]['nts'][userId];
+			var nts = data[type]['nts'][userId];
 
-			var url = '/Club/NationalTeam/NationalTeam.aspx?teamId=' + nt.teamId;
-			var title = elements.icon.title.replace(/%s/, nt.name);
-			var flagLink = Foxtrick.util.id.createFlagFromLeagueId(doc, nt.leagueId, url, title);
+			// show the team name only if the type has no title string
+			var template = elements.icon.title;
 
-			Foxtrick.addClass(flagLink, 'ft-no-popup');
+			var flags = doc.createDocumentFragment();
+			for (var nt of nts) {
+				var url = '/Club/NationalTeam/NationalTeam.aspx?teamId=' + nt.teamId;
+				var title = template ? template.replace(/%s/, nt.name) : nt.name;
+				var flagLink = Foxtrick.util.id.createFlagFromLeagueId(doc, nt.leagueId, url, title);
 
-			return flagLink;
+				Foxtrick.addClass(flagLink, 'ft-no-popup ft-staff-' + type);
+				flags.appendChild(flagLink);
+			}
+
+			return flags;
 		},
 		nt: function(elements, data, userId) {
 			return this._coach(elements, data, userId, 'nt');
 		},
 		u20: function(elements, data, userId) {
 			return this._coach(elements, data, userId, 'u20');
+		},
+		'nt-assistant': function(elements, data, userId) {
+			return this._coach(elements, data, userId, 'nt-assistant');
+		},
+		'u20-assistant': function(elements, data, userId) {
+			return this._coach(elements, data, userId, 'u20-assistant');
 		},
 		supporter: function(elements) {
 			var doc = elements.target.ownerDocument;
@@ -545,7 +577,7 @@ Foxtrick.modules.StaffMarker = {
 
 				Foxtrick.addClass(target, 'ft-staff ft-staff-' + type);
 				Foxtrick.addClass(icon, 'ft-staff-icon ft-staff-' + type);
-				icon.title = icon.alt = module.TITLE_MAP[type];
+				icon.title = icon.alt = module.TITLE_MAP[type] || '';
 
 				var duty, dutyDesc;
 				if (data[type]['hasDuties'] && (duty = data[type]['duty'][id]) &&
