@@ -96,6 +96,12 @@ a.ft-staff-ht, a.ft-staff-ht:hover, option.ft-staff-ht {
 	display: inline;
 }
 
+/* assistant coach flags are faded to tell them apart from head coach flags */
+a.ft-flag.ft-staff-nt-assistant img,
+a.ft-flag.ft-staff-u20-assistant img {
+	opacity: 0.55;
+}
+
 #ctl00_ctl00_CPContent_CPMain_ucForumSneakpeek_updSneakpeek .frontPageList {
 	margin-left: -18px;
 }

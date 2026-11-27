@@ -4,6 +4,7 @@ from __future__ import print_function
 from Hattrick.CHPP import Client
 
 import xml.etree.ElementTree as ET
+import json
 import os
 import sys
 import codecs
@@ -42,42 +43,60 @@ def getCoaches(id):
         team['TeamName'] = iTeam.find('NationalTeamName').text
         teams.append(team)
 
-    teams_with_coaches = []
+    coaches = []
+    assistants = []
 
     for t in teams:
         response = chpp.getFile('nationalteamdetails',
-                                params={'version': '1.8', 'teamID': t['TeamId']})
+                                params={'version': '2.0', 'teamID': t['TeamId']})
         dom = ET.fromstring(response.content)
-        iCoaches = dom.iter("NationalCoach")
-        for iCoach in iCoaches:
-            t['CoachId'] = int(iCoach.find('NationalCoachUserID').text)
-            t['CoachName'] = iCoach.find('NationalCoachLoginname').text
-            if t['CoachId']:
-                teams_with_coaches.append(t)
+        for iCoach in dom.iter("NationalCoach"):
+            addStaff(coaches, t, iCoach, 'NationalCoachUserID', 'NationalCoachLoginname')
+        for iAssistant in dom.iter("AssistantCoach"):
+            addStaff(assistants, t, iAssistant, 'UserID', 'Loginname')
 
-    return teams_with_coaches
+    return coaches, assistants
+
+
+def addStaff(staff, team, node, idTag, nameTag):
+    # skip vacant positions (missing node or user ID 0)
+    idNode = node.find(idTag)
+    if idNode is None or not idNode.text or not int(idNode.text):
+        return
+
+    nameNode = node.find(nameTag)
+    staff.append({
+        'LeagueId': team['LeagueId'],
+        'TeamId': team['TeamId'],
+        'TeamName': team['TeamName'],
+        'id': int(idNode.text),
+        'name': nameNode.text if nameNode is not None and nameNode.text else '',
+    })
 
 
 def saveCoaches(coaches, filename, type_str):
     with codecs.open(filename, mode='w', encoding='utf-8') as file:
         file.write('{\n')
-        file.write('\t"type": "%s",\n' % type_str)
+        file.write('\t"type": %s,\n' % json.dumps(type_str))
         file.write('\t"list": [\n')
-        file.write('\t\t' + ',\n\t\t'.join('{ "LeagueId": %d, "TeamId": %d, "TeamName": "%s", "id": %d, "name": "%s" }' % (a["LeagueId"], a["TeamId"], a["TeamName"], a["CoachId"], a["CoachName"]) for a in coaches))
+        # json.dumps escapes quotes and backslashes in team and user names
+        file.write('\t\t' + ',\n\t\t'.join(json.dumps(a, ensure_ascii=False) for a in coaches))
         file.write('\n\t]\n}')
 
         print(filename, 'written')
 
 
 def run(cwd='.'):
-    u20 = getCoaches(4)
-    nt = getCoaches(2)
+    u20, u20Assistants = getCoaches(4)
+    nt, ntAssistants = getCoaches(2)
 
-    u20 = sorted(u20, key=lambda x: x["LeagueId"])
-    nt = sorted(nt, key=lambda x: x["LeagueId"])
+    def byLeague(staff):
+        return sorted(staff, key=lambda x: x["LeagueId"])
 
-    saveCoaches(u20, os.path.expanduser(cwd + '/u20.json'), 'u20')
-    saveCoaches(nt, os.path.expanduser(cwd + '/nt.json'), 'nt')
+    saveCoaches(byLeague(u20), os.path.expanduser(cwd + '/u20.json'), 'u20')
+    saveCoaches(byLeague(nt), os.path.expanduser(cwd + '/nt.json'), 'nt')
+    saveCoaches(byLeague(u20Assistants), os.path.expanduser(cwd + '/u20-assistant.json'), 'u20-assistant')
+    saveCoaches(byLeague(ntAssistants), os.path.expanduser(cwd + '/nt-assistant.json'), 'nt-assistant')
 
 
 if __name__ == '__main__':
