@@ -923,8 +923,10 @@ Foxtrick.Pages.Players.getPlayerList = function(doc, callback, options) {
 
 					// psicoWage requires isAbroad!
 					let psico = Foxtrick.modules.PsicoTSI.getPrediction(player, currencyRate);
-					player.psicoTSI = psico.formAvg;
-					player.psicoWage = psico.wageLow;
+					if (psico) {
+						player.psicoTSI = psico.formAvg;
+						player.psicoWage = psico.wageLow;
+					}
 				}
 
 				if (node('ArrivalDate'))
