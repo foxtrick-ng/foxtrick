@@ -3,3 +3,9 @@ img.ft_friendly {
 	height:13px;
 	background: url('chrome://foxtrick/content/resources/img/friendly_small.png') no-repeat scroll 0 0 transparent;
 }
+
+/* HT series header is a flex container, so float is ignored and the link
+   ends up glued to the "Away matches" link; add spacing like HT's &nbsp;&nbsp; */
+.float_right + #ft-show-friendlies {
+	margin-inline-start: 0.5em;
+}
