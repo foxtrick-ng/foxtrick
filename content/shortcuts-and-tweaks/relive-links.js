@@ -17,7 +17,7 @@ Foxtrick.modules.ReLiveLinks = {
 		'matchesArchive', 'worldMatches', // insertCells
 	],
 	NICE: -1, // before any modules that might change row count
-	OPTIONS: ['ReLive', 'Live'],
+	OPTIONS: ['ReLive', 'Live', ['AddRoundToLive', 'HideHTAddRound']],
 
 	/** @param {document} doc */
 	run: function(doc) {
@@ -30,7 +30,8 @@ Foxtrick.modules.ReLiveLinks = {
 			return;
 		}
 
-		if (Foxtrick.isPage(doc, 'youthSeries'))
+		if (Foxtrick.isPage(doc, 'youthSeries') &&
+		    Foxtrick.Prefs.isModuleOptionEnabled(module, 'AddRoundToLive'))
 			module.addRoundToLive(doc);
 
 		if (Foxtrick.Prefs.isModuleOptionEnabled('ReLiveLinks', 'ReLive'))
@@ -38,8 +39,9 @@ Foxtrick.modules.ReLiveLinks = {
 	},
 
 	/**
-	 * add a link to add all upcoming round matches to HT-Live
-	 * (HT provides it natively for senior series only)
+	 * add an icon to add all upcoming round matches to HT-Live
+	 * to the header of the upcoming round table (as on senior series page);
+	 * HT provides only a text link below the previous round table on youth series page
 	 *
 	 * @param {document} doc
 	 */
@@ -53,37 +55,53 @@ Foxtrick.modules.ReLiveLinks = {
 
 		let header = table.querySelector('th');
 		if (!header || header.querySelector(LIVE_SELECTOR))
-			return; // no header or HT already provides the link
+			return; // no header or HT already provides the icon
 
-		/** @type {NodeListOf<HTMLAnchorElement>} */
-		let liveLinks = table.querySelectorAll(LIVE_SELECTOR);
-		if (!liveLinks.length)
-			return;
+		let url = '', title = '';
 
-		/** @type {number[]} */
-		let ids = [];
-		let source = '';
-		for (let liveLink of liveLinks) {
-			let id = Foxtrick.util.id.getMatchIdFromUrl(liveLink.href);
-			if (!id)
-				continue;
-
-			ids.push(id);
-			source = source || Foxtrick.getUrlParam(liveLink.href, 'SourceSystem');
+		/** @type {HTMLAnchorElement} */
+		let htLink = Foxtrick.getMBElement(doc, 'hypAddRoundToLive');
+		if (htLink && htLink.getAttribute('href')) {
+			url = htLink.getAttribute('href');
+			title = htLink.textContent.trim();
 		}
-		if (!ids.length || !source)
-			return;
+		else {
+			// fallback in case HT removes or changes the link
+			htLink = null;
+
+			/** @type {NodeListOf<HTMLAnchorElement>} */
+			let liveLinks = table.querySelectorAll(LIVE_SELECTOR);
+
+			/** @type {number[]} */
+			let ids = [];
+			let source = '';
+			for (let liveLink of liveLinks) {
+				let id = Foxtrick.util.id.getMatchIdFromUrl(liveLink.href);
+				if (!id)
+					continue;
+
+				ids.push(id);
+				source = source || Foxtrick.getUrlParam(liveLink.href, 'SourceSystem');
+			}
+			if (!ids.length || !source)
+				return;
+
+			url = '/Club/Matches/Live.aspx?matchID=' + ids.join(',') +
+				'&actionType=addMatch&SourceSystem=' + source;
+
+			let matchImg = liveLinks[0].querySelector('img');
+			if (matchImg && matchImg.title)
+				title = matchImg.title;
+		}
 
 		let link = doc.createElement('a');
-		link.href = '/Club/Matches/Live.aspx?matchID=' + ids.join(',') +
-			'&actionType=addMatch&SourceSystem=' + source;
+		link.href = url;
 
 		let img = doc.createElement('img');
 		img.src = '/Img/Svgs/matches/addToLive.svg';
 		img.className = 'svg-icon';
-		let matchImg = liveLinks[0].querySelector('img');
-		if (matchImg && matchImg.title)
-			img.alt = img.title = matchImg.title;
+		if (title)
+			img.alt = img.title = title;
 
 		link.appendChild(img);
 
@@ -91,6 +109,9 @@ Foxtrick.modules.ReLiveLinks = {
 		Foxtrick.addClass(span, 'float_right');
 		span.appendChild(link);
 		header.appendChild(span);
+
+		if (htLink && Foxtrick.Prefs.isModuleOptionEnabled(module, 'HideHTAddRound'))
+			htLink.style.display = 'none';
 	},
 
 	/** @param {document} doc */
