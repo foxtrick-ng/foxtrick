@@ -14,10 +14,29 @@ Foxtrick.modules.TableSort = {
 
 	/** @param {document} doc */
 	run: function(doc) {
+		const module = this;
+
+		/**
+		 * parse number, ignoring spaces and enclosing parentheses
+		 * @param  {string} text
+		 * @return {number}
+		 */
+		var toNum = function(text) {
+			let num = text.replace(/\u202d|&nbsp;|\s+/g, '')
+			              .replace(/^\((.*)\)$/, '$1')
+			              .replace(/,/, '.');
+			return parseFloat(num);
+		};
+
 		/** @type {Listener<HTMLTableCellElement,MouseEvent>} */
 		// eslint-disable-next-line complexity
 		var doSort = function(ev) {
 			try {
+				// let links inside header cells (e.g. info icons) do their own thing
+				let target = /** @type {Element} */ (ev.target);
+				if (target && typeof target.closest === 'function' && target.closest('a'))
+					return;
+
 				// eslint-disable-next-line consistent-this, no-invalid-this
 				var thisTh = this;
 
@@ -55,6 +74,11 @@ Foxtrick.modules.TableSort = {
 				 * @return {string}
 				 */
 				var getText = function(el) {
+					// HT rating web component: sort by rating rather than stamina tooltip
+					let rating = el.querySelector('hattrick-rating[rating]');
+					if (rating)
+						return rating.getAttribute('rating').trim();
+
 					var text = el.textContent.trim();
 					if (text == '') {
 						for (let att of ['title', 'alt']) {
@@ -104,8 +128,7 @@ Foxtrick.modules.TableSort = {
 
 					let inner = getText(cell);
 					if (inner) {
-						let num = inner.replace(/\u202d|&nbsp;|\s+/g, '').replace(/,/, '.');
-						if (isNaN(parseFloat(num)))
+						if (isNaN(toNum(inner)))
 							isNum = false;
 						if (!/^(-|\d)\/(-|\d)$/.test(inner))
 							isYouthSkill = false;
@@ -199,10 +222,8 @@ Foxtrick.modules.TableSort = {
 						return direction * (aVal - bVal);
 					}
 					else if (isNum) {
-						let aVal = parseFloat(aContent.replace(/\u202d|&nbsp;|\s+/g, '')
-						                              .replace(/,/, '.'));
-						let bVal = parseFloat(bContent.replace(/\u202d|&nbsp;|\s+/g, '')
-						                              .replace(/,/, '.'));
+						let aVal = toNum(aContent);
+						let bVal = toNum(bContent);
 						aVal = isNaN(aVal) ? lastSort : aVal;
 						bVal = isNaN(bVal) ? lastSort : bVal;
 						if (aVal === bVal)
@@ -214,7 +235,9 @@ Foxtrick.modules.TableSort = {
 
 					// sort string
 					// always sort by ascending order
-					return direction * aContent.localeCompare(bContent);
+					// natural order: numbers inside text compared numerically
+					let natural = { numeric: true };
+					return direction * aContent.localeCompare(bContent, undefined, natural);
 				};
 
 				// sort them
@@ -237,26 +260,47 @@ Foxtrick.modules.TableSort = {
 			}
 		};
 
+		/** @param {Iterable<HTMLTableElement>} tables */
+		var bindTables = function(tables) {
+			for (let table of tables) {
+				if (table.id == 'ft_skilltable' || Foxtrick.hasClass(table, 'tablesorter'))
+					continue;
+
+				let ths = table.querySelectorAll('th');
+				for (let th of ths) {
+					// already bound: prevents double listeners on re-run
+					if (th.dataset.ftTableSort)
+						continue;
+
+					if (!th.hasAttribute('ht-orderable-by') &&
+					    th.querySelectorAll('input').length === 0 &&
+					    th.querySelectorAll('a[href]').length === 0 &&
+					    !Foxtrick.hasClass(th, 'header')) { // ht sorting
+
+						th.dataset.ftTableSort = '1';
+						Foxtrick.makeFeaturedElement(th, module);
+						Foxtrick.onClick(th, doSort);
+					}
+				}
+			}
+		};
+
+		/** @type {NodeListOf<HTMLTableElement>} */
 		var tables;
 		if (Foxtrick.isPage(doc, 'forumViewThread'))
 			tables = doc.querySelectorAll('.htMlTable');
 		else
 			tables = doc.querySelectorAll('#mainBody table');
 
-		for (let table of tables) {
-			if (table.id == 'ft_skilltable' || Foxtrick.hasClass(table, 'tablesorter'))
-				continue;
+		bindTables(tables);
 
-			let ths = table.querySelectorAll('th');
-			for (let th of ths) {
-				if (!th.hasAttribute('ht-orderable-by') &&
-				    th.querySelectorAll('input').length === 0 &&
-				    th.querySelectorAll('a').length === 0 &&
-				    !Foxtrick.hasClass(th, 'header')) { // ht sorting
-
-					Foxtrick.makeFeaturedElement(th, this);
-					Foxtrick.onClick(th, doSort);
-				}
+		// player history tabs are replaced by postback
+		if (Foxtrick.isPage(doc, 'playerDetails')) {
+			let playerTabs = Foxtrick.getMBElement(doc, 'updPlayerTabs');
+			if (playerTabs) {
+				Foxtrick.onChange(playerTabs, () => {
+					bindTables(playerTabs.querySelectorAll('table'));
+				});
 			}
 		}
 	},
