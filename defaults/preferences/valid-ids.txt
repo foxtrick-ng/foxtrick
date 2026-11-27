@@ -470,6 +470,8 @@ module.Ratings.VnukStats.enabled
 module.Ratings.enabled
 module.RatingsDisplay.enabled
 module.RatingsDisplay.value
+module.ReLiveLinks.AddRoundToLive.enabled
+module.ReLiveLinks.HideHTAddRound.enabled
 module.ReLiveLinks.Live.enabled
 module.ReLiveLinks.ReLive.enabled
 module.ReLiveLinks.enabled
