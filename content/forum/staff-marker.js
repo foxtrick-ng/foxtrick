@@ -591,6 +591,13 @@ Foxtrick.modules.StaffMarker = {
 				}
 
 				if (!skip) {
+					// mark every marker image as a Foxtrick feature
+					// (icon, wrapped icon, coach flags)
+					var markerImgs =
+						marker.nodeName === 'IMG' ? [marker] : marker.querySelectorAll('img');
+					for (var markerImg of markerImgs)
+						Foxtrick.makeFeaturedElement(markerImg, module);
+
 					var parent = target.parentElement;
 					if (parent && Foxtrick.hasClass(parent, 'ft-popup-span')) {
 						// we want staff markers outside of popup spans
