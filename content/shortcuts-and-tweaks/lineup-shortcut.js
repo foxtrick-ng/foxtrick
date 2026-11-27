@@ -70,6 +70,11 @@ Foxtrick.modules['LineupShortcut'] = {
 			}
 		}
 
+		var isLegacy = Foxtrick.Pages.All.isLegacy(doc);
+
+		/** @type {{row: HTMLTableRowElement, matchId: number, fullNames: string[]}[]} */
+		var otherTeamRows = [];
+
 		var hasTransfer = false;
 		for (var i = 0; i < matchTable.rows.length; i++) {
 			var row = matchTable.rows[i];
@@ -133,9 +138,74 @@ Foxtrick.modules['LineupShortcut'] = {
 				this._Add_Lineup_Link(doc, row, opts);
 				hasMatch = true;
 			}
-			if (!hasMatch)
+			if (!hasMatch) {
 				hasTransfer = true;
+
+				// legacy (classic) view only: matches of other teams
+				// are linked once their team ids are resolved
+				if (isLegacy)
+					otherTeamRows.push({ row, matchId, fullNames });
+			}
 		}
+
+		if (otherTeamRows.length)
+			this._Add_Other_Team_Links(doc, otherTeamRows, playerId, teamName);
+	},
+
+	/**
+	 * Add lineup links for matches played for other (previous) teams.
+	 *
+	 * Team ids are resolved by team name from the player's transfer history (CHPP).
+	 * If a team cannot be resolved unambiguously, the link is added without TeamId.
+	 *
+	 * @param {document} doc
+	 * @param {{row: HTMLTableRowElement, matchId: number, fullNames: string[]}[]} rows
+	 * @param {number} playerId
+	 * @param {string} teamName current team name
+	 */
+	_Add_Other_Team_Links: function(doc, rows, playerId, teamName) {
+		const module = this;
+
+		/** @type {CHPPParams} */
+		const args = [
+			['file', 'transfersplayer'],
+			['playerId', playerId],
+		];
+		Foxtrick.util.api.retrieve(doc, args, { cache: 'session' }, (xml, errorText) => {
+			/** @type {Map<string, number>} team name -> team id, NaN if ambiguous */
+			const teams = new Map();
+
+			if (xml && !errorText) {
+				const addTeam = (/** @type {string} */ name, /** @type {number} */ id) => {
+					if (!name || !id)
+						return;
+
+					if (teams.has(name) && teams.get(name) !== id)
+						teams.set(name, NaN);
+					else
+						teams.set(name, id);
+				};
+
+				for (const transfer of xml.getElementsByTagName('Transfer')) {
+					addTeam(xml.text('BuyerTeamName', transfer), xml.num('BuyerTeamID', transfer));
+					addTeam(xml.text('SellerTeamName', transfer), xml.num('SellerTeamID', transfer));
+				}
+			}
+
+			for (const { row, matchId, fullNames } of rows) {
+				const candidates = fullNames.filter(name => name !== teamName && teams.has(name));
+
+				/** @type {{type: string, matchId: number, playerId: number, teamId?: number}} */
+				const opts = { type: 'normal', matchId, playerId };
+				if (candidates.length === 1) {
+					const teamId = teams.get(candidates[0]);
+					if (teamId)
+						opts.teamId = teamId;
+				}
+
+				module._Add_Lineup_Link(doc, row, opts);
+			}
+		});
 	},
 
 	_Analyze_Stat_Page: function(doc) {
@@ -174,10 +244,11 @@ Foxtrick.modules['LineupShortcut'] = {
 
 	/**
 	 * {type: NT|U21|Youth|normal, matchId, teamId, playerId, youthTeamId: number}
+	 * teamId is optional: when undefined, TeamId is omitted from the link
 	 * @param {document}            doc
 	 * @param {HTMLTableRowElement} row
 	 * @param {object}              opts {type: NT|U21|Youth|normal,
-	 *                                    matchId, teamId, playerId, youthTeamId: number}
+	 *                                    matchId, teamId?, playerId, youthTeamId: number}
 	 */
 	_Add_Lineup_Link: function(doc, row, opts) {
 		//the link is: /Club/Matches/MatchLineup.aspx?MatchID=<opts.matchId>&TeamID=<opts.teamId>
@@ -187,7 +258,8 @@ Foxtrick.modules['LineupShortcut'] = {
 		var cell = Foxtrick.insertFeaturedCell(row, this, -1); // append as the last cell
 		cell.className = 'ft-lineup-cell';
 		var url = '/Club/Matches/Match.aspx?matchID=' + opts.matchId +
-			'&TeamId=' + opts.teamId + '&HighlightPlayerID=' + opts.playerId;
+			(typeof opts.teamId == 'undefined' ? '' : '&TeamId=' + opts.teamId) +
+			'&HighlightPlayerID=' + opts.playerId;
 		var link = Foxtrick.createFeaturedElement(doc, this, 'a');
 		switch (opts.type) {
 		    case 'youth':
