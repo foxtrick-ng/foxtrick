@@ -19,8 +19,15 @@ Foxtrick.modules['NewMail'] = {
 	CSS: Foxtrick.InternalPath + 'resources/css/new-mail.css',
 
 	// eslint-disable-next-line complexity
-	exec: function(doc, mailCount, forumCount) {
+	exec: function(doc, mailCount, forumCount, wasLoggedIn) {
 		const MODULE = this;
+
+		// remember logouts, so the first page after login can catch up on forum replies
+		if (!Foxtrick.Pages.All.isLoggedIn(doc)) {
+			Foxtrick.sessionSet('newMailLoggedIn', false);
+			return;
+		}
+		Foxtrick.sessionSet('newMailLoggedIn', true);
 
 		const MAIL_URL = doc.location.origin + '/MyHattrick/Inbox/';
 		const FORUM_URL = doc.location.origin + '/Forum/?actionType=refresh';
@@ -72,20 +79,24 @@ Foxtrick.modules['NewMail'] = {
 		// new forum message
 		var newForumCount = 0;
 
+		// unread forum replies are shown as a badge inside the Forum menu link
 		let forum = menu.querySelector('a[href^="/Forum/"]');
+		let forumBadge = forum && forum.querySelector('.unread-badge');
+		if (forumBadge) {
+			let count = forumBadge.textContent.match(/\d+/);
+			newForumCount = count ? parseInt(count[0], 10) : 0;
+		}
 
-		if (forum && forum.textContent.indexOf('(') > -1) {
-			// has new message, no span this time, we need to add it
-			newForumCount = Number(forum.textContent.match(/\d+/)[0]);
-		}
-		else {
-			// no new forum messages
-			newForumCount = 0;
-		}
+		// supporters get live forum reply notifications from TickerAlert;
+		// NewMail only catches up on replies received while logged out
+		let isForumInTickerAlert = Foxtrick.util.layout.isSupporter(doc)
+			&& Foxtrick.Prefs.isModuleEnabled('TickerAlert')
+			&& Foxtrick.Prefs.getBool('module.TickerAlert.forum.enabled');
 
 		Foxtrick.sessionSet('forumCount', newForumCount);
 		if (Foxtrick.Prefs.isModuleOptionEnabled('NewMail', 'NotifyForum')
-			&& newForumCount > oldForumCount) {
+			&& newForumCount > oldForumCount
+			&& (!isForumInTickerAlert || !wasLoggedIn)) {
 
 			let forumL10n = Foxtrick.L10n.getString('notify.newMail', newForumCount);
 			let forumMsg = forumL10n.replace(/%s/, newForumCount);
@@ -107,7 +118,11 @@ Foxtrick.modules['NewMail'] = {
 	run: function(doc) {
 		const MODULE = this;
 
-		Promise.all([Foxtrick.session.get('mailCount'), Foxtrick.session.get('forumCount')])
+		Promise.all([
+			Foxtrick.session.get('mailCount'),
+			Foxtrick.session.get('forumCount'),
+			Foxtrick.session.get('newMailLoggedIn'),
+		])
 			.then(function(args) {
 				args.unshift(doc);
 				MODULE.exec.apply(MODULE, args);
