@@ -1098,6 +1098,52 @@ Foxtrick.util.matchEvent.addEventIcons = function(evnt) {
 };
 
 /**
+ * Fix the generic injury icon of body-part injury events (401-423).
+ * HT provides only the body part in the event itself,
+ * while the injury severity (e.g. bruise) is shown in match highlights.
+ * Event row and highlight are linked via data-eventindex <-> #matchEventIndex_N.
+ * Safe to call repeatedly.
+ * @param {Element} container
+ */
+Foxtrick.util.matchEvent.fixInjuryIcons = function(container) {
+	if (!container)
+		return;
+
+	const doc = container.ownerDocument;
+	const injuredSrc = /** @type {string} */
+		(Foxtrick.util.matchEvent.eventIconDefinition.injured);
+
+	/** @type {NodeListOf<HTMLTableRowElement>} */
+	const rows = container.querySelectorAll('tr[data-eventindex]:not([data-ft-injury-icon])');
+	for (const row of rows) {
+		const icons = Foxtrick.util.matchEvent.getEventTeamIcons(row);
+		if (!icons || icons.length !== 1 || icons[0] !== 'injured')
+			continue;
+
+		/** @type {HTMLImageElement} */
+		const ourImg = row.querySelector(`td.ft-dummy img[src="${injuredSrc}"]`);
+		if (!ourImg)
+			continue;
+
+		const hlCell = doc.getElementById('matchEventIndex_' + row.dataset.eventindex);
+		if (!hlCell || !Foxtrick.hasClass(hlCell, 'highlightInjuries'))
+			continue; // highlights not (yet) available
+
+		// guard against index collisions (e.g. several matches in HT-Live)
+		const pId = Foxtrick.util.id.findPlayerId(hlCell);
+		if (!pId || pId !== Foxtrick.util.id.findPlayerId(row))
+			continue;
+
+		row.dataset.ftInjuryIcon = 'done';
+
+		/** @type {HTMLImageElement} */
+		const htImg = hlCell.parentElement.querySelector('img.injuryBruised');
+		if (htImg && htImg.getAttribute('src'))
+			ourImg.src = htImg.getAttribute('src');
+	}
+};
+
+/**
  * @param {document} doc
  * @param {HTMLElement} container
  * @param {MatchEventMeta[]} icons

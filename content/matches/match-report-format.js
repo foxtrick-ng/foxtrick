@@ -32,6 +32,8 @@ Foxtrick.modules.MatchReportFormat = {
 
 			var row = doc.createElement('tr');
 			row.setAttribute('data-eventtype', eventId);
+			if (evnt.dataset.eventindex)
+				row.dataset.eventindex = evnt.dataset.eventindex;
 
 			if (isHomeEvent)
 				Foxtrick.addClass(row, 'liveHomeEvent');
@@ -105,6 +107,7 @@ Foxtrick.modules.MatchReportFormat = {
 			}
 
 			matchReport.insertBefore(table, matchReport.firstChild);
+			Foxtrick.util.matchEvent.fixInjuryIcons(table);
 		};
 
 		if (Foxtrick.Pages.Match.isPrematch(doc) || Foxtrick.Pages.Match.isNewLive(doc))
