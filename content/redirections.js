@@ -28,6 +28,12 @@ Foxtrick.modules['Redirections'] = {
 			return;
 		}
 
+		// open lineup tab in the new (angular) match view
+		if (/[?&]ft_tab=lineup\b/i.test(location)) {
+			this.openLineupTab(doc);
+			return;
+		}
+
 		var redirectRe = /redir_to_(\w+)=true/i;
 
 		if (!redirectRe.test(location))
@@ -152,10 +158,17 @@ Foxtrick.modules['Redirections'] = {
 						if (link == null)
 							break;
 
-						let parse = new URL(link.replace(/\/Match\.aspx\b/, '/Match.Classic.aspx'));
+						let isClassic = Foxtrick.Pages.All.isClassic(doc);
+						if (isClassic)
+							link = link.replace(/\/Match\.aspx\b/, '/Match.Classic.aspx');
+
+						let parse = new URL(link);
 						parse.searchParams.set('teamId', String(teamId));
+						if (!isClassic)
+							parse.searchParams.set('ft_tab', 'lineup');
+
 						// eslint-disable-next-line no-restricted-properties
-						url = parse.pathname + parse.search + '#tab2';
+						url = parse.pathname + parse.search + (isClassic ? '#tab2' : '');
 					}
 					break;
 
@@ -200,5 +213,44 @@ Foxtrick.modules['Redirections'] = {
 			// Running live, however, resolves URLs against XULDocument
 			doc.location.replace(doc.location.origin + url);
 		}
+	},
+
+	/**
+	 * Click the lineup (pitch) tab once angular renders the match view.
+	 * Gives up after a timeout.
+	 * @param {Document} doc
+	 */
+	openLineupTab: function(doc) {
+		const SELECTOR = 'a.htbox-content-control-pitch';
+		const SELECTED = 'htbox-content-control-selected';
+		const TIMEOUT = 15000;
+
+		let tryClick = () => {
+			let tab = doc.querySelector(SELECTOR);
+			if (!tab)
+				return false;
+
+			if (!tab.classList.contains(SELECTED))
+				/** @type {HTMLElement} */ (tab).click();
+
+			return true;
+		};
+
+		if (tryClick())
+			return;
+
+		let done = false;
+		let observer = Foxtrick.observe(doc.body, () => {
+			if (done)
+				return true;
+
+			done = tryClick();
+			return done;
+		});
+
+		doc.defaultView.setTimeout(() => {
+			done = true;
+			observer.disconnect();
+		}, TIMEOUT);
 	},
 };
