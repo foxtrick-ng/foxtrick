@@ -1,0 +1,6 @@
+/* Player page match history: let week/season wrap below the date
+   instead of pushing the table out of #mainBody (#300) */
+#mainBody table:has(td[id$="_tdGoals"]) td.ft-date {
+	white-space: normal;
+	width: auto !important; /* override HT inline width:70px */
+}

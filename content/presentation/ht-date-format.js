@@ -14,6 +14,7 @@ Foxtrick.modules.HTDateFormat = {
 	OPTIONS: ['LocalSeason', 'FirstDayOfWeekOffset'],
 	OPTION_EDITS: true,
 	OPTION_EDITS_DISABLED_LIST: [true, false],
+	CSS: Foxtrick.InternalPath + 'resources/css/ht-date-format.css',
 
 	/** @param {document} doc */
 	run: function(doc) {
