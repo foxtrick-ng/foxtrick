@@ -214,7 +214,7 @@ Foxtrick.modules['TeamPopupLinks'] = {
 			    MANAGER_RE.test(url) && userEnabled) {
 
 				var span = Foxtrick.createFeaturedElement(doc, module, 'span');
-				span.className = 'ft-popup-span';
+				Foxtrick.addClass(span, 'ft-popup-span');
 
 				if (highlightEnabled && TEAM_RE.test(url) &&
 					curTeamId == parseInt(Foxtrick.getUrlParam(url, 'TeamID'), 10)) {
